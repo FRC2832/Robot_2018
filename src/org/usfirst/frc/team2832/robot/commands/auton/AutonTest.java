@@ -22,16 +22,16 @@ public class AutonTest extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	startTime = System.currentTimeMillis();
-    	driveTrain.getDrive().arcadeDrive(0.2f, 0f);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	driveTrain.getDrive().arcadeDrive(0.2f, 0f);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return startTime + 3000f < System.currentTimeMillis();
     }
 
     // Called once after isFinished returns true
