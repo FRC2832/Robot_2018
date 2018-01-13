@@ -7,6 +7,9 @@
 
 package org.usfirst.frc.team2832.robot;
 
+import org.usfirst.frc.team2832.robot.commands.auton.AutonTest;
+import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -22,13 +25,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
 
+	private DriveTrain driveTrain = new DriveTrain();
+	private SendableChooser chooser;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
-		
+		chooser = new SendableChooser();
+		chooser.addDefault("AutonTest", AutonTest.class);
+		SmartDashboard.putData("Autonomous mode chooser", chooser);
 	}
 
 	/**
@@ -59,7 +66,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-
+		Scheduler.getInstance().add(new AutonTest(driveTrain));
+		
+		Command command = (Command)chooser.getSelected();
+		command.start();	
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -70,7 +80,7 @@ public class Robot extends TimedRobot {
 		// schedule the autonomous command (example)
 		
 		//YAY - Calvin
-		
+	
 	}
 
 	/**

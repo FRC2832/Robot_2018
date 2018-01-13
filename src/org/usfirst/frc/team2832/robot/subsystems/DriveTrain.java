@@ -15,10 +15,10 @@ public class DriveTrain extends Subsystem {
 	final int SOLENOID_FORWARD_CHANNEL = 9001; //It's over 9000!
 	final int SOLENOID_REVERSE_CHANNEL = 9002;
 	
-	final int DRIVE_MOTER_FL = 9003;
-	final int DRIVE_MOTER_FR = 9004;
-	final int DRIVE_MOTER_BL = 9005;
-	final int DRIVE_MOTER_BR = 9006;
+	final int DRIVE_MOTER_FL = 10;
+	final int DRIVE_MOTER_FR = 8;
+	final int DRIVE_MOTER_BL = 17;
+	final int DRIVE_MOTER_BR = 2;
 	
 	private DoubleSolenoid transmission;
 	
@@ -55,6 +55,10 @@ public class DriveTrain extends Subsystem {
     
     public void shift(GEAR gear) {
     	transmission.set(gear.getValue());
+    }
+    
+    public DifferentialDrive getDrive() {
+    	return drive;
     }
     
     public enum GEAR {
