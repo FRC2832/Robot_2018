@@ -62,15 +62,10 @@ public class DriveTrain extends Subsystem {
     }
     
     public enum GEAR {
-    	HIGH(Value.kReverse), 
-    	LOW(Value.kForward);
+    	HIGH, LOW;
     	
-    	private Value value;
-    	GEAR(Value value) {
-    		this.value = value;
-    	}
     	public Value getValue() {
-    		return value;
+    		return this == HIGH ? Value.kReverse : Value.kForward;
     	}
     }
 }
