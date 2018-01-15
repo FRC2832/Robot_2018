@@ -44,9 +44,7 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-	public void autonomousInit() {
-		new AutonTest(driveTrain).start();
-		
+	public void autonomousInit() {		
 		Command command = (Command)chooser.getSelected();
 		if(command != null)
 			command.start();
