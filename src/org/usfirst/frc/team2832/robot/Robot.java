@@ -21,6 +21,7 @@ public class Robot extends TimedRobot {
 	private DriveTrain driveTrain;
 	private SendableChooser chooser;
 	private Controls controls;
+	private Controls_OldStyleImproved controlsOld;
 	
 	@Override
 	public void robotInit() {

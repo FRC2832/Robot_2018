@@ -1,7 +1,7 @@
 package org.usfirst.frc.team2832.robot.commands;
 
-import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
+import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -25,10 +25,10 @@ public class ArcadeDrive extends Command {
     }
 
     protected void execute() {
-    	System.out.println("AAHHHHHH!");
-    	driveTrain.getDrive().arcadeDrive(0.5, 0);
+    	//driveTrain.getDrive().arcadeDrive(0.5, 0);
+    	//System.out.println("Controls: " + controls);
     	//System.out.println("Drive: " + controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft) + ": " + controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
-    	//driveTrain.getDrive().arcadeDrive(controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft), controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
+    	driveTrain.getDrive().arcadeDrive(controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft), controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
     }
 
     protected boolean isFinished() {

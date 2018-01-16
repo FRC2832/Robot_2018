@@ -1,9 +1,9 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
 import org.usfirst.frc.team2832.robot.Button;
-import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
+import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -48,9 +48,9 @@ public class DriveTrain extends Subsystem {
 		talonBL = new WPI_TalonSRX(DRIVE_MOTER_BL);
 		talonBR = new WPI_TalonSRX(DRIVE_MOTER_BR);
 		leftMoters = new SpeedControllerGroup(talonFL, talonBL);
-		leftMoters.setInverted(true);
 		rightMoters = new SpeedControllerGroup(talonFR, talonBR);
 		drive = new DifferentialDrive(leftMoters, rightMoters);
+		this.controls = controls;
 		//encoderLeft = new Encoder();
 	}
 
@@ -60,10 +60,8 @@ public class DriveTrain extends Subsystem {
     
     @Override
     public void periodic() {
-    	if(controls != null)
-        if(controls.getButtonPressed(
-        		SHIFT_BUTTON.getController(), 
-        		SHIFT_BUTTON.getButton())) {
+        if(controls.getButtonPressed(SHIFT_BUTTON.getController(), SHIFT_BUTTON.getButton())) {
+        	System.out.println("Shift");
         	toggleShift();
         	controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kLeftRumble, 0.5d, 0.5d);
         	controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kRightRumble, 0.5d, 0.5d);
