@@ -1,9 +1,8 @@
 package org.usfirst.frc.team2832.robot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -24,7 +23,7 @@ public class Controls {
 		controllerMain = new Controller(CONTROLLER_MAIN_PORT);
 		controllerSecondary = new Controller(CONTROLLER_SECONDARY_PORT);
 		triggers = new ArrayList<Trigger>();
-		rumbles = new ArrayList<Rumble>();
+		rumbles = new CopyOnWriteArrayList<Rumble>();
 	}
 	
 	public void update() {
