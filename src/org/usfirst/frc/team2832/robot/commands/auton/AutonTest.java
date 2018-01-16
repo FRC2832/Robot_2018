@@ -28,13 +28,12 @@ public class AutonTest extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	driveTrain.getDrive().arcadeDrive(0.4f, 0f);
-    	//System.out.println("HELLO!!!");
-    	System.out.println("Start: " + startTime + ", End:" + Timer.getFPGATimestamp());
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return startTime + 3d < Timer.getFPGATimestamp();
+
     }
 
     // Called once after isFinished returns true
@@ -46,5 +45,6 @@ public class AutonTest extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
     	driveTrain.getDrive().arcadeDrive(0, 0);
+    	System.out.println("AutonTest got interrupted!");
     }
 }
