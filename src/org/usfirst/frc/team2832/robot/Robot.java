@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		chooser = new SendableChooser();
-		chooser.addDefault("AutonTest", AutonTest.class);
+		chooser.addDefault("AutonTest", new AutonTest(driveTrain));
 		SmartDashboard.putData("Autonomous mode chooser", chooser);
 		
 		controls = new Controls();
@@ -53,8 +53,8 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {	
 		Scheduler.getInstance().removeAll();
 		System.out.println(chooser.getSelected());
-		//Command command = (Command)chooser.getSelected();
-		Command command = new AutonTest(driveTrain);
+		Command command = (Command)chooser.getSelected();
+		//Command command = new AutonTest(driveTrain);
 		Scheduler.getInstance().add(command);
 		
 		//if(command != null) {
