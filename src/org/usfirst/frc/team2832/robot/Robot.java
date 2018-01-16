@@ -19,8 +19,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 
 	private DriveTrain driveTrain;
-	private SendableChooser chooser;
+	SendableChooser chooser;
 	private Controls controls;
+	
+	Command autonomousCommand;
+	
 	
 	@Override
 	public void robotInit() {
@@ -31,6 +34,8 @@ public class Robot extends TimedRobot {
 		controls = new Controls();
 		
 		driveTrain = new DriveTrain(controls);
+		
+	
 	}
 
 	@Override
@@ -49,10 +54,13 @@ public class Robot extends TimedRobot {
 		System.out.println(chooser.getSelected());
 		//Command command = (Command)chooser.getSelected();
 		Command command = new AutonTest(driveTrain);
-		if(command != null)
-			command.start();
-		else
-			System.err.println("Command chooser returned null");
+		Scheduler.getInstance().add(command);
+		
+		//if(command != null) {
+			//command.start();
+		//} else {
+		//	System.err.println("Command chooser returned null");
+		//}
 	}
 
 	@Override
