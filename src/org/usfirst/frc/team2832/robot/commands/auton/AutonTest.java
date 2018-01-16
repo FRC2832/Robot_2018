@@ -27,6 +27,7 @@ public class AutonTest extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	driveTrain.getDrive().arcadeDrive(0.2f, 0f);
+    	System.out.println("HELLO!!!");
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;;
 public class DriveTrain extends Subsystem {
 
 	//Should these constants be static? Don't know of an example use, but could exist.
-	final int SOLENOID_FORWARD_CHANNEL = 9001; //It's over 9000!
-	final int SOLENOID_REVERSE_CHANNEL = 9002;
+	final int SOLENOID_FORWARD_CHANNEL = 0;
+	final int SOLENOID_REVERSE_CHANNEL = 1;
 	
 	final int DRIVE_MOTER_FL = 10;
 	final int DRIVE_MOTER_FR = 8;
@@ -48,6 +48,7 @@ public class DriveTrain extends Subsystem {
 		talonBL = new WPI_TalonSRX(DRIVE_MOTER_BL);
 		talonBR = new WPI_TalonSRX(DRIVE_MOTER_BR);
 		leftMoters = new SpeedControllerGroup(talonFL, talonBL);
+		leftMoters.setInverted(true);
 		rightMoters = new SpeedControllerGroup(talonFR, talonBR);
 		drive = new DifferentialDrive(leftMoters, rightMoters);
 		//encoderLeft = new Encoder();
@@ -59,7 +60,10 @@ public class DriveTrain extends Subsystem {
     
     @Override
     public void periodic() {
-        if(controls.getButtonPressed(SHIFT_BUTTON.getController(), SHIFT_BUTTON.getButton())) {
+    	if(controls != null)
+        if(controls.getButtonPressed(
+        		SHIFT_BUTTON.getController(), 
+        		SHIFT_BUTTON.getButton())) {
         	toggleShift();
         	controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kLeftRumble, 0.5d, 0.5d);
         	controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kRightRumble, 0.5d, 0.5d);

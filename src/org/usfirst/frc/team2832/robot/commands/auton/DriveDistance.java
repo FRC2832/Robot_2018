@@ -9,11 +9,14 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveDistance extends Command {
 
+	private int start;
+
 	public DriveDistance(DriveTrain driveTrain) {
         requires(driveTrain);
     }
 
     protected void initialize() {
+    	
     }
 
     protected void execute() {

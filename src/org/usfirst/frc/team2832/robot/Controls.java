@@ -28,6 +28,7 @@ public class Controls {
 	}
 	
 	public void update() {
+		System.out.println("Controllers: " + controllerMain + ": " + controllerSecondary);
 		for(Rumble rumble: rumbles) 
 			if(rumble.start + rumble.duration < System.currentTimeMillis()) {
 				getController(rumble.controller).setRumble(rumble.type, 0d);

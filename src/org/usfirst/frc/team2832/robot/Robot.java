@@ -44,8 +44,11 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-	public void autonomousInit() {		
-		Command command = (Command)chooser.getSelected();
+	public void autonomousInit() {	
+		Scheduler.getInstance().removeAll();
+		System.out.println(chooser.getSelected());
+		//Command command = (Command)chooser.getSelected();
+		Command command = new AutonTest(driveTrain);
 		if(command != null)
 			command.start();
 		else
@@ -59,7 +62,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		//Scheduler.getInstance().removeAll();
+		Scheduler.getInstance().removeAll();
 	}
 
 	@Override
