@@ -25,17 +25,14 @@ public class Robot extends TimedRobot {
 	
 	Command autonomousCommand;
 	
-	
 	@Override
 	public void robotInit() {
+		controls = new Controls();
+		driveTrain = new DriveTrain(controls);
+		
 		chooser = new SendableChooser();
 		chooser.addDefault("AutonTest", new AutonTest(driveTrain));
 		SmartDashboard.putData("Autonomous mode chooser", chooser);
-		
-		controls = new Controls();
-		
-		driveTrain = new DriveTrain(controls);
-		
 	
 	}
 
