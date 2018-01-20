@@ -20,15 +20,16 @@ public class DriveDistance extends Command {
     }
 
     protected void initialize() {
-    	start = Robot.driveTrain.getEncoderPosition(ENCODER.BOTH);
-    	Robot.driveTrain.arcadeDrive(speeed, 0);
+    	start = Math.abs(Robot.driveTrain.getEncoderPosition(ENCODER.BOTH));
     }
 
     protected void execute() {
+    	Robot.driveTrain.arcadeDrive(speeed, 0);
     }
 
     protected boolean isFinished() {
-        return Robot.driveTrain.getEncoderPosition(ENCODER.BOTH) > start + distance;
+    	System.out.println(start + ": " + Math.abs(Robot.driveTrain.getEncoderPosition(ENCODER.BOTH)));
+        return Math.abs(Robot.driveTrain.getEncoderPosition(ENCODER.BOTH)) > start + distance;
     }
 
     protected void end() {

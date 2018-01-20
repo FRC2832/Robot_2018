@@ -33,7 +33,7 @@ public class DriveTrain extends Subsystem {
 	final static int DRIVE_MOTER_BL = 17;
 	final static int DRIVE_MOTER_BR = 2;
 	
-	private static final double ENCODER_COUNT_TO_INCH = 1000d;
+	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; //Circumference divided by pulses/revolution
 	
 	final Button SHIFT_BUTTON = new Button(Controllers.CONTROLLER_MAIN, Buttons.Y);
 	
@@ -41,22 +41,30 @@ public class DriveTrain extends Subsystem {
 	private DifferentialDrive drive;
 	private SpeedControllerGroup leftMotors, rightMotors;	
 	private WPI_TalonSRX talonFL, talonFR, talonBL, talonBR;
-	private TalonSRX talonPhoenixFL, talonPhoenixFR;
+	private TalonSRX talonPhoenixLeft, talonPhoenixRight;
 	private static PigeonIMU pigeon;
 		
 	public DriveTrain() {
 		super();
-		transmission = new DoubleSolenoid(TRANSMISSION_FORWARD_CHANNEL, TRANSMISSION_REVERSE_CHANNEL);
+		//transmission = new DoubleSolenoid(TRANSMISSION_FORWARD_CHANNEL, TRANSMISSION_REVERSE_CHANNEL);
 		talonFL = new WPI_TalonSRX(DRIVE_MOTER_FL);
 		talonFR = new WPI_TalonSRX(DRIVE_MOTER_FR);
 		talonBL = new WPI_TalonSRX(DRIVE_MOTER_BL);
 		talonBR = new WPI_TalonSRX(DRIVE_MOTER_BR);
-		talonPhoenixFL = new TalonSRX(DRIVE_MOTER_FL);
-		talonPhoenixFR = new TalonSRX(DRIVE_MOTER_FR);
+		talonPhoenixLeft = new TalonSRX(DRIVE_MOTER_FL);
+		talonPhoenixRight = new TalonSRX(DRIVE_MOTER_FR);
 		leftMotors = new SpeedControllerGroup(talonFL, talonBL);
 		rightMotors = new SpeedControllerGroup(talonFR, talonBR);
 		drive = new DifferentialDrive(leftMotors, rightMotors);
 		pigeon = new PigeonIMU(0);
+		talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
+		talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
+		//talonPhoenixLeft.setInverted(true);
+		//talonPhoenixRight.setInverted(true);
+		//talonFL.setInverted(true);
+		//talonFR.setInverted(true);
+		//talonBL.setInverted(true);
+		//talonBR.setInverted(true);
 	}
 	
     public void initDefaultCommand() {
@@ -67,6 +75,7 @@ public class DriveTrain extends Subsystem {
     public void periodic() {
     	SmartDashboard.putNumber("Encoder Left Position", getEncoderPosition(ENCODER.LEFT));
     	SmartDashboard.putNumber("Encoder Right Position", getEncoderPosition(ENCODER.RIGHT));
+    	SmartDashboard.putNumber("Pigeon Yaw Value", getPigeonYaw());
 
     	//Toggles which gear it is in and makes controller rumble
         if(Robot.controls.getButtonPressed(SHIFT_BUTTON.getController(), SHIFT_BUTTON.getButton())) {
@@ -83,16 +92,16 @@ public class DriveTrain extends Subsystem {
      * @return velocity of the selected encoder
      */
     public int getEncoderVelocity(ENCODER side) {
-    	return side.equals(ENCODER.LEFT) ? talonPhoenixFL.getSensorCollection().getQuadratureVelocity() : talonPhoenixFR.getSensorCollection().getQuadratureVelocity();
+    	return side.equals(ENCODER.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : talonPhoenixRight.getSensorCollection().getQuadratureVelocity();
     }
     
     /**\
      * Gets encoder position from drive motor encoders
      * @param side of robot to get encoder
-     * @return position of the selected encoder
+     * @return position of the selected encoder(inches)
      */
     public double getEncoderPosition(ENCODER side) {
-    	return side.equals(ENCODER.LEFT) ? talonPhoenixFL.getSensorCollection().getQuadraturePosition() : (side.equals(ENCODER.RIGHT)? talonPhoenixFR.getSensorCollection().getQuadraturePosition(): (talonPhoenixFL.getSensorCollection().getQuadraturePosition() + talonPhoenixFR.getSensorCollection().getQuadraturePosition()) / 2d);
+    	return (side.equals(ENCODER.LEFT) ? -talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(ENCODER.RIGHT)? talonPhoenixRight.getSensorCollection().getQuadraturePosition(): (talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * ENCODER_COUNT_TO_INCH;
     }
     
     /**
@@ -100,14 +109,14 @@ public class DriveTrain extends Subsystem {
      * @param gear to shift to
      */
     public void shift(GEAR gear) {
-    	transmission.set(gear.getValue());
+    	//transmission.set(gear.getValue());
     }
     
     /**
      * Toggles selected gear
      */
     public void toggleShift() {
-    	transmission.set(transmission.get().equals(GEAR.HIGH.getValue()) ? GEAR.LOW.getValue(): GEAR.HIGH.getValue());
+    	//transmission.set(transmission.get().equals(GEAR.HIGH.getValue()) ? GEAR.LOW.getValue(): GEAR.HIGH.getValue());
     }
     
     /**
@@ -115,7 +124,7 @@ public class DriveTrain extends Subsystem {
      * @param direction
      */
     public void arcadeDrive(double speed, double direction) {
-    	drive.arcadeDrive(speed, direction);
+    	drive.arcadeDrive(-speed, direction);
     }
     
     public void tankDrive(double leftSpeed, double rightSpeed) {

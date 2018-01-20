@@ -31,7 +31,7 @@ public class Lift extends Subsystem {
 		super();
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
-		collapse = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
+		//collapse = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 	}
 	
 	public void setLiftPositon(POSITION position) {
@@ -48,11 +48,10 @@ public class Lift extends Subsystem {
     }
     
     public enum POSITION {
-    	
     	SWITCH(0),
     	SCALE(1);
     	
-    	public int height;
+    	public double height;
     	
     	private POSITION(int height) {
     		this.height = height;
