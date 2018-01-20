@@ -12,14 +12,13 @@ public class TurnDegrees extends Command {
 
 	private static double initialYaw;
 	private static double currentYaw;
-	private DriveTrain driveTrain;
+	private DriveTrain driveTrain = Robot.driveTrain;
 	private double degrees;
 	private boolean turnRight;
 
 	//set turnRight to true to turn right, set to false to turn left
-	public TurnDegrees(DriveTrain driveTrain, double degrees, boolean turnRight) {
-		requires(driveTrain);
-		this.driveTrain = driveTrain;
+	public TurnDegrees(double degrees, boolean turnRight) {
+		requires(Robot.driveTrain);
 		this.degrees = degrees;
 		this.turnRight = turnRight;
 	}
@@ -36,20 +35,20 @@ public class TurnDegrees extends Command {
 		double YawDifference = Math.abs(initialYaw - currentYaw);
 		
 		if (turnRight) {
-			if (YawDifference < degrees - 10) {
+			if (YawDifference < degrees - 20) {
 				driveTrain.tankDrive(.5, -.5);
 			} else if (YawDifference < degrees) {
-				driveTrain.tankDrive(.3, -.3);
+				driveTrain.tankDrive(.2, -.2);
 			} else if (YawDifference > degrees) {
-				driveTrain.tankDrive(-.3, .3);
+				driveTrain.tankDrive(-.2, .2);
 			}
 		} else {
-			if (YawDifference < degrees - 10) {
+			if (YawDifference < degrees - 20) {
 				driveTrain.tankDrive(-.5, .5);
 			} else if (YawDifference < degrees) {
-				driveTrain.tankDrive(-.3, .3);
+				driveTrain.tankDrive(-.2, .2);
 			} else if (YawDifference > degrees) {
-				driveTrain.tankDrive(.3, -.3);
+				driveTrain.tankDrive(.2, -.2);
 			}
 		}
 
