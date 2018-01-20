@@ -12,7 +12,7 @@ public class Dashboard {
 	
 	public Dashboard() {
 		chooser = new SendableChooser<Command>();
-		chooser.addDefault("AutonTest", new DriveTime(Robot.driveTrain, 3d));
+		chooser.addDefault("AutonTest", new DriveTime(Robot.driveTrain, 0.5d, 3d));
 		SmartDashboard.putData("Autonomous mode chooser", chooser);
 	}
 	

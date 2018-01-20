@@ -11,12 +11,13 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveTime extends Command {
 
 	private DriveTrain driveTrain;
-	private double startTime, duration;
+	private double startTime, duration, speeed;
 	
-    public DriveTime(DriveTrain driveTrain, double duration) {
+    public DriveTime(DriveTrain driveTrain, double speeed, double duration) {
     	requires(driveTrain);
     	this.driveTrain = driveTrain;
     	this.duration = duration;
+    	this.speeed = speeed;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
@@ -28,7 +29,7 @@ public class DriveTime extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	driveTrain.arcadeDrive(0.4f, 0f);
+    	driveTrain.arcadeDrive(speeed, 0f);
     }
 
     // Make this return true when this Command no longer needs to run execute()
