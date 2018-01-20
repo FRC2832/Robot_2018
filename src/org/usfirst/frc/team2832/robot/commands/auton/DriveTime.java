@@ -8,14 +8,15 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class AutonTest extends Command {
+public class DriveTime extends Command {
 
 	private DriveTrain driveTrain;
-	private double startTime;
+	private double startTime, duration;
 	
-    public AutonTest(DriveTrain driveTrain) {
+    public DriveTime(DriveTrain driveTrain, double duration) {
     	requires(driveTrain);
     	this.driveTrain = driveTrain;
+    	this.duration = duration;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
@@ -27,24 +28,24 @@ public class AutonTest extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	driveTrain.getDrive().arcadeDrive(0.4f, 0f);
+    	driveTrain.arcadeDrive(0.4f, 0f);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return startTime + 3d < Timer.getFPGATimestamp();
+        return startTime + duration < Timer.getFPGATimestamp();
 
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	driveTrain.getDrive().arcadeDrive(0, 0);
+    	driveTrain.arcadeDrive(0, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	driveTrain.getDrive().arcadeDrive(0, 0);
+    	driveTrain.arcadeDrive(0, 0);
     	System.out.println("AutonTest got interrupted!");
     }
 }

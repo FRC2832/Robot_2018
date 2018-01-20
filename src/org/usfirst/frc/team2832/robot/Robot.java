@@ -7,7 +7,7 @@
 
 package org.usfirst.frc.team2832.robot;
 
-import org.usfirst.frc.team2832.robot.commands.auton.AutonTest;
+import org.usfirst.frc.team2832.robot.commands.auton.DriveTime;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -18,10 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
-	private DriveTrain driveTrain;
-	SendableChooser chooser;
-	private Controls controls;
-	private Controls_OldStyleImproved controlsOld;
+	public static DriveTrain driveTrain;
+	public static Controls controls;
+	public static Dashboard dashboard;
 	
 	Command autonomousCommand;
 	
@@ -29,11 +28,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		controls = new Controls();
 		driveTrain = new DriveTrain(controls);
-		
-		chooser = new SendableChooser();
-		chooser.addDefault("AutonTest", new AutonTest(driveTrain));
-		SmartDashboard.putData("Autonomous mode chooser", chooser);
-	
+		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
 	}
 
 	@Override
@@ -49,16 +44,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {	
 		Scheduler.getInstance().removeAll();
-		System.out.println(chooser.getSelected());
-		Command command = (Command)chooser.getSelected();
-		//Command command = new AutonTest(driveTrain);
-		Scheduler.getInstance().add(command);
-		
-		//if(command != null) {
-			//command.start();
-		//} else {
-		//	System.err.println("Command chooser returned null");
-		//}
+		Scheduler.getInstance().add(dashboard.getSelectedCommand());
+
 	}
 
 	@Override

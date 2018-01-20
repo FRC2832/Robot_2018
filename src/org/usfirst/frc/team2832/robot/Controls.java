@@ -7,13 +7,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Controls {
 	
-	final int CONTROLLER_MAIN_PORT = 0;
-	final int CONTROLLER_SECONDARY_PORT = 1;
+	final static int CONTROLLER_MAIN_PORT = 0;
+	final static int CONTROLLER_SECONDARY_PORT = 1;
 	
 	private Controller controllerMain, controllerSecondary;
 	private List<Trigger> triggers;
@@ -29,7 +30,8 @@ public class Controls {
 	public void update() {
 		//System.out.println("Controllers: " + controllerMain + ": " + controllerSecondary);
 		for(Rumble rumble: rumbles) 
-			if(rumble.start + rumble.duration < System.currentTimeMillis()) {
+			if(rumble.start + rumble.duration < Timer.getFPGATimestamp()) {
+				System.out.println("Rumble '" + rumble + "' killed");
 				getController(rumble.controller).setRumble(rumble.type, 0d);
 				rumbles.remove(rumble);
 			}

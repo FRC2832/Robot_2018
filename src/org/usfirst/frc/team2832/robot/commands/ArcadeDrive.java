@@ -25,10 +25,8 @@ public class ArcadeDrive extends Command {
     }
 
     protected void execute() {
-    	//driveTrain.getDrive().arcadeDrive(0.5, 0);
-    	//System.out.println("Controls: " + controls);
-    	//System.out.println("Drive: " + controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft) + ": " + controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
-    	driveTrain.getDrive().arcadeDrive(controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft), controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
+    	driveTrain.arcadeDrive(controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft), 
+    			controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
     }
 
     protected boolean isFinished() {
