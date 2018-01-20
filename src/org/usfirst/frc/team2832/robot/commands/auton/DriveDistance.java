@@ -16,10 +16,11 @@ public class DriveDistance extends Command {
 	public DriveDistance(double speeed, double distance) {
         requires(Robot.driveTrain);
         this.speeed = speeed;
+        this.distance = distance;
     }
 
     protected void initialize() {
-    	start = Robot.driveTrain.getAverageEncoderPosition();
+    	start = Robot.driveTrain.getEncoderPosition(ENCODER.BOTH);
     	Robot.driveTrain.arcadeDrive(speeed, 0);
     }
 
@@ -27,7 +28,7 @@ public class DriveDistance extends Command {
     }
 
     protected boolean isFinished() {
-        return Robot.driveTrain.getAverageEncoderPosition() > start + distance;
+        return Robot.driveTrain.getEncoderPosition(ENCODER.BOTH) > start + distance;
     }
 
     protected void end() {
