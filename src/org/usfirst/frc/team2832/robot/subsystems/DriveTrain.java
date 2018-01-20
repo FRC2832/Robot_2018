@@ -42,7 +42,7 @@ public class DriveTrain extends Subsystem {
 	private SpeedControllerGroup leftMotors, rightMotors;	
 	private WPI_TalonSRX talonFL, talonFR, talonBL, talonBR;
 	private TalonSRX talonPhoenixLeft, talonPhoenixRight;
-	private static PigeonIMU pigeon;
+	private PigeonIMU pigeon;
 		
 	public DriveTrain() {
 		super();
@@ -149,9 +149,9 @@ public class DriveTrain extends Subsystem {
     	}
     }
     
-    public static double getPigeonYaw() {
+    public double getPigeonYaw() {
     	double [] yaw = new double[3];
-    	pigeon.getYawPitchRoll(yaw);
+    	this.pigeon.getYawPitchRoll(yaw);
     	return yaw[0];
     }
 }
