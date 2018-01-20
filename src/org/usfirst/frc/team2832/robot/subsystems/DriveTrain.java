@@ -66,6 +66,8 @@ public class DriveTrain extends Subsystem {
     @Override
     public void periodic() {
     	SmartDashboard.putNumber("Encoder Left Position", getEncoderPosition(ENCODER.LEFT));
+    	SmartDashboard.putNumber("Encoder Right Position", getEncoderPosition(ENCODER.RIGHT));
+
     	//Toggles which gear it is in and makes controller rumble
         if(Robot.controls.getButtonPressed(SHIFT_BUTTON.getController(), SHIFT_BUTTON.getButton())) {
         	System.out.println("Shift");
@@ -89,16 +91,8 @@ public class DriveTrain extends Subsystem {
      * @param side of robot to get encoder
      * @return position of the selected encoder
      */
-    public int getEncoderPosition(ENCODER side) {
-    	return side.equals(ENCODER.LEFT) ? talonPhoenixFL.getSensorCollection().getQuadraturePosition() : talonPhoenixFR.getSensorCollection().getQuadraturePosition();
-    }
-    
-    /**
-     * Get average value of the two drive encoders
-     * @return average of two positions
-     */
-    public double getAverageEncoderPosition() {
-    	return (talonPhoenixFL.getSensorCollection().getQuadraturePosition() + talonPhoenixFR.getSensorCollection().getQuadraturePosition()) / 2d;
+    public double getEncoderPosition(ENCODER side) {
+    	return side.equals(ENCODER.LEFT) ? talonPhoenixFL.getSensorCollection().getQuadraturePosition() : (side.equals(ENCODER.RIGHT)? talonPhoenixFR.getSensorCollection().getQuadraturePosition(): (talonPhoenixFL.getSensorCollection().getQuadraturePosition() + talonPhoenixFR.getSensorCollection().getQuadraturePosition()) / 2d);
     }
     
     /**
@@ -132,7 +126,7 @@ public class DriveTrain extends Subsystem {
      *Enumeration for drive motor encoders
      */
     public enum ENCODER {
-    	LEFT, RIGHT;
+    	LEFT, RIGHT, BOTH;
     }
     
     /**
