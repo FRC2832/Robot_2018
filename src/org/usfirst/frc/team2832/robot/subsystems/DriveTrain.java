@@ -9,6 +9,7 @@ import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -41,6 +42,7 @@ public class DriveTrain extends Subsystem {
 	private SpeedControllerGroup leftMotors, rightMotors;	
 	private WPI_TalonSRX talonFL, talonFR, talonBL, talonBR;
 	private TalonSRX talonPhoenixFL, talonPhoenixFR;
+	private static PigeonIMU pigeon;
 		
 	public DriveTrain() {
 		super();
@@ -54,6 +56,7 @@ public class DriveTrain extends Subsystem {
 		leftMotors = new SpeedControllerGroup(talonFL, talonBL);
 		rightMotors = new SpeedControllerGroup(talonFR, talonBR);
 		drive = new DifferentialDrive(leftMotors, rightMotors);
+		pigeon = new PigeonIMU(0);
 	}
 	
     public void initDefaultCommand() {
@@ -115,6 +118,10 @@ public class DriveTrain extends Subsystem {
     	drive.arcadeDrive(speed, direction);
     }
     
+    public void tankDrive(double leftSpeed, double rightSpeed) {
+    	drive.tankDrive(leftSpeed, rightSpeed);
+    }
+    
     /**
      *Enumeration for drive motor encoders
      */
@@ -131,6 +138,12 @@ public class DriveTrain extends Subsystem {
     	public Value getValue() {
     		return this == HIGH ? Value.kReverse : Value.kForward;
     	}
+    }
+    
+    public static double getPigeonYaw() {
+    	double [] yaw = new double[3];
+    	pigeon.getYawPitchRoll(yaw);
+    	return yaw[0];
     }
 }
 
