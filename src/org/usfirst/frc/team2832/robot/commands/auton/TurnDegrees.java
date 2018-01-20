@@ -1,49 +1,54 @@
 package org.usfirst.frc.team2832.robot.commands.auton;
 
 import edu.wpi.first.wpilibj.command.Command;
+
+import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 
 /**
  *
  */
-public class Turn90Degrees extends Command {
+public class TurnDegrees extends Command {
 
 	private static double initialYaw;
 	private static double currentYaw;
 	private DriveTrain driveTrain;
+	private double degrees;
 	private boolean turnRight;
 
 	//set turnRight to true to turn right, set to false to turn left
-	public Turn90Degrees(DriveTrain driveTrain, boolean turnRight) {
+	public TurnDegrees(DriveTrain driveTrain, double degrees, boolean turnRight) {
 		requires(driveTrain);
 		this.driveTrain = driveTrain;
+		this.degrees = degrees;
+		this.turnRight = turnRight;
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		initialYaw = DriveTrain.getPigeonYaw();
+		initialYaw = Robot.driveTrain.getPigeonYaw();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		currentYaw = DriveTrain.getPigeonYaw();
+		currentYaw = Robot.driveTrain.getPigeonYaw();
 		
 		double YawDifference = Math.abs(initialYaw - currentYaw);
 		
 		if (turnRight) {
-			if (YawDifference < 80) {
+			if (YawDifference < degrees - 10) {
 				driveTrain.tankDrive(.5, -.5);
-			} else if (YawDifference < 90) {
+			} else if (YawDifference < degrees) {
 				driveTrain.tankDrive(.3, -.3);
-			} else if (YawDifference > 90) {
+			} else if (YawDifference > degrees) {
 				driveTrain.tankDrive(-.3, .3);
 			}
 		} else {
-			if (YawDifference < 80) {
+			if (YawDifference < degrees - 10) {
 				driveTrain.tankDrive(-.5, .5);
-			} else if (YawDifference < 90) {
+			} else if (YawDifference < degrees) {
 				driveTrain.tankDrive(-.3, .3);
-			} else if (YawDifference > 90) {
+			} else if (YawDifference > degrees) {
 				driveTrain.tankDrive(.3, -.3);
 			}
 		}
@@ -52,7 +57,7 @@ public class Turn90Degrees extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		if ((Math.abs(initialYaw - currentYaw) > 88) && (Math.abs(initialYaw - currentYaw) < 92)) {
+		if ((Math.abs(initialYaw - currentYaw) > degrees - 2) && (Math.abs(initialYaw - currentYaw) < degrees + 2)) {
 			return true;
 		} else {
 			return false;
