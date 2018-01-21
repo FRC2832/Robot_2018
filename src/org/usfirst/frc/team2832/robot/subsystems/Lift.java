@@ -1,18 +1,15 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
-
 import org.usfirst.frc.team2832.robot.Controls;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-
 /**
- * The drive train subsystem which handles encoders, the transmission, and driving
+ * The lift subsystem which handles an encoder, commanding the lift motor, and folding with a pneumatic cylinder
  */
 public class Lift extends Subsystem {
 
@@ -34,8 +31,13 @@ public class Lift extends Subsystem {
 		//collapse = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 	}
 	
+	/**
+	 * Commands the lift to move to a set height
+	 * 
+	 * @param position to go to
+	 */
 	public void setLiftPositon(POSITION position) {
-		
+		//Maybe set a variable here and have a command running to go to whichever position is set?
 	}
 	
     public void initDefaultCommand() {
@@ -47,9 +49,12 @@ public class Lift extends Subsystem {
     	
     }
     
+    /**
+     * An enumeration for lift height positions
+     */
     public enum POSITION {
-    	SWITCH(0),
-    	SCALE(1);
+    	SWITCH(10),
+    	SCALE(50);
     	
     	public double height;
     	

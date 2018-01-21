@@ -33,6 +33,9 @@ public class Controls {
 		rumbles = new CopyOnWriteArrayList<Rumble>();
 	}
 
+	/**
+	 * Called periodically to handle rumble events
+	 */
 	public void update() {
 		// System.out.println("Controllers: " + controllerMain + ": " +
 		// controllerSecondary);
@@ -44,39 +47,133 @@ public class Controls {
 			}
 	}
 
+	/**
+	 * Adds a new {@link Rumble} instance to the list
+	 * 
+	 * @param controller to be rumbled
+	 * @param type as in left or right
+	 * @param duration in seconds
+	 * @param intensity between 0 and 1
+	 */
 	public void setRumble(Controllers controller, RumbleType type, double duration, double intensity) {
 		rumbles.add(new Rumble(controller, type, duration));
 		getController(controller).setRumble(type, intensity);
 	}
 
+	/**
+	 * Get joystick x value from controller
+	 * 
+	 * @param controller to retrieve from
+	 * @param hand, as in which joystick
+	 * @return x value between -1 and 1
+	 */
 	public double getJoystickX(Controllers controller, Hand hand) {
 		return getController(controller).getX(hand);
 	}
 
+	/**
+	 * Get joystick y value from controller
+	 * 
+	 * @param controller to retrieve from
+	 * @param hand, as in which joystick
+	 * @return y value between -1 and 1
+	 */
 	public double getJoystickY(Controllers controller, Hand hand) {
 		return getController(controller).getY(hand);
 	}
 
+	/**
+	 * Get D-pad from controller
+	 * 
+	 * @param controller to retrieve d-pad from
+	 * @return angle, I think, going clockwise
+	 */
 	public int getPOV(Controllers controller) {
 		return getController(controller).getPOV();
 	}
 
+	/**
+	 * Checks whether or not the button is currently pressed
+	 * 
+	 * @param mapping to retrieve value from
+	 * @return if the button is pressed
+	 */
+	public boolean getButton(ButtonMapping mapping) {
+		return getButton(mapping.getController(), mapping.getButton());
+	}
+	
+	/**
+	 * Checks whether or not the button is currently pressed
+	 * 
+	 * @param controller to retrieve values from
+	 * @param button to check
+	 * @return if the button is pressed
+	 */
 	public boolean getButton(Controllers controller, Buttons button) {
 		return getController(controller).getButton(button);
 	}
 
+	/**
+	 * Checks whether or not the button was just pressed
+	 * 
+	 * @param mapping to retrieve value from
+	 * @return if the button was just pressed
+	 */
+	public boolean getButtonPressed(ButtonMapping mapping) {
+		return getButtonPressed(mapping.getController(), mapping.getButton());
+	}
+	
+	/**
+	 * Checks whether or not the button was just pressed
+	 * 
+	 * @param controller to retrieve values from
+	 * @param button to check
+	 * @return if the button was just pressed
+	 */
 	public boolean getButtonPressed(Controllers controller, Buttons button) {
 		return getController(controller).getRawButtonPressed(button.value);
 	}
 
+	/**
+	 * Checks whether or not the button was just released
+	 * 
+	 * @param mapping to retrieve value from
+	 * @return if the button was just released
+	 */
+	public boolean getButtonReleased(ButtonMapping mapping) {
+		return getButtonReleased(mapping.getController(), mapping.getButton());
+	}
+	
+	/**
+	 * Checks whether or not the button was just released
+	 * 
+	 * @param controller to retrieve values from
+	 * @param button to check
+	 * @return if the button button was just released
+	 */
 	public boolean getButtonReleased(Controllers controller, Buttons button) {
 		return getController(controller).getRawButtonReleased(button.value);
 	}
 
-	public Trigger whilePressed(Button button, Command command) {
-		return whilePressed(button.getController(), button.getButton(), command);
+	/**
+	 * Registers a command to be run while a button is pressed
+	 * 
+	 * @param mapping from which to listen
+	 * @param command to run
+	 * @return a reference to the trigger to remove listener
+	 */
+	public Trigger whilePressed(ButtonMapping mapping, Command command) {
+		return whilePressed(mapping.getController(), mapping.getButton(), command);
 	}
 	
+	/**
+	 * Registers a command to be run while a button is pressed
+	 * 
+	 * @param controller to listen for
+	 * @param button to listen for
+	 * @param command to run
+	 * @return a reference to the trigger to remove listener
+	 */
 	public Trigger whilePressed(Controllers controller, Buttons button, Command command) {
 		Trigger trigger = new Trigger() {
 			@Override
@@ -89,10 +186,25 @@ public class Controls {
 		return trigger;
 	}
 
-	public Trigger whenPressed(Button button, Command command) {
-		return whenPressed(button.getController(), button.getButton(), command);
+	/**
+	 * Registers a command to be run when a button is pressed
+	 * 
+	 * @param mapping from which to listen
+	 * @param command to run
+	 * @return a reference to the trigger to remove listener
+	 */
+	public Trigger whenPressed(ButtonMapping mapping, Command command) {
+		return whenPressed(mapping.getController(), mapping.getButton(), command);
 	}
 	
+	/**
+	 * Registers a command to be run when a button is pressed
+	 * 
+	 * @param controller to listen for
+	 * @param button to listen for
+	 * @param command to run
+	 * @return a reference to the trigger to remove listener
+	 */
 	public Trigger whenPressed(Controllers controller, Buttons button, Command command) {
 		Trigger trigger = new Trigger() {
 			@Override
@@ -105,10 +217,25 @@ public class Controls {
 		return trigger;
 	}
 
-	public Trigger whenReleased(Button button, Command command) {
-		return whenReleased(button.getController(), button.getButton(), command);
+	/**
+	 * Registers a command to be run when a button is released
+	 * 
+	 * @param mapping from which to listen
+	 * @param command to run
+	 * @return a reference to the trigger to remove listener
+	 */
+	public Trigger whenReleased(ButtonMapping mapping, Command command) {
+		return whenReleased(mapping.getController(), mapping.getButton(), command);
 	}
 	
+	/**
+	 * Registers a command to be run when a button is released
+	 * 
+	 * @param controller to listen for
+	 * @param button to listen for
+	 * @param command to run
+	 * @return a reference to the trigger to remove listener
+	 */
 	public Trigger whenReleased(Controllers controller, Buttons button, Command command) {
 		Trigger trigger = new Trigger() {
 			@Override
@@ -121,10 +248,21 @@ public class Controls {
 		return trigger;
 	}
 
+	/**
+	 * Removes a button listener
+	 * 
+	 * @param trigger to remove
+	 */
 	public void removeTrigger(Trigger trigger) {
 		triggers.remove(trigger);
 	}
 
+	/**
+	 * Returns an instance of the desired controller from the {@link Controllers} enumeration
+	 * 
+	 * @param controller enumeration
+	 * @return relevant instance of {@link Controller}
+	 */
 	private Controller getController(Controllers controller) {
 		return controller.equals(Controllers.CONTROLLER_MAIN) ? controllerMain : controllerSecondary;
 	}

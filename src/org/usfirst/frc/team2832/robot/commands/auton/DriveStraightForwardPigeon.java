@@ -8,13 +8,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Drive strait forward with correction from pigeon IMU
  */
 public class DriveStraightForwardPigeon extends Command {
 	
+	public static double CORRECTION = 20;
+	
 	private DriveTrain driveTrain = Robot.driveTrain;
 	private double initialYaw, currentYaw, speed, start, distance;
-	private double correction = 20;
 	
 	public DriveStraightForwardPigeon(double speed, double distance) {
 		requires(Robot.driveTrain);
@@ -22,35 +23,44 @@ public class DriveStraightForwardPigeon extends Command {
 		this.distance = distance;
     }
 
-    // Called just before this Command runs the first time
+    /**
+     * Set the initial yaw value and starting encoder position
+     */
     protected void initialize() {
     	initialYaw = driveTrain.getPigeonYaw();
-    	start = Robot.driveTrain.getEncoderPosition(ENCODER.BOTH);
+    	start = Robot.driveTrain.getEncoderPosition(ENCODER.AVERAGE);
     }
 
-    // Called repeatedly when this Command is scheduled to run
+    /**
+     * Drive with speed adjusted based on difference between starting and current angle
+     */
     protected void execute() {
     	currentYaw = driveTrain.getPigeonYaw();
     	double differenceYaw = initialYaw - currentYaw;
     	if (differenceYaw > 0) {
-    		driveTrain.tankDrive(speed - (differenceYaw / correction), speed + (differenceYaw / correction));
+    		driveTrain.tankDrive(speed - (differenceYaw / CORRECTION), speed + (differenceYaw / CORRECTION));
     	} else {
-    		driveTrain.tankDrive(speed + (differenceYaw / correction), speed - (differenceYaw / correction));
+    		driveTrain.tankDrive(speed + (differenceYaw / CORRECTION), speed - (differenceYaw / CORRECTION));
     	}
     }
 
-    // Make this return true when this Command no longer needs to run execute()
+    /**
+     * Terminate if average encoder position surpasses target distance
+     */
     protected boolean isFinished() {
-        return Robot.driveTrain.getEncoderPosition(ENCODER.BOTH) > start + distance;
+        return Robot.driveTrain.getEncoderPosition(ENCODER.AVERAGE) > start + distance;
     }
 
-    // Called once after isFinished returns true
+    /**
+     * Important - we don't want uncontrolled motors
+     */
     protected void end() {
     	driveTrain.tankDrive(0, 0);
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
+    /**
+     * Sanity check
+     */
     protected void interrupted() {
     	driveTrain.tankDrive(0, 0);
     }

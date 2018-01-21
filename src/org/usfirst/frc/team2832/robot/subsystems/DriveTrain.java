@@ -1,6 +1,6 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
-import org.usfirst.frc.team2832.robot.Button;
+import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
@@ -35,7 +35,7 @@ public class DriveTrain extends Subsystem {
 	
 	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; //Circumference divided by pulses/revolution
 	
-	final Button SHIFT_BUTTON = new Button(Controllers.CONTROLLER_MAIN, Buttons.Y);
+	final ButtonMapping SHIFT_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
 	
 	private DoubleSolenoid transmission;
 	private DifferentialDrive drive;
@@ -59,18 +59,22 @@ public class DriveTrain extends Subsystem {
 		pigeon = new PigeonIMU(0);
 		talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
 		talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
-		//talonPhoenixLeft.setInverted(true);
-		//talonPhoenixRight.setInverted(true);
 		//talonFL.setInverted(true);
 		//talonFR.setInverted(true);
 		//talonBL.setInverted(true);
 		//talonBR.setInverted(true);
 	}
 	
+	/**
+	 * Runs the {@link ArcadeDrive} command when no other command is running on this subsystem
+	 */
     public void initDefaultCommand() {
-        setDefaultCommand(new ArcadeDrive(this));
+        setDefaultCommand(new ArcadeDrive());
     }
     
+    /**
+     * Puts values to dashboard and listens for pressing of the Y button for rumbling
+     */
     @Override
     public void periodic() {
     	SmartDashboard.putNumber("Encoder Left Position", getEncoderPosition(ENCODER.LEFT));
@@ -81,8 +85,8 @@ public class DriveTrain extends Subsystem {
         if(Robot.controls.getButtonPressed(SHIFT_BUTTON.getController(), SHIFT_BUTTON.getButton())) {
         	System.out.println("Shift");
         	toggleShift();
-        	Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kLeftRumble, 1d, 2.0d);
-        	Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kRightRumble, 1d, 2.0d);
+        	Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kLeftRumble, 0.5d, 1d);
+        	Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kRightRumble, 0.5d, 1d);
         }
     }
     
@@ -120,13 +124,21 @@ public class DriveTrain extends Subsystem {
     }
     
     /**
-     * @param speed
-     * @param direction
+     * Commands the drive motors using arcade drive
+     * 
+     * @param speed to drive at between 0 and 1
+     * @param direction to drive in between -1 and 1
      */
     public void arcadeDrive(double speed, double direction) {
     	drive.arcadeDrive(-speed, direction);
     }
     
+    /**
+     * Commands the drive motors using tank drive
+     * 
+     * @param leftSpeed between 0 and 1
+     * @param rightSpeed between 0 and 1
+     */
     public void tankDrive(double leftSpeed, double rightSpeed) {
     	drive.tankDrive(leftSpeed, rightSpeed);
     }
@@ -135,7 +147,7 @@ public class DriveTrain extends Subsystem {
      *Enumeration for drive motor encoders
      */
     public enum ENCODER {
-    	LEFT, RIGHT, BOTH;
+    	LEFT, RIGHT, AVERAGE;
     }
     
     /**
@@ -149,10 +161,26 @@ public class DriveTrain extends Subsystem {
     	}
     }
     
+    /**
+     * Retrieves the yaw value from the pigeon IMU
+     * 
+     * @return current yaw angle
+     */
     public double getPigeonYaw() {
-    	double [] yaw = new double[3];
-    	this.pigeon.getYawPitchRoll(yaw);
-    	return yaw[0];
+    	double[] rotations = new double[3];
+    	this.pigeon.getYawPitchRoll(rotations);
+    	return rotations[0];
+    }
+    
+    /**
+     * Retrieves the pitch value from the pigeon IMU
+     * 
+     * @return current pitch angle
+     */
+    public double getPigeonPitch() {
+    	double[] rotations = new double[3];
+    	this.pigeon.getYawPitchRoll(rotations);
+    	return rotations[1];
     }
 }
 

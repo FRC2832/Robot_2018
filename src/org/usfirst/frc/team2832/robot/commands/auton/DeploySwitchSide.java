@@ -3,7 +3,7 @@ package org.usfirst.frc.team2832.robot.commands.auton;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
- *
+ * Possibly use this instead of manually building command groups
  */
 public class DeploySwitchSide extends CommandGroup {
 

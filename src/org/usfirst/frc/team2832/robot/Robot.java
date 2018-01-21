@@ -30,6 +30,9 @@ public class Robot extends TimedRobot {
 	public static Controls controls;
 	public static Dashboard dashboard;
 		
+	/**
+	 * Called when the robot is initialized
+	 */
 	@Override
 	public void robotInit() {
 		controls = new Controls();
@@ -41,7 +44,7 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * Called once when robot is disabled
+	 * Called when when robot is disabled
 	 */
 	@Override
 	public void disabledInit() {
@@ -57,13 +60,12 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * Called once when robot enters autonomous
+	 * Called when robot enters autonomous
 	 */
 	@Override
 	public void autonomousInit() {	
 		Scheduler.getInstance().removeAll();
 		Scheduler.getInstance().add(dashboard.getSelectedCommand());
-
 	}
 
 	/**
@@ -92,9 +94,18 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
+	 * Called when test mode begins
+	 */
+	@Override
+	public void testInit() {
+		
+	}
+	
+	/**
 	 * Called periodically while in test mode
 	 */
 	@Override
 	public void testPeriodic() {
+		
 	}
 }

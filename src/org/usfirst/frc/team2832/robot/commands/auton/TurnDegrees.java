@@ -6,14 +6,12 @@ import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 
 /**
- *
+ * A command to turn a set number of degrees
  */
 public class TurnDegrees extends Command {
 
-	private static double initialYaw;
-	private static double currentYaw;
-	private DriveTrain driveTrain = Robot.driveTrain;
-	private double degrees;
+	private DriveTrain driveTrain;
+	private double initialYaw, degrees, currentYaw;
 	private boolean turnRight;
 
 	//set turnRight to true to turn right, set to false to turn left
@@ -21,17 +19,21 @@ public class TurnDegrees extends Command {
 		requires(Robot.driveTrain);
 		this.degrees = degrees;
 		this.turnRight = turnRight;
+		driveTrain = Robot.driveTrain;
 	}
 
-	// Called just before this Command runs the first time
+	/**
+	 * Save the initial angle of the robot
+	 */
 	protected void initialize() {
 		initialYaw = Robot.driveTrain.getPigeonYaw();
 	}
 
-	// Called repeatedly when this Command is scheduled to run
+	/**
+	 * Turn left or right based on direction and slow down as approaching angle
+	 */
 	protected void execute() {
 		currentYaw = Robot.driveTrain.getPigeonYaw();
-		
 		double YawDifference = Math.abs(initialYaw - currentYaw);
 		
 		if (turnRight) {
@@ -54,22 +56,23 @@ public class TurnDegrees extends Command {
 
 	}
 
-	// Make this return true when this Command no longer needs to run execute()
+	/**
+	 * Terminate if within four degrees of target angle
+	 */
 	protected boolean isFinished() {
-		if ((Math.abs(initialYaw - currentYaw) > degrees - 2) && (Math.abs(initialYaw - currentYaw) < degrees + 2)) {
-			return true;
-		} else {
-			return false;
-		}
+		return ((Math.abs(initialYaw - currentYaw) > degrees - 2) && (Math.abs(initialYaw - currentYaw) < degrees + 2));
 	}
 
-	// Called once after isFinished returns true
+	/**
+	 * Oh, are we still turning?
+	 */
 	protected void end() {
 		driveTrain.tankDrive(0, 0);
 	}
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
+	/**
+	 * Let's not spin in circles like last year
+	 */
 	protected void interrupted() {
 		driveTrain.tankDrive(0, 0);
 	}

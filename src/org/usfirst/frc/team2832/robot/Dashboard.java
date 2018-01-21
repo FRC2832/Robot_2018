@@ -2,10 +2,12 @@ package org.usfirst.frc.team2832.robot;
 
 import org.usfirst.frc.team2832.robot.commands.auton.DriveDistance;
 import org.usfirst.frc.team2832.robot.commands.auton.DriveTime;
+import org.usfirst.frc.team2832.robot.commands.auton.TurnDegrees;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * This class handles interaction with the dashboard
  */
@@ -22,6 +24,7 @@ public class Dashboard {
 	}
 
 	/**
+	 * Gets the selected command from the {@link SendableChooser}
 	 * 
 	 * @return An instance of the currently selected command
 	 */
@@ -30,7 +33,7 @@ public class Dashboard {
 	}
 
 	/**
-	 * An enum for the different autonomous modes
+	 * An enumeration for the different autonomous modes
 	 */
 	public enum AUTON_MODE {
 		DRIVE_FORWARD, SCALE_LEFT, SCALE_RIGHT, SWITCH_LEFT, SWITCH_RIGHT;
@@ -39,7 +42,7 @@ public class Dashboard {
 			switch (this) {
 			case DRIVE_FORWARD: return new DriveTime(0.4d, 3d);
 			case SCALE_LEFT: return new DriveDistance(0.4d, 24d);
-			case SCALE_RIGHT: return null;
+			case SCALE_RIGHT: return new TurnDegrees(90, false);
 			case SWITCH_LEFT: return null;
 			case SWITCH_RIGHT: return null;
 			default: return null;

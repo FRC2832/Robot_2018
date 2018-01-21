@@ -5,7 +5,8 @@ import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * This was intended to be a hybrid of commands to drive forward a distance, adjust angle with pigeon, 
+ * look for lines, and possibly watch the distance from the wall
  */
 public class DriveToScale extends Command {
 
