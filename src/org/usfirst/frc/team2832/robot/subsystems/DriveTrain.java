@@ -105,7 +105,7 @@ public class DriveTrain extends Subsystem {
      * @return position of the selected encoder(inches)
      */
     public double getEncoderPosition(ENCODER side) {
-    	return (side.equals(ENCODER.LEFT) ? -talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(ENCODER.RIGHT)? talonPhoenixRight.getSensorCollection().getQuadraturePosition(): (talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * ENCODER_COUNT_TO_INCH;
+    	return (side.equals(ENCODER.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(ENCODER.RIGHT)? -talonPhoenixRight.getSensorCollection().getQuadraturePosition(): (talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * ENCODER_COUNT_TO_INCH;
     }
     
     /**
@@ -130,7 +130,7 @@ public class DriveTrain extends Subsystem {
      * @param direction to drive in between -1 and 1
      */
     public void arcadeDrive(double speed, double direction) {
-    	drive.arcadeDrive(-speed, direction);
+    	drive.arcadeDrive(speed, direction);
     }
     
     /**
