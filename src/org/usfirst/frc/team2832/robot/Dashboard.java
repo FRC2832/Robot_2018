@@ -51,7 +51,7 @@ public class Dashboard {
 		public Command getCommand() {
 			CommandGroup group = new CommandGroup();
 			switch (this) {
-			case DRIVE_FORWARD: new DriveStraightForwardPigeon(.5f, 5f);
+			case DRIVE_FORWARD: new DriveDistance(.5f, 48f);
 			case SCALE_LEFT: return null; //new DriveDistance(0.4d, 24d);
 			case SCALE_RIGHT:
 			group.addSequential(new DriveStraightForwardPigeon(.5f, 9f));
