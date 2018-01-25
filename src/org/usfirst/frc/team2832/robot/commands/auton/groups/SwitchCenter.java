@@ -3,6 +3,7 @@ package org.usfirst.frc.team2832.robot.commands.auton.groups;
 import org.usfirst.frc.team2832.robot.commands.auton.DriveStraightForwardPigeon;
 import org.usfirst.frc.team2832.robot.commands.auton.TurnDegrees;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
@@ -10,10 +11,14 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class SwitchCenter extends CommandGroup {
 
-    public SwitchCenter() {
-    	addSequential(new DriveStraightForwardPigeon(.5f, 1f));
-		addSequential(new TurnDegrees(45f, true));
-		addSequential(new DriveStraightForwardPigeon(.5f, 2f));
-		addSequential(new TurnDegrees(45f, false));
-    }
+	public SwitchCenter() {
+
+		String gameData = DriverStation.getInstance().getGameSpecificMessage();
+		
+		addSequential(new DriveStraightForwardPigeon(.5d, 1d));
+		addSequential(new TurnDegrees(45, (gameData.charAt(0) == 'R'))); //turn towards our switch
+		addSequential(new DriveStraightForwardPigeon(.5d, 3d));
+		addSequential(new TurnDegrees(45, (gameData.charAt(0) == 'L'))); //turn straight back to the switch
+		
+	}
 }

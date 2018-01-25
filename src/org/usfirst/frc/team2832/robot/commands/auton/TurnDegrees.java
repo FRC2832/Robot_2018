@@ -60,7 +60,8 @@ public class TurnDegrees extends Command {
 	 * Terminate if within four degrees of target angle
 	 */
 	protected boolean isFinished() {
-		return ((Math.abs(initialYaw - currentYaw) > degrees - 1) && (Math.abs(initialYaw - currentYaw) < degrees + 1));
+		return ((Math.abs(initialYaw - currentYaw) > degrees - 2) && (Math.abs(initialYaw - currentYaw) < degrees + 2));
+		//Done when within + or - 2 degrees of target
 	}
 
 	/**
