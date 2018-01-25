@@ -20,6 +20,7 @@ public class Dashboard {
 		chooser.addDefault("Left Side", AUTON_MODE.LEFTSIDE);
 		chooser.addObject("Right Side", AUTON_MODE.RIGHTSIDE);
 		chooser.addObject("Center", AUTON_MODE.CENTER);
+		chooser.addObject("PROGRAMMING TESTING", AUTON_MODE.TEST);
 		SmartDashboard.putData("Autonomous mode chooser", chooser);
 	}
 
@@ -36,25 +37,17 @@ public class Dashboard {
 	 * An enumeration for the different autonomous modes
 	 */
 	public enum AUTON_MODE {		
-		LEFTSIDE, RIGHTSIDE, CENTER;
+		LEFTSIDE, RIGHTSIDE, CENTER, TEST;
 
 		public Command getCommand() {
 			switch (this) {
-<<<<<<< HEAD
+
 			case LEFTSIDE: return new LeftSide();
 			case RIGHTSIDE: return new RightSide();
-=======
-			case DRIVE_FORWARD: new DriveDistance(.5f, 48f);
-			case SCALE_LEFT: return null; //new DriveDistance(0.4d, 24d);
-			case SCALE_RIGHT:
-			group.addSequential(new DriveStraightForwardPigeon(.5f, 9f));
-			group.addSequential(new TurnDegrees(90f, false));
-			return group;
-			case SWITCH_LEFT: return null;
-			case SWITCH_RIGHT: return new DeploySwitchRight();
->>>>>>> refs/remotes/origin/master
 			case CENTER: return new SwitchCenter();
+			case TEST: return null;
 			default: return null;
+			
 			}
 		}
 	}
