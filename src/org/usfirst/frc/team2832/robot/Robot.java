@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		Robot.driveTrain.setBrakeMode(false);
 	}
 
 	/**
@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {	
+		Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
 		Scheduler.getInstance().add(dashboard.getSelectedCommand());
 	}
@@ -81,6 +82,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
+		Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
 	}
 

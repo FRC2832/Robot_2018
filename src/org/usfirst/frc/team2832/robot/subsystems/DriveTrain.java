@@ -7,6 +7,7 @@ import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -34,6 +35,7 @@ public class DriveTrain extends Subsystem {
 	final static int DRIVE_MOTER_BR = 2;
 	
 	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; //Circumference divided by pulses/revolution
+	private static final double ENCODER_ERROR_PERCENTAGE = 68d / 66.62d; //Actual/desired distance
 	
 	final ButtonMapping SHIFT_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
 	
@@ -105,7 +107,22 @@ public class DriveTrain extends Subsystem {
      * @return position of the selected encoder(inches)
      */
     public double getEncoderPosition(ENCODER side) {
-    	return (side.equals(ENCODER.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(ENCODER.RIGHT)? -talonPhoenixRight.getSensorCollection().getQuadraturePosition(): (talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * ENCODER_COUNT_TO_INCH;
+    	return (side.equals(ENCODER.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(ENCODER.RIGHT)? -talonPhoenixRight.getSensorCollection().getQuadraturePosition(): (talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE;
+    }
+    
+    /**
+     * Turns brake mode on or off for the moters
+     */
+    public void setBrakeMode(boolean mode) {
+    	NeutralMode brakeMode;
+    	if(mode) 
+    		brakeMode = NeutralMode.Brake;
+    	else
+    		brakeMode = NeutralMode.Coast;
+       	talonFL.setNeutralMode(brakeMode);
+    	talonFR.setNeutralMode(brakeMode);
+    	talonBL.setNeutralMode(brakeMode);
+    	talonBR.setNeutralMode(brakeMode);
     }
     
     /**

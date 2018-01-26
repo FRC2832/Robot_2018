@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2832.robot;
 
+import org.usfirst.frc.team2832.robot.commands.auton.DriveDistance;
 import org.usfirst.frc.team2832.robot.commands.auton.groups.LeftSide;
 import org.usfirst.frc.team2832.robot.commands.auton.groups.RightSide;
 import org.usfirst.frc.team2832.robot.commands.auton.groups.SwitchCenter;
@@ -45,7 +46,8 @@ public class Dashboard {
 			case LEFTSIDE: return new LeftSide();
 			case RIGHTSIDE: return new RightSide();
 			case CENTER: return new SwitchCenter();
-			case TEST: return null;
+			//case TEST: return new DriveDistance(0.6d, 288d, 15);
+			case TEST: return new DriveDistance(0.6d, 120.5d, 15);
 			default: return null;
 			
 			}
