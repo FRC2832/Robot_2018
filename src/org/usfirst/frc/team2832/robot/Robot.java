@@ -9,6 +9,7 @@ package org.usfirst.frc.team2832.robot;
 
 import org.usfirst.frc.team2832.robot.commands.auton.DriveTime;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot {
 	//Subsystems
 	public static DriveTrain driveTrain;
 	public static Lift lift;
+	public static Ingestor ingestor;
 	
 	public static Controls controls;
 	public static Dashboard dashboard;
@@ -39,6 +41,7 @@ public class Robot extends TimedRobot {
 		
 		driveTrain = new DriveTrain();
 		lift = new Lift();
+		ingestor = new Ingestor();
 		
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
 	}
