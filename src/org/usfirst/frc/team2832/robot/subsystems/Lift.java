@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -39,16 +40,22 @@ public class Lift extends Subsystem {
 	private WPI_TalonSRX talonLift;
 	private TalonSRX talonPhoenixLift;
 	
-
 	public Lift() {
 		super();
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
-		
-		// collapse = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL,
-		// COLLAPSE_REVERSE_CHANNEL);
+		collapse.set(Value.kForward);
+		collapse = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 	}
 
+	public void pack() {
+		collapse.set(Value.kForward);
+	}
+	
+	public void unpack() {
+		collapse.set(Value.kReverse);
+	}
+	
 	public double getLiftPosition() {
 		return talonPhoenixLift.getSensorCollection().getQuadraturePosition() * ENCODER_COUNT_TO_INCH;
 	}

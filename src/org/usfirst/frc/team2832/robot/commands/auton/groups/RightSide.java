@@ -16,6 +16,7 @@ public class RightSide extends CommandGroup {
     	
     	String gameData = DriverStation.getInstance().getGameSpecificMessage();
     	
+		//addSequential(new SensorFailsafe(0.5d, 120d, ()->Robot.driveTrain.getEncoderPosition(ENCODER.LEFT), ()->Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT), ()->Robot.driveTrain.getPigeonYaw()));
     	if (gameData.charAt(0) == 'R') { //If the switch is on our side
     		addSequential(new DriveDistance(0.6d, 150d, 10d)); //go forward to switch
     		addSequential(new TurnDegrees(90f, false)); //turn 90 degrees
