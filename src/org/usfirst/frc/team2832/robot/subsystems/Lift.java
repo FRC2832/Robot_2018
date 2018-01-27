@@ -4,8 +4,9 @@ import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
+import org.usfirst.frc.team2832.robot.commands.MoveLift;
+import org.usfirst.frc.team2832.robot.commands.MoveLiftPID;
 import org.usfirst.frc.team2832.robot.Robot;
-import org.usfirst.frc.team2832.robot.commands.auton.MoveLift;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -57,15 +58,15 @@ public class Lift extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
-		
+		setDefaultCommand(new MoveLift());
 	}
 
 	@Override
     public void periodic() {
-		if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
+		/*if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
 			for(int i = POSITION.values().length - 1; i >= 0; i--) {
 				if(POSITION.values()[i].height < getLiftPosition()) {
-					Scheduler.getInstance().add(new MoveLift(POSITION.values()[i]));
+					Scheduler.getInstance().add(new MoveLiftPID(POSITION.values()[i]));
 					break;
 				}
 			}
@@ -74,20 +75,20 @@ public class Lift extends Subsystem {
 		if(Robot.controls.getButtonPressed(RAISE_LIFT)) {
 			for(int i = 0; i < POSITION.values().length; i++) {
 				if(POSITION.values()[i].height > getLiftPosition()) {
-					Scheduler.getInstance().add(new MoveLift(POSITION.values()[i]));
+					Scheduler.getInstance().add(new MoveLiftPID(POSITION.values()[i]));
 					break;
 				}
 			}
 		}
 		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
 		if(pov != -1) {
-			if(getCurrentCommand() != null && getCurrentCommand() instanceof MoveLift)
+			if(getCurrentCommand() != null && getCurrentCommand() instanceof MoveLiftPID)
 				getCurrentCommand().cancel();
 			if(pov > 90 && pov < 270)
 				talonLift.set(-0.4d);
 			else
 				talonLift.set(0.4d);
-		}
+		}*/
     }
 
 	/**

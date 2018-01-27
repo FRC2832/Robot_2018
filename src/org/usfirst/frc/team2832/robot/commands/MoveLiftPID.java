@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2832.robot.commands.auton;
+package org.usfirst.frc.team2832.robot.commands;
 
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  * Moves lift to desired height
  */
-public class MoveLift extends Command implements PIDOutput, PIDSource {
+public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
 		
 	private PIDSourceType sourceType;
 	private PIDController controller;
@@ -27,11 +27,11 @@ public class MoveLift extends Command implements PIDOutput, PIDSource {
 	private final double TOLERANCE_INCHES = 1.5f;
 	private final int PATIENCE = 20;
 	
-	public MoveLift(Lift.POSITION position) {
+	public MoveLiftPID(Lift.POSITION position) {
 		this(position.height);
 	}
 	
-    public MoveLift(double targetHeight) {
+    public MoveLiftPID(double targetHeight) {
     	requires(Robot.lift);
     	this.targetHeight = targetHeight;
     	sourceType = PIDSourceType.kDisplacement;
