@@ -32,7 +32,7 @@ public class Lift extends Subsystem {
 	
 	public static final double RAIL_HEIGHT = 84;
 	
-	private final ButtonMapping RAISE_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
+	private final ButtonMapping RAISE_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);
 	private final ButtonMapping LOWER_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
 
 	private DoubleSolenoid collapse;
@@ -53,8 +53,8 @@ public class Lift extends Subsystem {
 		return talonPhoenixLift.getSensorCollection().getQuadraturePosition() * ENCODER_COUNT_TO_INCH;
 	}
 
-	public void setLiftPower(double speeed) {
-		talonLift.set(speeed);
+	public void setLiftPower(double speed) {
+		talonLift.set(speed);
 	}
 	
 	public void initDefaultCommand() {
@@ -89,6 +89,13 @@ public class Lift extends Subsystem {
 			else
 				talonLift.set(0.4d);
 		}*/
+		if(Robot.controls.getButton(LOWER_LIFT)) {
+			talonLift.set(-0.4d);
+		} else if(Robot.controls.getButton(RAISE_LIFT)) {
+			talonLift.set(0.4d);
+		} else {
+			talonLift.set(0.0d);
+		}
     }
 
 	/**
