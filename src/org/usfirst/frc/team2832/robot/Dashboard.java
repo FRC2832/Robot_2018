@@ -16,13 +16,16 @@ public class Dashboard {
 
 	private SendableChooser<AUTON_MODE> chooser;
 
+	public static final String PREFIX_DRIVER = "Drivers";
+	public static final String PREFIX_PROG = "Prog";
+	
 	public Dashboard() {
 		chooser = new SendableChooser<AUTON_MODE>();
 		chooser.addDefault("Left Side", AUTON_MODE.LEFTSIDE);
 		chooser.addObject("Right Side", AUTON_MODE.RIGHTSIDE);
 		chooser.addObject("Center", AUTON_MODE.CENTER);
 		chooser.addObject("PROGRAMMING TESTING", AUTON_MODE.TEST);
-		SmartDashboard.putData("Autonomous mode chooser", chooser);
+		SmartDashboard.putData(PREFIX_DRIVER + "Autonomous mode chooser", chooser);
 	}
 
 	/**

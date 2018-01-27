@@ -6,6 +6,7 @@ import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team2832.robot.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -79,9 +80,9 @@ public class DriveTrain extends Subsystem {
      */
     @Override
     public void periodic() {
-    	SmartDashboard.putNumber("Encoder Left Position", getEncoderPosition(ENCODER.LEFT));
-    	SmartDashboard.putNumber("Encoder Right Position", getEncoderPosition(ENCODER.RIGHT));
-    	SmartDashboard.putNumber("Pigeon Yaw Value", getPigeonYaw());
+    	SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Left Position", getEncoderPosition(ENCODER.LEFT));
+    	SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Right Position", getEncoderPosition(ENCODER.RIGHT));
+    	SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Yaw Value", getPigeonYaw());
 
     	//Toggles which gear it is in and makes controller rumble
         if(Robot.controls.getButtonPressed(SHIFT_BUTTON.getController(), SHIFT_BUTTON.getButton())) {
