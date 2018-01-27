@@ -4,6 +4,9 @@ import org.usfirst.frc.team2832.robot.commands.auton.DriveDistance;
 import org.usfirst.frc.team2832.robot.commands.auton.groups.LeftSide;
 import org.usfirst.frc.team2832.robot.commands.auton.groups.RightSide;
 import org.usfirst.frc.team2832.robot.commands.auton.groups.SwitchCenter;
+import org.usfirst.frc.team2832.robot.commands.auton.groups.time.LeftSideTime;
+import org.usfirst.frc.team2832.robot.commands.auton.groups.time.RightSideTime;
+import org.usfirst.frc.team2832.robot.commands.auton.groups.time.SwitchCenterTime;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -43,9 +46,9 @@ public class Dashboard {
 		public Command getCommand() {
 			switch (this) {
 
-			case LEFTSIDE: return new LeftSide();
-			case RIGHTSIDE: return new RightSide();
-			case CENTER: return new SwitchCenter();
+			case LEFTSIDE: return new LeftSideTime();
+			case RIGHTSIDE: return new RightSideTime();
+			case CENTER: return new SwitchCenterTime();
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
 			case TEST: return new DriveDistance(0.6d, 120.5d, 15);
 			default: return null;

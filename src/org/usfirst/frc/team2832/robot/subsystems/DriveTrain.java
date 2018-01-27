@@ -61,10 +61,6 @@ public class DriveTrain extends Subsystem {
 		pigeon = new PigeonIMU(0);
 		talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
 		talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
-		//talonFL.setInverted(true);
-		//talonFR.setInverted(true);
-		//talonBL.setInverted(true);
-		//talonBR.setInverted(true);
 	}
 	
 	/**
@@ -179,6 +175,14 @@ public class DriveTrain extends Subsystem {
     }
     
     /**
+     * Set pigeon yaw
+     * @param angle to set
+     */
+    public void setPigeonYaw(double angle) {
+		pigeon.setYaw(angle, 100);
+    }
+    
+    /**
      * Retrieves the yaw value from the pigeon IMU
      * 
      * @return current yaw angle
@@ -198,6 +202,10 @@ public class DriveTrain extends Subsystem {
     	double[] rotations = new double[3];
     	this.pigeon.getYawPitchRoll(rotations);
     	return rotations[1];
+    }
+    
+    public PigeonIMU getPigeon() {
+    	return pigeon;
     }
 }
 

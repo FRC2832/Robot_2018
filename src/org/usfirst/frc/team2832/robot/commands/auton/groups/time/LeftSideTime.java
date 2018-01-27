@@ -1,26 +1,28 @@
-package org.usfirst.frc.team2832.robot.commands.auton.groups;
+package org.usfirst.frc.team2832.robot.commands.auton.groups.time;
 
-import org.usfirst.frc.team2832.robot.commands.auton.DriveDistance;
 import org.usfirst.frc.team2832.robot.commands.auton.DriveStraightForwardPigeon;
 import org.usfirst.frc.team2832.robot.commands.auton.TurnDegrees;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class LeftSide extends CommandGroup {
+/**
+ *
+ */
+public class LeftSideTime extends CommandGroup {
 
-    public LeftSide() {
+    public LeftSideTime() {
     	
     	String gameData = DriverStation.getInstance().getGameSpecificMessage();
     	
     	if (gameData.charAt(0) == 'L') { //If the switch is on our side
-    		addSequential(new DriveDistance(.6f, 150d, 10)); //go forward to switch
+    		addSequential(new DriveStraightForwardPigeon(.5f, 5f)); //go forward to switch
     		addSequential(new TurnDegrees(90f, true)); //turn 90 degrees
     	} else if (gameData.charAt(1) == 'L') { //If the scale is on our side
-    		addSequential(new DriveDistance(.6f, 291d, 10)); // go forward to scale
+    		addSequential(new DriveStraightForwardPigeon(.5f, 9f)); // go forward to scale
     		addSequential(new TurnDegrees(90f, true)); //turn 90 degrees
     	} else { //If neither is on our side
-    		addSequential(new DriveDistance(.5f, 120d, 10)); //go forward past the line
+    		addSequential(new DriveStraightForwardPigeon(.5f, 6f)); //go forward past the line
     	}
     	
     }

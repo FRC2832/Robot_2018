@@ -1,6 +1,5 @@
-package org.usfirst.frc.team2832.robot.commands.auton.groups;
+package org.usfirst.frc.team2832.robot.commands.auton.groups.time;
 
-import org.usfirst.frc.team2832.robot.commands.auton.DriveDistance;
 import org.usfirst.frc.team2832.robot.commands.auton.DriveStraightForwardPigeon;
 import org.usfirst.frc.team2832.robot.commands.auton.TurnDegrees;
 
@@ -10,15 +9,15 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  * Drive from center to a switch side
  */
-public class SwitchCenter extends CommandGroup {
+public class SwitchCenterTime extends CommandGroup {
 
-	public SwitchCenter() {
+	public SwitchCenterTime() {
 
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
-		addSequential(new DriveDistance(0.5d, 40d, 10d));
+		addSequential(new DriveStraightForwardPigeon(.5d, 1d));
 		addSequential(new TurnDegrees(45, (gameData.charAt(0) == 'R'))); //turn towards our switch
-		addSequential(new DriveDistance(0.5d, 62d, 10d));
+		addSequential(new DriveStraightForwardPigeon(.5d, 3d));
 		addSequential(new TurnDegrees(45, (gameData.charAt(0) == 'L'))); //turn straight back to the switch
 		
 	}

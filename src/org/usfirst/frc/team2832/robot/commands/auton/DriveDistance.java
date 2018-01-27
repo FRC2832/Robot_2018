@@ -23,7 +23,6 @@ public class DriveDistance extends Command {
 		this.speeed = speeed;
 		this.distance = distance;
 		this.timeout = timeout;
-		startTime = Timer.getFPGATimestamp();
 	}
 
 	/**
@@ -33,6 +32,7 @@ public class DriveDistance extends Command {
 		startLeft = Robot.driveTrain.getEncoderPosition(ENCODER.LEFT);
 		startRight = Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT);
 		initialYaw = driveTrain.getPigeonYaw();
+		startTime = Timer.getFPGATimestamp();
 	}
 
 	/**
