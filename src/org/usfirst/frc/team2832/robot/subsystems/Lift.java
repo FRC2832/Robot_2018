@@ -1,66 +1,105 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
+import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls;
+import org.usfirst.frc.team2832.robot.Controls.Buttons;
+import org.usfirst.frc.team2832.robot.Controls.Controllers;
+import org.usfirst.frc.team2832.robot.Robot;
+import org.usfirst.frc.team2832.robot.commands.auton.MoveLift;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
- * The lift subsystem which handles an encoder, commanding the lift motor, and folding with a pneumatic cylinder
+ * The lift subsystem which handles an encoder, commanding the lift motor, and
+ * folding with a pneumatic cylinder
  */
 public class Lift extends Subsystem {
 
 	final static int COLLAPSE_FORWARD_CHANNEL = 2;
 	final static int COLLAPSE_REVERSE_CHANNEL = 3;
-	
 	final static int LIFT_MOTOR = 0;
+	private static final double ENCODER_COUNT_TO_INCH = 1000;
 	
-	private static final double ENCODER_COUNT_TO_INCH = 0;
-		
+	public static final double RAIL_HEIGHT = 84;
+	
+	private final ButtonMapping RAISE_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
+	private final ButtonMapping LOWER_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
+
 	private DoubleSolenoid collapse;
 	private WPI_TalonSRX talonLift;
 	private TalonSRX talonPhoenixLift;
-		
+	
+
 	public Lift() {
 		super();
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
-		//collapse = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
+		
+		// collapse = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL,
+		// COLLAPSE_REVERSE_CHANNEL);
 	}
-	
-	/**
-	 * Commands the lift to move to a set height
-	 * 
-	 * @param position to go to
-	 */
-	public void setLiftPositon(POSITION position) {
-		//Maybe set a variable here and have a command running to go to whichever position is set?
-	}
-	
-    public void initDefaultCommand() {
-        //setDefaultCommand(new ArcadeDrive(this, controls));
-    }
-    
-    @Override
-    public void periodic() {
-    	
-    }
-    
-    /**
-     * An enumeration for lift height positions
-     */
-    public enum POSITION {
-    	SWITCH(10),
-    	SCALE(50);
-    	
-    	public double height;
-    	
-    	private POSITION(int height) {
-    		this.height = height;
-    	}
-    }
-}
 
+	public double getLiftPosition() {
+		return talonPhoenixLift.getSensorCollection().getQuadraturePosition() * ENCODER_COUNT_TO_INCH;
+	}
+
+	public void setLiftPower(double speeed) {
+		talonLift.set(speeed);
+	}
+	
+	public void initDefaultCommand() {
+		
+	}
+
+	@Override
+    public void periodic() {
+		if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
+			for(int i = POSITION.values().length - 1; i >= 0; i--) {
+				if(POSITION.values()[i].height < getLiftPosition()) {
+					Scheduler.getInstance().add(new MoveLift(POSITION.values()[i]));
+					break;
+				}
+			}
+			
+		}
+		if(Robot.controls.getButtonPressed(RAISE_LIFT)) {
+			for(int i = 0; i < POSITION.values().length; i++) {
+				if(POSITION.values()[i].height > getLiftPosition()) {
+					Scheduler.getInstance().add(new MoveLift(POSITION.values()[i]));
+					break;
+				}
+			}
+		}
+		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
+		if(pov != -1) {
+			if(getCurrentCommand() != null && getCurrentCommand() instanceof MoveLift)
+				getCurrentCommand().cancel();
+			if(pov > 90 && pov < 270)
+				talonLift.set(-0.4d);
+			else
+				talonLift.set(0.4d);
+		}
+    }
+
+	/**
+	 * An enumeration for lift height positions
+	 */
+	public enum POSITION {
+		INGESTOR(0), SWITCH(50), HEIGHT(70), SCALE(84);
+
+		public double height;
+
+		private POSITION(int height) {
+			this.height = height;
+		}
+	}
+}
