@@ -2,9 +2,11 @@ package org.usfirst.frc.team2832.robot.subsystems;
 
 import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
+import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -25,7 +27,7 @@ public class Ingestor extends Subsystem {
 		super();
 		talonL = new TalonSRX(INGESTOR_L);
 		talonR = new TalonSRX(INGESTOR_R);
-		// set to break mode
+		setBrakeMode(true);
 	}
 	
 	@Override
@@ -48,15 +50,15 @@ public class Ingestor extends Subsystem {
 		talonR.set(ControlMode.PercentOutput, -0.0);
 	}
 	
-	public void setBreakMode() {
-		// uses TalonSRX not WPI_TalonSRX
-		// to be used during auton & teleop
-	}
-	
-	public void setCoastMode() {
-		// uses TalonSRX not WPI_TalonSRX
-		// to be used towards the end of teleop
-	}
+	public void setBrakeMode(boolean mode) {
+    	NeutralMode brakeMode;
+    	if(mode) 
+    		brakeMode = NeutralMode.Brake;
+    	else
+    		brakeMode = NeutralMode.Coast;
+       	talonL.setNeutralMode(brakeMode);
+    	talonR.setNeutralMode(brakeMode);
+    }
 	
 	public void periodic () {
 		
