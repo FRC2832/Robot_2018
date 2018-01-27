@@ -12,6 +12,7 @@ import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {	
 		Robot.driveTrain.setBrakeMode(true);
+		Robot.lift.unpack();
 		Scheduler.getInstance().removeAll();
 		Scheduler.getInstance().add(dashboard.getSelectedCommand());
 	}

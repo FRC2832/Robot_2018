@@ -76,8 +76,8 @@ public class DriveTrain extends Subsystem {
      */
     @Override
     public void periodic() {
-    	SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Left Position", getEncoderPosition(ENCODER.LEFT));
-    	SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Right Position", getEncoderPosition(ENCODER.RIGHT));
+    	SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Left Position", getEncoderPosition(Encoder.LEFT));
+    	SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Right Position", getEncoderPosition(Encoder.RIGHT));
     	SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Yaw Value", getPigeonYaw());
 
     	//Toggles which gear it is in and makes controller rumble
@@ -94,8 +94,8 @@ public class DriveTrain extends Subsystem {
      * @param side of robot to get encoder
      * @return velocity of the selected encoder
      */
-    public int getEncoderVelocity(ENCODER side) {
-    	return side.equals(ENCODER.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : talonPhoenixRight.getSensorCollection().getQuadratureVelocity();
+    public int getEncoderVelocity(Encoder side) {
+    	return side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : talonPhoenixRight.getSensorCollection().getQuadratureVelocity();
     }
     
     /**\
@@ -103,8 +103,8 @@ public class DriveTrain extends Subsystem {
      * @param side of robot to get encoder
      * @return position of the selected encoder(inches)
      */
-    public double getEncoderPosition(ENCODER side) {
-    	return (side.equals(ENCODER.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(ENCODER.RIGHT)? -talonPhoenixRight.getSensorCollection().getQuadraturePosition(): (talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE;
+    public double getEncoderPosition(Encoder side) {
+    	return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(Encoder.RIGHT)? -talonPhoenixRight.getSensorCollection().getQuadraturePosition(): (talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE;
     }
     
     /**
@@ -160,8 +160,8 @@ public class DriveTrain extends Subsystem {
     /**
      *Enumeration for drive motor encoders
      */
-    public enum ENCODER {
-    	LEFT, RIGHT, AVERAGE;
+    public enum Encoder {
+    	LEFT, RIGHT;
     }
     
     /**

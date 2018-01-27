@@ -16,6 +16,7 @@ public class SwitchCenter extends CommandGroup {
 
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
+		//addSequential(new SensorFailsafe(0.5d, 120d, ()->Robot.driveTrain.getEncoderPosition(ENCODER.LEFT), ()->Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT), ()->Robot.driveTrain.getPigeonYaw()));
 		addSequential(new DriveDistance(0.5d, 40d, 10d));
 		addSequential(new TurnDegrees(45, (gameData.charAt(0) == 'R'))); //turn towards our switch
 		addSequential(new DriveDistance(0.5d, 62d, 10d));

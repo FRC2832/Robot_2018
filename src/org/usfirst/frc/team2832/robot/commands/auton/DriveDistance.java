@@ -2,7 +2,7 @@ package org.usfirst.frc.team2832.robot.commands.auton;
 
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.ENCODER;
+import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.Encoder;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -29,8 +29,8 @@ public class DriveDistance extends Command {
 	 * Set the starting position by averaging encoder values
 	 */
 	protected void initialize() {
-		startLeft = Robot.driveTrain.getEncoderPosition(ENCODER.LEFT);
-		startRight = Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT);
+		startLeft = Robot.driveTrain.getEncoderPosition(Encoder.LEFT);
+		startRight = Robot.driveTrain.getEncoderPosition(Encoder.RIGHT);
 		initialYaw = driveTrain.getPigeonYaw();
 		startTime = Timer.getFPGATimestamp();
 	}
@@ -61,8 +61,8 @@ public class DriveDistance extends Command {
 	}
 
 	private double averageDist() {
-		return (Robot.driveTrain.getEncoderPosition(ENCODER.LEFT) - startLeft
-				+ Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT) - startRight) / 2f;
+		return (Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft
+				+ Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight) / 2f;
 	}
 
 	/**

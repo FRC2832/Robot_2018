@@ -2,7 +2,7 @@ package org.usfirst.frc.team2832.robot.commands.auton;
 
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.ENCODER;
+import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.Encoder;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -29,7 +29,7 @@ public class DriveStraightForwardPigeon extends Command {
      */
     protected void initialize() {
     	initialYaw = driveTrain.getPigeonYaw();
-    	start = Robot.driveTrain.getEncoderPosition(ENCODER.AVERAGE);
+    	start = Robot.driveTrain.getEncoderPosition(Encoder.LEFT);
     	startTime = Timer.getFPGATimestamp();
     }
 
