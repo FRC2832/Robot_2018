@@ -42,6 +42,7 @@ public class Lift extends Subsystem {
 	
 	public Lift() {
 		super();
+		collapse = new DoubleSolenoid(0,1);
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
 		collapse.set(Value.kForward);

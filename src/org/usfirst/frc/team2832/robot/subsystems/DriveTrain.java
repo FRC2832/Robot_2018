@@ -31,9 +31,9 @@ public class DriveTrain extends Subsystem {
 	final static int TRANSMISSION_REVERSE_CHANNEL = 1;
 	
 	final static int DRIVE_MOTER_FL = 10;
-	final static int DRIVE_MOTER_FR = 8;
-	final static int DRIVE_MOTER_BL = 17;
-	final static int DRIVE_MOTER_BR = 2;
+	final static int DRIVE_MOTER_FR = 24;
+	final static int DRIVE_MOTER_BL = 11;
+	final static int DRIVE_MOTER_BR = 23;
 	
 	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; //Circumference divided by pulses/revolution
 	private static final double ENCODER_ERROR_PERCENTAGE = 68d / 66.62d; //Actual/desired distance
