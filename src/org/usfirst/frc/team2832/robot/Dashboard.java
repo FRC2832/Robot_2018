@@ -19,8 +19,8 @@ public class Dashboard {
 
 	private SendableChooser<AUTON_MODE> chooser;
 
-	public static final String PREFIX_DRIVER = "Drivers";
-	public static final String PREFIX_PROG = "Prog";
+	public static final String PREFIX_DRIVER = "Drivers-";
+	public static final String PREFIX_PROG = "Prog-";
 	
 	public Dashboard() {
 		chooser = new SendableChooser<AUTON_MODE>();
