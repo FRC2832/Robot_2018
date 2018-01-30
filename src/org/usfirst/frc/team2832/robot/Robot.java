@@ -7,17 +7,13 @@
 
 package org.usfirst.frc.team2832.robot;
 
-import org.usfirst.frc.team2832.robot.commands.auton.DriveTime;
+import org.usfirst.frc.team2832.robot.subsystems.Climber;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Main robot class and location for static objects like subsystems and dashboard
@@ -29,6 +25,7 @@ public class Robot extends TimedRobot {
 	public static DriveTrain driveTrain;
 	public static Lift lift;
 	public static Ingestor ingestor;
+	public static Climber climber;
 	
 	public static Controls controls;
 	public static Dashboard dashboard;

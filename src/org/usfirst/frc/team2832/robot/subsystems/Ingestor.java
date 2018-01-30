@@ -40,9 +40,9 @@ public class Ingestor extends Subsystem {
 		// via left trigger ???
 	}
 	
-	public void setMotorSpeed(double sped) {
-		talonL.set(ControlMode.PercentOutput, sped);
-		talonR.set(ControlMode.PercentOutput, -sped);
+	public void setMotorSpeed(double speed) {
+		talonL.set(ControlMode.PercentOutput, speed);
+		talonR.set(ControlMode.PercentOutput, -speed);
 	}
 	
 	public void stopMotors() {

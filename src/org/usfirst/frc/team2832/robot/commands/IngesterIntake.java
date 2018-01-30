@@ -7,13 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 public class IngesterIntake extends Command {
 	
 	public IngesterIntake() {
-		
-	}
-
-	public IngesterIntake(String direction) {
 		requires(Robot.ingestor);
 	}
-	
+
 	protected void execute() {
 		if (Robot.controls.getButtonPressed(Robot.ingestor.INTAKE_BUTTON.getController(), 
 											Robot.ingestor.INTAKE_BUTTON.getButton())) {
