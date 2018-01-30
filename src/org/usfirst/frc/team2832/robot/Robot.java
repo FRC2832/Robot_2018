@@ -12,6 +12,7 @@ import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -25,14 +26,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
+	private final static int ROBOT_TYPE_PIN = 3;
+	
 	//Subsystems
 	public static DriveTrain driveTrain;
 	public static Lift lift;
 	public static Ingestor ingestor;
 	
+	//Other
 	public static Controls controls;
 	public static Dashboard dashboard;
+	
+	private static RobotType robotType;
+	private AnalogInput robotTypeInput;
 		
+	/**
+	 * Gets which robot the code is running on
+	 * @return type of robot
+	 */
+	public static RobotType getRobotType() {
+		return robotType;
+	}
+	
 	/**
 	 * Called when the robot is initialized
 	 */
@@ -45,8 +60,16 @@ public class Robot extends TimedRobot {
 		ingestor = new Ingestor();
 		
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
+		
+		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
+		robotType = RobotType.Competition; //Default to competition
 	}
 
+	@Override
+	public void robotPeriodic() {
+		SmartDashboard.putString(Dashboard.PREFIX_DRIVER + "RobotType", robotType.name());
+	}
+	
 	/**
 	 * Called when when robot is disabled
 	 */
@@ -62,6 +85,16 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 		driveTrain.setPigeonYaw(0);
+		
+		// Set the type of robot based on the average voltage of a pin
+		double value = robotTypeInput.getAverageVoltage();
+		if(3.75d <= value && value <= 5d) {
+			robotType = RobotType.Programming;
+		} else if(1.25d < value && value < 3.75d) {
+			robotType = RobotType.Practice;
+		} else {
+			robotType = RobotType.Competition;
+		}
 	}
 
 	/**
@@ -115,5 +148,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 		
+	}
+	
+	public enum RobotType {
+		Programming, Practice, Competition;
 	}
 }

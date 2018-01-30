@@ -104,7 +104,12 @@ public class DriveTrain extends Subsystem {
      * @return position of the selected encoder(inches)
      */
     public double getEncoderPosition(Encoder side) {
-    	return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(Encoder.RIGHT)? -talonPhoenixRight.getSensorCollection().getQuadraturePosition(): (talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE;
+    	return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition(): 
+    		(side.equals(Encoder.RIGHT)? -talonPhoenixRight.getSensorCollection().getQuadraturePosition(): 
+    			(talonPhoenixLeft.getSensorCollection().getQuadraturePosition() + 
+    					talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d)) * 
+    			ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE * 
+    			(Robot.RobotType.Programming.equals(Robot.getRobotType())? 1d: 1d/3d);
     }
     
     /**
