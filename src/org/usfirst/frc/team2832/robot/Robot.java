@@ -1,3 +1,4 @@
+
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -11,6 +12,7 @@ import org.usfirst.frc.team2832.robot.commands.auton.DriveTime;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
+import org.usfirst.frc.team2832.robot.subsystems.Climber;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
@@ -27,19 +29,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 
 	private final static int ROBOT_TYPE_PIN = 3;
-	
+
 	//Subsystems
 	public static DriveTrain driveTrain;
 	public static Lift lift;
 	public static Ingestor ingestor;
-	
+	public static Climber climber;
+
 	//Other
 	public static Controls controls;
 	public static Dashboard dashboard;
-	
+
 	private static RobotType robotType;
 	private AnalogInput robotTypeInput;
-		
+
 	/**
 	 * Gets which robot the code is running on
 	 * @return type of robot
@@ -47,20 +50,21 @@ public class Robot extends TimedRobot {
 	public static RobotType getRobotType() {
 		return robotType;
 	}
-	
+
 	/**
 	 * Called when the robot is initialized
 	 */
 	@Override
 	public void robotInit() {
 		controls = new Controls();
-		
+
 		driveTrain = new DriveTrain();
 		lift = new Lift();
 		ingestor = new Ingestor();
-		
+		climber = new Climber();
+
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
-		
+
 		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
 		robotType = RobotType.Competition; //Default to competition
 	}
@@ -69,7 +73,7 @@ public class Robot extends TimedRobot {
 	public void robotPeriodic() {
 		SmartDashboard.putString(Dashboard.PREFIX_DRIVER + "RobotType", robotType.name());
 	}
-	
+
 	/**
 	 * Called when when robot is disabled
 	 */
@@ -85,7 +89,7 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 		driveTrain.setPigeonYaw(0);
-		
+
 		// Set the type of robot based on the average voltage of a pin
 		double value = robotTypeInput.getAverageVoltage();
 		if(3.75d <= value && value <= 5d) {
@@ -101,7 +105,7 @@ public class Robot extends TimedRobot {
 	 * Called when robot enters autonomous
 	 */
 	@Override
-	public void autonomousInit() {	
+	public void autonomousInit() {
 		Robot.driveTrain.setBrakeMode(true);
 		Robot.lift.unpack();
 		Scheduler.getInstance().removeAll();
@@ -139,17 +143,17 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testInit() {
-		
+
 	}
-	
+
 	/**
 	 * Called periodically while in test mode
 	 */
 	@Override
 	public void testPeriodic() {
-		
+
 	}
-	
+
 	public enum RobotType {
 		Programming, Practice, Competition;
 	}
