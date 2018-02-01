@@ -5,16 +5,17 @@ import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls;
+import org.usfirst.frc.team2832.robot.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Ingestor extends Subsystem {
 	
@@ -66,7 +67,7 @@ public class Ingestor extends Subsystem {
 	}
 	
 	public void setMotorSpeed(double sped) {
-		talonL.set(ControlMode.PercentOutput, sped);
+		talonL.set(ControlMode.PercentOutput,  sped);
 		talonR.set(ControlMode.PercentOutput, -sped);
 	}
 	
@@ -87,8 +88,8 @@ public class Ingestor extends Subsystem {
     }
 	
 	public void periodic () {
-		double tLeft = Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kLeft); // intake
-		double tRight = Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kRight); // expel
+		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kLeft )); // intake
+		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kRight)); // expel
 		
 		if (  Robot.controls.getButtonPressed(Robot.ingestor.TOGGLE_TILT_0.getController(), 
 											  Robot.ingestor.TOGGLE_TILT_0.getButton()) 
@@ -96,15 +97,17 @@ public class Ingestor extends Subsystem {
 											  Robot.ingestor.TOGGLE_TILT_1.getButton()) 
 		   )
 		{
-			System.out.println("toggle tilt");
 			Robot.ingestor.toggleTilt();
-		} else if (tLeft > 0) { // fix this [-1,1]
-			setMotorSpeed(tLeft); // check sign and include motor speed conversion
-		} else if (tRight > 0) { // fix this [-1,1]
-			setMotorSpeed(tRight); // check sign and include motor speed conversion
+		} else if (tLeft > 0.05) { // assumes [0,1] where 0 is at rest
+			setMotorSpeed(tLeft * 0.8); // max manual motor speed is 0.8
+		} else if (tRight > 0.05) {
+			setMotorSpeed(tRight * 0.8);
 		} else {
 			stopMotors();
 		}
+		
+		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Left Trigger Value",  tLeft);
+		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Right Trigger Value", tRight);
 	}
 
 }
