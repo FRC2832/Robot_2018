@@ -36,6 +36,9 @@ public class DriveTrain extends Subsystem {
 	final static int DRIVE_MOTER_BL = 11;
 	final static int DRIVE_MOTER_BR = 23;
 
+	final static double SHIFT_VELOCITY = 9001; // Velocity(pulses/second) to switch to high gear
+	final static double VIBRATE_THRESHOLD = 0.4d;
+
 	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; // Circumference divided by
 																				// pulses/revolution
 	private static final double ENCODER_ERROR_PERCENTAGE = 68d / 66.62d; // Actual/desired distance
@@ -51,8 +54,8 @@ public class DriveTrain extends Subsystem {
 
 	public DriveTrain() {
 		super();
-		// transmission = new DoubleSolenoid(TRANSMISSION_FORWARD_CHANNEL,
-		// TRANSMISSION_REVERSE_CHANNEL);
+		transmission = new DoubleSolenoid(TRANSMISSION_FORWARD_CHANNEL,
+		TRANSMISSION_REVERSE_CHANNEL);
 		talonFL = new WPI_TalonSRX(DRIVE_MOTER_FL);
 		talonFR = new WPI_TalonSRX(DRIVE_MOTER_FR);
 		talonBL = new WPI_TalonSRX(DRIVE_MOTER_BL);
@@ -93,14 +96,21 @@ public class DriveTrain extends Subsystem {
 			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kRightRumble, 0.5d, 1d);
 		}
 
+		// Vibrate controllers if greater than threshold "Gs"
 		double[] accelerometer = new double[3];
 		pigeon.getAccelerometerAngles(accelerometer);
-		if (accelerometer[0] >= 1 || accelerometer[2] >= 1) {
-			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN,       RumbleType.kLeftRumble,  0.7d, Math.max(accelerometer[0], accelerometer[2]) - 0.4d);
-			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN,       RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]) - 0.4d);
-			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kLeftRumble,  0.7d, Math.max(accelerometer[0], accelerometer[2]) - 0.4d);
-			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]) - 0.4d);
+		if (accelerometer[0] >= VIBRATE_THRESHOLD || accelerometer[2] >= VIBRATE_THRESHOLD) {
+			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN,       RumbleType.kLeftRumble,  0.7d, Math.max(accelerometer[0], accelerometer[2]));
+			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN,       RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]));
+			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kLeftRumble,  0.7d, Math.max(accelerometer[0], accelerometer[2]));
+			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]));
 		}
+
+		// Shift gears if velocity is greater than threshold
+		if ((talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() + talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()) / 2d > SHIFT_VELOCITY)
+			shift(GEAR.HIGH);
+		else
+			shift(GEAR.LOW);
 	}
 
 	/**
@@ -153,15 +163,15 @@ public class DriveTrain extends Subsystem {
 	 *            to shift to
 	 */
 	public void shift(GEAR gear) {
-		// transmission.set(gear.getValue());
+		transmission.set(gear.getValue());
 	}
 
 	/**
 	 * Toggles selected gear
 	 */
 	public void toggleShift() {
-		// transmission.set(transmission.get().equals(GEAR.HIGH.getValue()) ?
-		// GEAR.LOW.getValue(): GEAR.HIGH.getValue());
+		transmission.set(transmission.get().equals(GEAR.HIGH.getValue()) ?
+		GEAR.LOW.getValue(): GEAR.HIGH.getValue());
 	}
 
 	/**

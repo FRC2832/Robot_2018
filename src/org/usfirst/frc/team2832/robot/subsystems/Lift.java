@@ -24,15 +24,15 @@ public class Lift extends Subsystem {
 	final static int COLLAPSE_FORWARD_CHANNEL = 2;
 	final static int COLLAPSE_REVERSE_CHANNEL = 3;
 	final static int LIFT_MOTOR = 0;
-	private static final double ENCODER_COUNT_TO_INCH = 1000;
+	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	
 	public static final double RAIL_HEIGHT = 84;
 	
 //	private final ButtonMapping RAISE_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);
 //	private final ButtonMapping LOWER_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
 	
-	private double RaiseLift = Robot.controls.getTrigger(Controllers.CONTROLLER_MAIN, Hand.kLeft);
-	private double LowerLift = Robot.controls.getTrigger(Controllers.CONTROLLER_MAIN, Hand.kRight);
+//	private double RaiseLift = Robot.controls.getTrigger(Controllers.CONTROLLER_MAIN, Hand.kLeft);
+//	private double LowerLift = Robot.controls.getTrigger(Controllers.CONTROLLER_MAIN, Hand.kRight);
 
 
 	private DoubleSolenoid collapse;
