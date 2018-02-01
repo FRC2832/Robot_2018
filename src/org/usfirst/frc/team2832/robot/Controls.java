@@ -61,6 +61,13 @@ public class Controls {
 	}
 
 	/**
+	 * Clears all rumble instances
+	 */
+	public void clearRumbles() {
+		rumbles.clear();
+	}
+	
+	/**
 	 * Get trigger value from controller
 	 * 
 	 * @param controller to retrieve from
