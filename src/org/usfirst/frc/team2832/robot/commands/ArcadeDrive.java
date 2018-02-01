@@ -25,7 +25,7 @@ public class ArcadeDrive extends Command {
 	 * Drive based on input from left and right joysticks
 	 */
 	protected void execute() {
-		Robot.driveTrain.arcadeDrive(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft),
+		Robot.driveTrain.arcadeDrive(-Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft),
 				Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
 	}
 

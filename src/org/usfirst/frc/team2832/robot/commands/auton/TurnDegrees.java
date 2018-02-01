@@ -37,7 +37,7 @@ public class TurnDegrees extends Command {
 		double YawDifference = Math.abs(initialYaw - currentYaw);
 		
 		if (turnRight) {
-			if (YawDifference < degrees - 20) {
+			if (YawDifference < degrees - 15) {
 				driveTrain.tankDrive(.5, -.5);
 			} else if (YawDifference < degrees) {
 				driveTrain.tankDrive(.2, -.2);
@@ -45,7 +45,7 @@ public class TurnDegrees extends Command {
 				driveTrain.tankDrive(-.2, .2);
 			}
 		} else {
-			if (YawDifference < degrees - 20) {
+			if (YawDifference < degrees - 15) {
 				driveTrain.tankDrive(-.5, .5);
 			} else if (YawDifference < degrees) {
 				driveTrain.tankDrive(-.2, .2);
@@ -61,12 +61,14 @@ public class TurnDegrees extends Command {
 	 */
 	protected boolean isFinished() {
 		return ((Math.abs(initialYaw - currentYaw) > degrees - 2) && (Math.abs(initialYaw - currentYaw) < degrees + 2));
+		//Done when within + or - 2 degrees of target
 	}
 
 	/**
 	 * Oh, are we still turning?
 	 */
 	protected void end() {
+		System.out.println("I'm done turning!");
 		driveTrain.tankDrive(0, 0);
 	}
 

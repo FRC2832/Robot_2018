@@ -61,6 +61,24 @@ public class Controls {
 	}
 
 	/**
+	 * Clears all rumble instances
+	 */
+	public void clearRumbles() {
+		rumbles.clear();
+	}
+	
+	/**
+	 * Get trigger value from controller
+	 * 
+	 * @param controller to retrieve from
+	 * @param hand, as in which trigger
+	 * @return value between -1 and 1
+	 */
+	public double getTrigger(Controllers controller, Hand hand) {
+		return getController(controller).getTrigger(hand);
+	}
+	
+	/**
 	 * Get joystick x value from controller
 	 * 
 	 * @param controller to retrieve from
@@ -311,6 +329,14 @@ public class Controls {
 			}
 		}
 
+		public double getTrigger(Hand hand) {
+			if (hand.equals(Hand.kLeft)) {
+				return getRawAxis(2);
+			} else {
+				return getRawAxis(3);
+			}
+		}
+		
 		public boolean getButton(Buttons button) {
 			return getRawButton(button.value);
 		}
