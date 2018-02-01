@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * Moves lift to desired height
  */
 public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
-		
+	
 	private PIDSourceType sourceType;
 	private PIDController controller;
 	private double speeed, targetHeight;

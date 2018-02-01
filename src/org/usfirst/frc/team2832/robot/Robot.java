@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		Robot.driveTrain.setBrakeMode(false);
+		controls.clearRumbles();
 	}
 
 	/**
