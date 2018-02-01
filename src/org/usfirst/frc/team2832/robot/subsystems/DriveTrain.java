@@ -4,7 +4,6 @@ import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
-import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -14,8 +13,9 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -45,6 +45,10 @@ public class DriveTrain extends Subsystem {
 	private WPI_TalonSRX talonFL, talonFR, talonBL, talonBR;
 	private TalonSRX talonPhoenixLeft, talonPhoenixRight;
 	private PigeonIMU pigeon;
+	//private Port portColorSensor;
+	private I2C i2cColorSensor;
+	private byte[] colorSensorResults;
+	private byte[] toSendColorSensor;
 		
 	public DriveTrain() {
 		super();
@@ -65,6 +69,10 @@ public class DriveTrain extends Subsystem {
 		//talonFR.setInverted(true);
 		//talonBL.setInverted(true);
 		//talonBR.setInverted(true);
+		i2cColorSensor = new I2C(I2C.Port.kOnboard, 168);
+		colorSensorResults = new byte[1];
+		toSendColorSensor = new byte[1];
+		toSendColorSensor[0]=(byte)-1;
 	}
 	
 	/**
@@ -198,6 +206,27 @@ public class DriveTrain extends Subsystem {
     	double[] rotations = new double[3];
     	this.pigeon.getYawPitchRoll(rotations);
     	return rotations[1];
+    }
+    
+    public String readColorSensor() {
+    	i2cColorSensor.read(0, 1, colorSensorResults);
+    	if(colorSensorResults[0]==(byte)0) {
+    		return "not white/black";
+    	}
+    	else if(colorSensorResults[0]==(byte)1) {
+    		return "white";
+    	}
+    	else if(colorSensorResults[0]==(byte)2) {
+    		return "black";
+    	}
+    	else if(colorSensorResults[0]==(byte)3) {
+    		return "sensor error";
+    	}
+    	return "not receiving data";
+    }
+    
+    public void stopColorSensor() {
+    	i2cColorSensor.transaction(toSendColorSensor,1,null,0);
     }
 }
 
