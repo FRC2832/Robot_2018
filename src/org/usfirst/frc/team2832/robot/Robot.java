@@ -8,18 +8,13 @@
 
 package org.usfirst.frc.team2832.robot;
 
-import org.usfirst.frc.team2832.robot.commands.auton.DriveTime;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
-import org.usfirst.frc.team2832.robot.subsystems.Climber;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -34,7 +29,6 @@ public class Robot extends TimedRobot {
 	public static DriveTrain driveTrain;
 	public static Lift lift;
 	public static Ingestor ingestor;
-	public static Climber climber;
 
 	//Other
 	public static Controls controls;
@@ -61,7 +55,6 @@ public class Robot extends TimedRobot {
 		driveTrain = new DriveTrain();
 		lift = new Lift();
 		ingestor = new Ingestor();
-		climber = new Climber();
 
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
 

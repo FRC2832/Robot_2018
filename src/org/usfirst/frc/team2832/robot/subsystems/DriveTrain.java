@@ -29,8 +29,8 @@ import org.usfirst.frc.team2832.robot.commands.ArcadeDriveImproved;;
  */
 public class DriveTrain extends Subsystem {
 
-	final static int TRANSMISSION_FORWARD_CHANNEL = 0;
-	final static int TRANSMISSION_REVERSE_CHANNEL = 1;
+	final static int TRANSMISSION_FORWARD_CHANNEL = 2;
+	final static int TRANSMISSION_REVERSE_CHANNEL = 3;
 
 	final static int DRIVE_MOTER_FL = 10;
 	final static int DRIVE_MOTER_FR = 24;
@@ -97,14 +97,14 @@ public class DriveTrain extends Subsystem {
 		}
 
 		// Vibrate controllers if greater than threshold "Gs"
-		double[] accelerometer = new double[3];
+		/*double[] accelerometer = new double[3];
 		pigeon.getAccelerometerAngles(accelerometer);
 		if (accelerometer[0] >= VIBRATE_THRESHOLD || accelerometer[2] >= VIBRATE_THRESHOLD) {
 			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN,       RumbleType.kLeftRumble,  0.7d, Math.max(accelerometer[0], accelerometer[2]));
 			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN,       RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]));
 			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kLeftRumble,  0.7d, Math.max(accelerometer[0], accelerometer[2]));
 			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]));
-		}
+		}*/
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class DriveTrain extends Subsystem {
 		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
 				: (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity()
 				: (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
-				+ talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d));
+				- talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d)) / 1440;
 	}
 
 	/**
