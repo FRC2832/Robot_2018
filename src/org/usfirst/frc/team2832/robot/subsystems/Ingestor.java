@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Ingestor extends Subsystem {
 	
-	final static int INGESTOR_L = 9000; // fix these
-	final static int INGESTOR_R = 9001;
-	final static int FORWARD_CHANNEL = 4; // assign these to pneumatics
-	final static int REVERSE_CHANNEL = 5;
+	final static int INGESTOR_L = 0; // fix these
+	final static int INGESTOR_R = 1;
+	final static int FORWARD_CHANNEL = 2; // assign these to pneumatics
+	final static int REVERSE_CHANNEL = 3;
 	
 	private TalonSRX talonL;
 	private TalonSRX talonR;
@@ -36,6 +36,7 @@ public class Ingestor extends Subsystem {
 		tilt = new DoubleSolenoid(FORWARD_CHANNEL, REVERSE_CHANNEL);
 		setBrakeMode(true);
 		lowerTilt();
+		talonR.setInverted(true);
 	}
 	
 	@Override
@@ -66,7 +67,7 @@ public class Ingestor extends Subsystem {
 	
 	public void setMotorSpeed(double sped) {
 		talonL.set(ControlMode.PercentOutput,  sped);
-		talonR.set(ControlMode.PercentOutput, -sped);
+		talonR.set(ControlMode.PercentOutput,  sped);
 	}
 	
 	public void stopMotors() {

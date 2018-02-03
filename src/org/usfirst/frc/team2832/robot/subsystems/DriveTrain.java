@@ -29,8 +29,8 @@ import org.usfirst.frc.team2832.robot.commands.ArcadeDriveImproved;;
  */
 public class DriveTrain extends Subsystem {
 
-	final static int TRANSMISSION_FORWARD_CHANNEL = 2;
-	final static int TRANSMISSION_REVERSE_CHANNEL = 3;
+	final static int TRANSMISSION_FORWARD_CHANNEL = 5;
+	final static int TRANSMISSION_REVERSE_CHANNEL = 6;
 
 	final static int DRIVE_MOTER_FL = 10;
 	final static int DRIVE_MOTER_FR = 24;
