@@ -19,11 +19,9 @@ public class MoveLift extends Command {
 	private double heightSwitch = 15d;
 	private double heightIntake = 4d;
 	
-	private final ButtonMapping LEVEL_UP = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);
-	private final ButtonMapping LOWER_TO_BOTTOM = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
 	
-	private boolean upPressed = Robot.controls.getButton(LEVEL_UP);
-	private boolean downPressed = Robot.controls.getButton(LOWER_TO_BOTTOM);
+	private boolean upPressed = Robot.controls.getButton(ButtonMapping.LEVEL_UP);
+	private boolean downPressed = Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM); 
 	
 	private int position;
 	

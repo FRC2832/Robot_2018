@@ -22,8 +22,6 @@ public class Climber extends Subsystem {
 	private TalonSRX winchMotor;
 	private TalonSRX hook;
 	
-	public final ButtonMapping raiseButton = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
-	public final ButtonMapping lowerButton = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.A);
 	
 	public Climber() {
 		super();

@@ -28,12 +28,6 @@ public class Lift extends Subsystem {
 	
 	public static final double RAIL_HEIGHT = 84;
 	
-//	private final ButtonMapping RAISE_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);
-//	private final ButtonMapping LOWER_LIFT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
-	
-//	private double RaiseLift = Robot.controls.getTrigger(Controllers.CONTROLLER_MAIN, Hand.kLeft);
-//	private double LowerLift = Robot.controls.getTrigger(Controllers.CONTROLLER_MAIN, Hand.kRight);
-
 
 	private DoubleSolenoid collapse;
 	private WPI_TalonSRX talonLift;
@@ -96,25 +90,6 @@ public class Lift extends Subsystem {
 			else
 				talonLift.set(0.4d);
 		}
-/*		if(Robot.controls.getButton(LOWER_LIFT)) { //Raise/Lower Lift Based on button
-			talonLift.set(-0.4d);
-		} else if(Robot.controls.getButton(RAISE_LIFT)) {
-			talonLift.set(0.4d);
-		} else {
-			talonLift.set(0.0d);
-		}*/
-/*		if(RaiseLift > 0.6d) {
-			RaiseLift = 0.6d;
-		}
-		if(LowerLift > 0.6) {
-			LowerLift = 0.6d;
-		}
-
-		talonLift.set(RaiseLift);
-		talonLift.set(-LowerLift); */
-	/**
-	 * An enumeration for lift height positions
-	 */
 	}
 	public enum POSITION {
 		INGESTOR(0), SWITCH(50), HEIGHT(70), SCALE(84);
