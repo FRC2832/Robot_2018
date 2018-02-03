@@ -28,8 +28,6 @@ public class Ingestor extends Subsystem {
 	private TalonSRX talonR;
 	private DoubleSolenoid tilt;
 	
-	public final ButtonMapping TOGGLE_TILT_0 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.A);
-	public final ButtonMapping TOGGLE_TILT_1 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.X);
 	
 	public Ingestor() {
 		super();
@@ -91,10 +89,10 @@ public class Ingestor extends Subsystem {
 		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kLeft )); // intake
 		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kRight)); // expel
 		
-		if (  Robot.controls.getButtonPressed(Robot.ingestor.TOGGLE_TILT_0.getController(), 
-											  Robot.ingestor.TOGGLE_TILT_0.getButton()) 
-		   || Robot.controls.getButtonPressed(Robot.ingestor.TOGGLE_TILT_1.getController(), 
-											  Robot.ingestor.TOGGLE_TILT_1.getButton()) 
+		if (  Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_0.getController(), 
+											  ButtonMapping.TOGGLE_TILT_0.getButton()) 
+		   || Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_1.getController(), 
+				   							  ButtonMapping.TOGGLE_TILT_1.getButton()) 
 		   )
 		{
 			Robot.ingestor.toggleTilt();

@@ -43,7 +43,6 @@ public class DriveTrain extends Subsystem {
 																				// pulses/revolution
 	private static final double ENCODER_ERROR_PERCENTAGE = 68d / 66.62d; // Actual/desired distance
 
-	final ButtonMapping SHIFT_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
 
 	private DoubleSolenoid transmission;
 	private DifferentialDrive drive;
@@ -89,7 +88,7 @@ public class DriveTrain extends Subsystem {
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Yaw Value", getPigeonYaw());
 
 		// Toggles which gear it is in and makes controller rumble
-		if (Robot.controls.getButtonPressed(SHIFT_BUTTON.getController(), SHIFT_BUTTON.getButton())) {
+		if (Robot.controls.getButtonPressed(ButtonMapping.SHIFT_BUTTON.getController(), ButtonMapping.SHIFT_BUTTON.getButton())) {
 			// System.out.println("Shift");
 			// toggleShift();
 			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kLeftRumble, 0.5d, 1d);
