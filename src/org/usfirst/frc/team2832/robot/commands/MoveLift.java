@@ -26,6 +26,8 @@ public class MoveLift extends Command {
 	private boolean downPressed = Robot.controls.getButton(LOWER_TO_BOTTOM);
 	
 	private int position;
+	
+	private boolean stop = false;
 	//Add something about encoders and converting to inches
 	public MoveLift() {
 		requires(Robot.lift);
@@ -39,6 +41,7 @@ public class MoveLift extends Command {
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
+		stop = true;
 	}
 	private void moveToScaleMiddle() {
 		if (currentHeight < (heightScaleMiddle - 3)) {
@@ -47,7 +50,8 @@ public class MoveLift extends Command {
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
-		
+		stop = true;
+
 	}
 	private void moveToScaleLow() {
 		if (currentHeight < (heightScaleLow - 3)) {
@@ -56,6 +60,8 @@ public class MoveLift extends Command {
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
+		stop = true;
+
 	}
 	private void moveToSwitch() {
 		if (currentHeight < (heightSwitch - 3)) {
@@ -64,7 +70,8 @@ public class MoveLift extends Command {
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
-		
+		stop = true;
+
 	}
 	private void moveToIntake() {
 		if (currentHeight > (heightIntake + 4)) { //Lowest Height
@@ -73,7 +80,8 @@ public class MoveLift extends Command {
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
-		
+		stop = true;
+
 	}
 
 	protected void execute() {
@@ -105,10 +113,9 @@ public class MoveLift extends Command {
 
 		
 	}
-	//Figure something out for this
 	@Override
 	protected boolean isFinished() {
-		return true;
+		return stop;
 	}
 
 	protected void end() {

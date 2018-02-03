@@ -90,7 +90,7 @@ public class Lift extends Subsystem {
 		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
 		if(pov != -1) {
 //			if(getCurrentCommand() != null && getCurrentCommand() instanceof MoveLiftPID)
-				getCurrentCommand().cancel();
+//				getCurrentCommand().cancel();
 			if(pov > 90 && pov < 270)
 				talonLift.set(-0.4d);
 			else
