@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Lift extends Subsystem {
 
-	final static int COLLAPSE_FORWARD_CHANNEL = 2;
-	final static int COLLAPSE_REVERSE_CHANNEL = 3;
+	final static int COLLAPSE_FORWARD_CHANNEL = 1;
+	final static int COLLAPSE_REVERSE_CHANNEL = 0;
 	final static int LIFT_MOTOR = 0;
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	

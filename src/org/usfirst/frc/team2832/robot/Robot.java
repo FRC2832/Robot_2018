@@ -111,6 +111,7 @@ public class Robot extends TimedRobot {
 		Robot.lift.unpack();
 		Scheduler.getInstance().removeAll();
 		Scheduler.getInstance().add(dashboard.getSelectedCommand());
+		System.out.println(robotType);
 	}
 
 	/**
