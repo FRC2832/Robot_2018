@@ -20,8 +20,8 @@ public class ArcadeDriveImproved extends Command {
 
         joystickToDD = new LinearInterpolation(new double[]{0, 0.4, 1}, new double[]{0.2, 0.7, 1});
         joystickToDDPrecision = new LinearInterpolation(new double[]{0, 0.6, 1}, new double[]{0.2, 0.5, 1});
-        upshift = new LinearInterpolation(new double[]{}, new double[]{});
-        downshift = new LinearInterpolation(new double[]{}, new double[]{});
+        upshift = new LinearInterpolation(new double[]{0, 1}, new double[]{0, 1});
+        downshift = new LinearInterpolation(new double[]{0, 1}, new double[]{0, 1});
     }
 
     protected void initialize() {
@@ -32,6 +32,7 @@ public class ArcadeDriveImproved extends Command {
      */
     protected void execute() {
         double dD = joystickToDD.interpolate(Math.abs(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft)));
+        System.out.println(dD);
         double velocity = Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE);
         if(velocity >= upshift.interpolate(dD))
             Robot.driveTrain.shift(DriveTrain.GEAR.HIGH);

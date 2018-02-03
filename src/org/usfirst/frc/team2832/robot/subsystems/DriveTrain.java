@@ -20,7 +20,8 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team2832.robot.commands.ArcadeDriveImproved;;
 
 /**
  * The drive train subsystem which handles encoders, the transmission, and
@@ -74,7 +75,7 @@ public class DriveTrain extends Subsystem {
 	 * subsystem
 	 */
 	public void initDefaultCommand() {
-		setDefaultCommand(new ArcadeDrive());
+		setDefaultCommand(new ArcadeDriveImproved());
 	}
 
 	/**

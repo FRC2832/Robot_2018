@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Climber extends Subsystem {
 	//get the actual values for these
-	final static int EXTENDER_FORWARD = 69;
-	final static int EXTENDER_REVERSE = 1337;
-	final static int WINCH_MOTOR = 420;
-	final static int HOOK_MOTOR = 42;
+	final static int EXTENDER_FORWARD = 6;
+	final static int EXTENDER_REVERSE = 7;
+	final static int WINCH_MOTOR = 9;
+	final static int HOOK_MOTOR = 13;
 	
 	private DoubleSolenoid extender;
 	private TalonSRX winchMotor;

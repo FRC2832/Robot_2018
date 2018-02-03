@@ -3,7 +3,7 @@ package org.usfirst.frc.team2832.robot;
 import java.util.Arrays;
 
 /**
- *
+ * A helper class to perform linear interpolations from 2d tables
  */
 public class LinearInterpolation {
 
@@ -28,7 +28,7 @@ public class LinearInterpolation {
         for (int i = 0; i < xValues.length - 1; i++) {
             dx[i] = xValues[i + 1] - xValues[i];
             if (dx[i] == 0) {
-                throw new IllegalArgumentException("X must be montotonic. A duplicate " + "xValues-value was found");
+                throw new IllegalArgumentException("X must be monotonic. A duplicate " + "xValues-value was found");
             }
             if (dx[i] < 0) {
                 throw new IllegalArgumentException("X must be sorted");
