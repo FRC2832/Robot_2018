@@ -105,12 +105,6 @@ public class DriveTrain extends Subsystem {
 			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kLeftRumble,  0.7d, Math.max(accelerometer[0], accelerometer[2]));
 			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]));
 		}
-
-		// Shift gears if velocity is greater than threshold
-		if ((talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() + talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()) / 2d > SHIFT_VELOCITY)
-			shift(GEAR.HIGH);
-		else
-			shift(GEAR.LOW);
 	}
 
 	/**
@@ -120,9 +114,11 @@ public class DriveTrain extends Subsystem {
 	 *            of robot to get encoder
 	 * @return velocity of the selected encoder
 	 */
-	public int getEncoderVelocity(Encoder side) {
-		return side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
-				: talonPhoenixRight.getSensorCollection().getQuadratureVelocity();
+	public double getEncoderVelocity(Encoder side) {
+		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
+				: (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity()
+				: (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
+				+ talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d));
 	}
 
 	/**
@@ -202,7 +198,7 @@ public class DriveTrain extends Subsystem {
 	 * Enumeration for drive motor encoders
 	 */
 	public enum Encoder {
-		LEFT, RIGHT;
+		LEFT, RIGHT, AVERAGE;
 	}
 
 	/**
