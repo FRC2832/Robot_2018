@@ -11,8 +11,8 @@ public class Unpacker extends Subsystem {
 	
 	DoubleSolenoid solenoid;
 	
-	final int UNPACK_FORWARD_CHANNEL = 4;
-	final int UNPACK_REVERSE_CHANNEL = 5;
+	final int UNPACK_FORWARD_CHANNEL = 3;
+	final int UNPACK_REVERSE_CHANNEL = 4;
 	
 	public Unpacker() {
 		super();

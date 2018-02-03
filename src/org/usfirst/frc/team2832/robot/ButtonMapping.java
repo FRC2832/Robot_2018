@@ -15,6 +15,7 @@ public class ButtonMapping {
 	public static final ButtonMapping LOWER_TO_BOTTOM = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
 	public static final ButtonMapping raiseButton = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
 	public static final ButtonMapping lowerButton = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.B);
+	public static final ButtonMapping toggleUnpack = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.START);
 	
 	private Controllers controller;
 	private Buttons button;
