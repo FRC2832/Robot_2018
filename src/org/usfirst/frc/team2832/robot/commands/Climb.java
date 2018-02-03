@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2832.robot.commands;
 
+import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.Climber;
 
@@ -19,10 +20,10 @@ public class Climb extends Command {
 	}
 	
 	protected void execute() {
-		if(Robot.controls.getButtonPressed(Robot.climber.lowerButton.getController(), Robot.climber.lowerButton.getButton())) {
+		if(Robot.controls.getButtonPressed(ButtonMapping.lowerButton.getController(), ButtonMapping.lowerButton.getButton())) {
 			Robot.climber.extendPiston();
 			Robot.climber.setWinchMotorSpeed(-.3); //need to make this stop after a bit
-		} else if(Robot.controls.getButtonPressed(Robot.climber.raiseButton.getController(), Robot.climber.raiseButton.getButton())) {
+		} else if(Robot.controls.getButtonPressed(ButtonMapping.raiseButton.getController(), ButtonMapping.raiseButton.getButton())) {
 			Robot.climber.extendPiston();
 			Robot.climber.setWinchMotorSpeed(-.3); //need to make this stop after a bit
 		}

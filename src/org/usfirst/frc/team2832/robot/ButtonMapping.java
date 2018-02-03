@@ -13,8 +13,8 @@ public class ButtonMapping {
 	public static final ButtonMapping TOGGLE_TILT_1 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.X);
 	public static final ButtonMapping LEVEL_UP = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);
 	public static final ButtonMapping LOWER_TO_BOTTOM = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
-	public final ButtonMapping raiseButton = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
-	public final ButtonMapping lowerButton = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.B);
+	public static final ButtonMapping raiseButton = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
+	public static final ButtonMapping lowerButton = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.B);
 	
 	private Controllers controller;
 	private Buttons button;
