@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
 import org.usfirst.frc.team2832.robot.ButtonMapping;
+import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
@@ -49,6 +50,7 @@ public class DriveTrain extends Subsystem {
 	private I2C i2cColorSensor;
 	private byte[] colorSensorResults;
 	private byte[] toSendColorSensor;
+	private final ButtonMapping toggleSensor = new ButtonMapping(Controls.Controllers.CONTROLLER_MAIN, Controls.Buttons.A);
 		
 	public DriveTrain() {
 		super();
@@ -97,6 +99,11 @@ public class DriveTrain extends Subsystem {
         	toggleShift();
         	Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kLeftRumble, 0.5d, 1d);
         	Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kRightRumble, 0.5d, 1d);
+        }
+        stopColorSensor();
+        if(Robot.controls.getButtonPressed(toggleSensor)) {
+        	System.out.println("a button pressed");
+        	startColorSensor();
         }
     }
     
@@ -210,22 +217,33 @@ public class DriveTrain extends Subsystem {
     
     public String readColorSensor() {
     	i2cColorSensor.read(0, 1, colorSensorResults);
-    	if(colorSensorResults[0]==(byte)0) {
+    	if(colorSensorResults[0]==(byte)1) {
+    		System.out.println("neither");
     		return "not white/black";
     	}
-    	else if(colorSensorResults[0]==(byte)1) {
+    	else if(colorSensorResults[0]==(byte)2) {
+    		System.out.println("white");
     		return "white";
     	}
-    	else if(colorSensorResults[0]==(byte)2) {
+    	else if(colorSensorResults[0]==(byte)3) {
+    		System.out.println("black");
     		return "black";
     	}
-    	else if(colorSensorResults[0]==(byte)3) {
+    	else if(colorSensorResults[0]==(byte)4) {
+    		System.out.println("error");
     		return "sensor error";
     	}
+    	System.out.println("no data");
     	return "not receiving data";
     }
     
     public void stopColorSensor() {
+    	toSendColorSensor[0]=(byte)-1;
+    	i2cColorSensor.transaction(toSendColorSensor,1,null,0);
+    }
+    
+    public void startColorSensor() {
+    	toSendColorSensor[0]=(byte)100;
     	i2cColorSensor.transaction(toSendColorSensor,1,null,0);
     }
 }
