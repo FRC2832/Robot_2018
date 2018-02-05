@@ -59,10 +59,4 @@ public class LinearInterpolation {
         }
         return y;
     }
-
-    public static void main(String[] args) {
-        LinearInterpolation interpolation = new LinearInterpolation(new double[]{0, 5, 10}, new double[]{0, 5, 20});
-        System.out.println("Interpolation of 3: " + interpolation.interpolate(3));
-        System.out.println("Interpolation of 8: " + interpolation.interpolate(8));
-    }
 }
