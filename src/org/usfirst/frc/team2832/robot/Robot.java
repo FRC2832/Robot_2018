@@ -8,7 +8,6 @@
 
 package org.usfirst.frc.team2832.robot;
 
-import org.usfirst.frc.team2832.robot.subsystems.Climber;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
@@ -31,7 +30,6 @@ public class Robot extends TimedRobot {
 	public static DriveTrain driveTrain;
 	public static Lift lift;
 	public static Ingestor ingestor;
-	public static Climber climber;
 	public static Unpacker unpacker;
 
 	//Other
@@ -59,7 +57,6 @@ public class Robot extends TimedRobot {
 		driveTrain = new DriveTrain();
 		lift = new Lift();
 		ingestor = new Ingestor();
-		climber = new Climber();
 		unpacker = new Unpacker();
 
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
@@ -110,6 +107,7 @@ public class Robot extends TimedRobot {
 		Robot.lift.unpack();
 		Scheduler.getInstance().removeAll();
 		Scheduler.getInstance().add(dashboard.getSelectedCommand());
+		System.out.println(robotType);
 	}
 
 	/**
