@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
+import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.commands.Climb;
 import org.usfirst.frc.team2832.robot.commands.MoveLift;
@@ -15,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The lift subsystem which handles an encoder, commanding the lift motor, and
@@ -24,7 +26,7 @@ public class Lift extends Subsystem {
 
 	final static int COLLAPSE_FORWARD_CHANNEL = 0;
 	final static int COLLAPSE_REVERSE_CHANNEL = 1;
-	final static int LIFT_MOTOR = 0;
+	final static int LIFT_MOTOR = 10;
 	final static int WINCH_MOTOR = 9;
 
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
@@ -84,6 +86,7 @@ public class Lift extends Subsystem {
 			else
 				Scheduler.getInstance().add(new Climb());
 		}
+		SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command", getCurrentCommandName());
 		/*if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
 			for(int i = POSITION.values().length - 1; i >= 0; i--) {
 				if(POSITION.values()[i].height < getLiftPosition()) {
@@ -109,6 +112,9 @@ public class Lift extends Subsystem {
 				talonLift.set(-0.4d);
 			else
 				talonLift.set(0.4d);
+		}
+		else {
+			talonLift.set(0.0);
 		}
 	}
 	public enum POSITION {
