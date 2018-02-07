@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
@@ -112,13 +113,13 @@ public class DriveTrain extends Subsystem {
 	 * 
 	 * @param side
 	 *            of robot to get encoder
-	 * @return velocity of the selected encoder
+	 * @return velocity of the selected encoder in rotations/second
 	 */
 	public double getEncoderVelocity(Encoder side) {
 		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
-				: (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity()
+				: side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity()
 				: (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
-				- talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d)) / 1440;
+				- talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d) / 144d;
 	}
 
 	/**

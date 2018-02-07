@@ -15,15 +15,20 @@ import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
  */
 public class ArcadeDriveImproved extends Command {
 
+    private static double SMOOTHING_CONSTANT_UP = 0.04;
+    private static double SMOOTHING_CONSTANT_DOWN = 0.074;
+
     private LinearInterpolation joystickToDD, joystickToDDPrecision, upshift, downshift;
+    private double prevVelocity = 0;
+    private boolean firstIteration = true;
 
     public ArcadeDriveImproved() {
         requires(Robot.driveTrain);
 
         joystickToDD = new LinearInterpolation(new double[]{0, 0.4, 1}, new double[]{0.2, 0.7, 1});
         joystickToDDPrecision = new LinearInterpolation(new double[]{0, 0.6, 1}, new double[]{0.2, 0.5, 1});
-        upshift = new LinearInterpolation(new double[]{0.2, 0.8, 0.801, 1}, new double[]{0.1, 0.35, 0.37, 0.37});
-        downshift = new LinearInterpolation(new double[]{0.2, 0.8, 0.801, 1}, new double[]{0.05, 0.3, 0.37, 0.37});
+        upshift = new LinearInterpolation(new double[]{0.2, 0.8, 0.801, 1}, new double[]{1, 4.5, 6, 7});
+        downshift = new LinearInterpolation(new double[]{0.2, 0.8, 0.801, 1}, new double[]{0.5, 4, 5.5, 6.5});
     }
 
     protected void initialize() {
@@ -34,8 +39,18 @@ public class ArcadeDriveImproved extends Command {
      */
     protected void execute() {
         double dD = joystickToDD.interpolate(Math.abs(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft))); //Driver demand
-        double velocity = Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE));
-        SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocity", velocity);
+        double velocity;
+        if(firstIteration) {
+            velocity = Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE));
+            firstIteration = false;
+        } else if(prevVelocity > Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)))
+            velocity = Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)) * SMOOTHING_CONSTANT_DOWN + (1 - SMOOTHING_CONSTANT_DOWN) * prevVelocity;
+        else
+            velocity = Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)) * SMOOTHING_CONSTANT_UP + (1 - SMOOTHING_CONSTANT_UP) * prevVelocity;
+        prevVelocity = velocity;
+
+        SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "FilteredVelocity", velocity);
+        SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "Velocity", Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "driverDemand", dD);
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityUpshift", upshift.interpolate(dD));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityDownshift", downshift.interpolate(dD));
