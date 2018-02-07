@@ -2,6 +2,7 @@ package org.usfirst.frc.team2832.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
@@ -24,10 +25,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Lift extends Subsystem {
 
-	final static int COLLAPSE_FORWARD_CHANNEL = 0;
-	final static int COLLAPSE_REVERSE_CHANNEL = 1;
-	final static int LIFT_MOTOR = 10;
-	final static int WINCH_MOTOR = 9;
+	final static private int COLLAPSE_FORWARD_CHANNEL = 0;
+	final static private int COLLAPSE_REVERSE_CHANNEL = 1;
+	final static private int LIFT_MOTOR = 10;
+	final static private int WINCH_MOTOR = 9;
+	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
 
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	
@@ -36,9 +38,11 @@ public class Lift extends Subsystem {
 	private DoubleSolenoid collapse;
 	private WPI_TalonSRX talonLift;
 	private TalonSRX talonPhoenixLift, winchMotor;
+	private AnalogInput limitSwitch;
 	
 	public Lift() {
 		super();
+		limitSwitch = new AnalogInput(LIFT_LIMIT_SWITCH_PIN);
 		winchMotor = new TalonSRX(WINCH_MOTOR);
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
@@ -73,6 +77,9 @@ public class Lift extends Subsystem {
 		winchMotor.set(ControlMode.PercentOutput, power);
 	}
 
+	public boolean getLiftLimitSwitch() {
+		return Math.abs(limitSwitch.getAverageVoltage() - 5) < 2;
+	}
 
 	public void initDefaultCommand() {
 		setDefaultCommand(new MoveLift());
