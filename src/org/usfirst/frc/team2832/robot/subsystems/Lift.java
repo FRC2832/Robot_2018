@@ -35,7 +35,7 @@ public class Lift extends Subsystem {
 	
 	public static final double RAIL_HEIGHT = 84;
 
-	private DoubleSolenoid collapse;
+	private DoubleSolenoid climbPiston;
 	private WPI_TalonSRX talonLift;
 	private TalonSRX talonPhoenixLift, winchMotor;
 	private AnalogInput limitSwitch;
@@ -46,17 +46,18 @@ public class Lift extends Subsystem {
 		winchMotor = new TalonSRX(WINCH_MOTOR);
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
-		collapse = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
-		collapse.set(Value.kForward);
+		climbPiston = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
+		climbPiston.set(Value.kForward);
 	}
 
+	//the pistons are retracted when the climber is extended and extended when the climber is retracted
 	public void pack() {
-		collapse.set(Value.kForward);
+		climbPiston.set(Value.kForward);
+	}
+	public void unpack() {
+		climbPiston.set(Value.kReverse);
 	}
 	
-	public void unpack() {
-		collapse.set(Value.kReverse);
-	}
 	//Adjust for lift motors (see google drive folder)
 	public double getLiftPosition() {
 		return talonPhoenixLift.getSensorCollection().getQuadraturePosition() * ENCODER_COUNT_TO_INCH;
@@ -111,6 +112,8 @@ public class Lift extends Subsystem {
 				}
 			}
 		} */
+		
+		//dpad controls
 		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
 		if(pov != -1) {
 //			if(getCurrentCommand() != null && getCurrentCommand() instanceof MoveLiftPID)
