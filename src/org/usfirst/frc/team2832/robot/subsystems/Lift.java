@@ -27,7 +27,7 @@ public class Lift extends Subsystem {
 
 	final static private int COLLAPSE_FORWARD_CHANNEL = 2;
 	final static private int COLLAPSE_REVERSE_CHANNEL = 3;
-	final static private int LIFT_MOTOR = 9;
+	final static private int LIFT_MOTOR = 5;
 	final static private int WINCH_MOTOR = 11;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
 
@@ -35,7 +35,7 @@ public class Lift extends Subsystem {
 	
 	public static final double RAIL_HEIGHT = 84;
 
-	private DoubleSolenoid climbPiston;
+	private DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
 	private TalonSRX talonPhoenixLift, winchMotor;
 	private AnalogInput limitSwitch;
@@ -46,16 +46,16 @@ public class Lift extends Subsystem {
 		winchMotor = new TalonSRX(WINCH_MOTOR);
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
-		climbPiston = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
-		climbPiston.set(Value.kForward);
+		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
+		collapserer.set(Value.kForward);
 	}
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
 	public void pack() {
-		climbPiston.set(Value.kForward);
+		collapserer.set(Value.kForward);
 	}
 	public void unpack() {
-		climbPiston.set(Value.kReverse);
+		collapserer.set(Value.kReverse);
 	}
 	
 	//Adjust for lift motors (see google drive folder)

@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
-	final static int INGESTOR_L = 0;
-	final static int INGESTOR_R = 1;
-	final static int FORWARD_CHANNEL = 2;
-	final static int REVERSE_CHANNEL = 3;
+	final static int INGESTOR_L = 3;
+	final static int INGESTOR_R = 4;
+	final static int FORWARD_CHANNEL = 0;
+	final static int REVERSE_CHANNEL = 1;
 	final static int DIGITAL_PIN = 1; // get proper channel!
 	
 	private DigitalInput di;

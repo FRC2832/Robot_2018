@@ -30,13 +30,13 @@ import org.usfirst.frc.team2832.robot.commands.ArcadeDriveImproved;;
  */
 public class DriveTrain extends Subsystem {
 
-	final static int TRANSMISSION_FORWARD_CHANNEL = 0;
-	final static int TRANSMISSION_REVERSE_CHANNEL = 1;
+	final static int TRANSMISSION_FORWARD_CHANNEL = 6;
+	final static int TRANSMISSION_REVERSE_CHANNEL = 5;
 
-	final static int DRIVE_MOTER_FL = 1;
-	final static int DRIVE_MOTER_FR = 24;
-	final static int DRIVE_MOTER_BL = 10;
-	final static int DRIVE_MOTER_BR = 23;
+	final static int DRIVE_MOTER_FL = 0;
+	final static int DRIVE_MOTER_FR = 14;
+	final static int DRIVE_MOTER_BL = 1;
+	final static int DRIVE_MOTER_BR = 13;
 
 	final static double SHIFT_VELOCITY = 9001; // Velocity(pulses/second) to switch to high gear
 	final static double VIBRATE_THRESHOLD = 0.4d;
