@@ -1,11 +1,8 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
+import org.usfirst.frc.team2832.robot.*;
 import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
-import org.usfirst.frc.team2832.robot.Robot;
-import org.usfirst.frc.team2832.robot.ButtonMapping;
-import org.usfirst.frc.team2832.robot.Controls;
-import org.usfirst.frc.team2832.robot.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -17,17 +14,16 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Ingestor extends Subsystem {
+public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
 	final static int INGESTOR_L = 0; // fix these
 	final static int INGESTOR_R = 1;
-	final static int FORWARD_CHANNEL = 2; // assign these to pneumatics
-	final static int REVERSE_CHANNEL = 3;
+	final static int FORWARD_CHANNEL = 5; // assign these to pneumatics
+	final static int REVERSE_CHANNEL = 6;
 	
 	private TalonSRX talonL;
 	private TalonSRX talonR;
 	private DoubleSolenoid tilt;
-	
 	
 	public Ingestor() {
 		super();
@@ -109,4 +105,7 @@ public class Ingestor extends Subsystem {
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Right Trigger Value", tRight);
 	}
 
+	enum IngestorFlags {
+		TEST
+	}
 }

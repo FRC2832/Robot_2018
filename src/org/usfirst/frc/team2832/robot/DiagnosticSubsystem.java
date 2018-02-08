@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-public abstract class DiagnosticSubsystem<E extends Enumeration> extends Subsystem {
+public abstract class DiagnosticSubsystem<E extends Enum> extends Subsystem {
 
     private List<E> flags;
 
@@ -15,6 +15,10 @@ public abstract class DiagnosticSubsystem<E extends Enumeration> extends Subsyst
     }
 
     public List<E> getFlags;
+
+    public boolean hasFlag(E flag) {
+        return flags.contains(flag);
+    }
 
     public void clearFlags() {
         flags.clear();

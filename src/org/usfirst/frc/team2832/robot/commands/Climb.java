@@ -23,7 +23,7 @@ public class Climb extends Command {
 	
 	protected void execute() {
 		//Potentially check motor currrent in the case that limit switch fails
-		if(Timer.getFPGATimestamp() < start + DURATION && !Robot.lift.getLiftLimitSwitch()) {
+		if(Timer.getFPGATimestamp() < start + DURATION) {// && !Robot.lift.getLiftLimitSwitch()) {
 			Robot.lift.setWinchPower(3);
 		} else {
 			Robot.lift.setWinchPower(0);
@@ -38,10 +38,14 @@ public class Climb extends Command {
 	
 	protected void end() {
 		Robot.lift.setWinchPower(0);
+		Robot.lift.setWinchBrakeMode(false);
+		Robot.lift.unpack();
 	}
 	
 	protected void interrupted() {
 		Robot.lift.setWinchPower(0);
+		Robot.lift.setWinchBrakeMode(false);
+		Robot.lift.unpack();
 	}
 
 }

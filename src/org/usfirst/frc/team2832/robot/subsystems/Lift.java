@@ -25,10 +25,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Lift extends Subsystem {
 
-	final static private int COLLAPSE_FORWARD_CHANNEL = 0;
-	final static private int COLLAPSE_REVERSE_CHANNEL = 1;
-	final static private int LIFT_MOTOR = 10;
-	final static private int WINCH_MOTOR = 9;
+	final static private int COLLAPSE_FORWARD_CHANNEL = 2;
+	final static private int COLLAPSE_REVERSE_CHANNEL = 3;
+	final static private int LIFT_MOTOR = 9;
+	final static private int WINCH_MOTOR = 11;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
 
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
@@ -89,7 +89,7 @@ public class Lift extends Subsystem {
     public void periodic() {
 		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if(getCurrentCommand() instanceof Climb)
-				getCurrentCommand().free();
+				getCurrentCommand().cancel();
 			else
 				Scheduler.getInstance().add(new Climb());
 		}
