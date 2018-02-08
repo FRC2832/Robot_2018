@@ -12,7 +12,9 @@ import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -60,6 +62,17 @@ public class Robot extends TimedRobot {
 
 		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
 		robotType = RobotType.Competition; //Default to competition
+		new Thread(() -> {
+	    	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+	    	 camera.setResolution(640, 480);
+	    	while(true) {
+	    		try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+
+				}
+	    	}
+	    }).start();
 	}
 
 	@Override
