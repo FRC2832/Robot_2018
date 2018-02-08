@@ -16,6 +16,7 @@ public class Climb extends Command {
 	}
 	
 	protected void initialize() {
+		//pack is extending the pistons
 		Robot.lift.pack();
 		this.start = Timer.getFPGATimestamp();
 
