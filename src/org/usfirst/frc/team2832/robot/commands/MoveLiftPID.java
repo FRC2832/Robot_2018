@@ -27,7 +27,7 @@ public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
 	private final double TOLERANCE_INCHES = 1.5f;
 	private final int PATIENCE = 20;
 	
-	public MoveLiftPID(Lift.POSITION position) {
+	public MoveLiftPID(Lift.Position position) {
 		this(position.height);
 	}
 	

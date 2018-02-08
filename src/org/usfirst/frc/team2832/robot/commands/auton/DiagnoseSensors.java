@@ -16,10 +16,11 @@ public class DiagnoseSensors extends Command {
 	
 	private double startTime;
 	private boolean done;
-	SensorTest[] sensorTests;
+	private SensorTest[] sensorTests;
 
 	public DiagnoseSensors(SensorTest... sensorTests) {
 		requires(Robot.driveTrain);
+		requires(Robot.lift);
 		this.sensorTests = sensorTests;
 	}
 
@@ -28,14 +29,20 @@ public class DiagnoseSensors extends Command {
 	}
 
 	/**
-	 * Drive straight at set speed
+	 * Move motors at set speed
 	 */
 	protected void execute() {
-		Robot.driveTrain.arcadeDrive(SPEEEED, 0);
+		if (Timer.getFPGATimestamp() < startTime + TEST_DURATION / 2d) {
+			Robot.driveTrain.arcadeDrive(SPEEEED, 0);
+			Robot.lift.setLiftPower(SPEEEED);
+		} else {
+			Robot.driveTrain.arcadeDrive(-SPEEEED, 0);
+			Robot.lift.setLiftPower(-SPEEEED);
+		}
 	}
 
 	/**
-	 * Terminate if sensorTests are working
+	 * Terminate when duration has elapsed
 	 */
 	protected boolean isFinished() {
 		return Timer.getFPGATimestamp() > startTime + TEST_DURATION;
@@ -46,7 +53,7 @@ public class DiagnoseSensors extends Command {
 	 */
 	private void testSensors() {
 		for(SensorTest test: sensorTests)
-			if(test.getSensor() == 0)
+			if(test.getSensor())
 				test.getSubsystem().addFlag(test.getFlag());
 	}
 
@@ -55,6 +62,7 @@ public class DiagnoseSensors extends Command {
 	 */
 	protected void end() {
 		Robot.driveTrain.arcadeDrive(0, 0);
+		Robot.lift.setLiftPower(0);
 		testSensors();
 	}
 
@@ -63,6 +71,7 @@ public class DiagnoseSensors extends Command {
 	 */
 	protected void interrupted() {
 		Robot.driveTrain.arcadeDrive(0, 0);
+		Robot.lift.setLiftPower(0);
 		testSensors();
 	}
 }

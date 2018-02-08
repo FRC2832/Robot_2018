@@ -1,9 +1,9 @@
 package org.usfirst.frc.team2832.robot;
 
-import org.usfirst.frc.team2832.robot.commands.auton.DriveDistance;
-import org.usfirst.frc.team2832.robot.commands.auton.groups.LeftSide;
-import org.usfirst.frc.team2832.robot.commands.auton.groups.RightSide;
-import org.usfirst.frc.team2832.robot.commands.auton.groups.SwitchCenter;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
+import org.usfirst.frc.team2832.robot.commands.auton.autongroups.LeftSide;
+import org.usfirst.frc.team2832.robot.commands.auton.autongroups.RightSide;
+import org.usfirst.frc.team2832.robot.commands.auton.autongroups.SwitchCenter;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;

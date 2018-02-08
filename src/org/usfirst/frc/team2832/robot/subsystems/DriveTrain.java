@@ -1,12 +1,8 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
-import org.usfirst.frc.team2832.robot.Controls.Buttons;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
-import org.usfirst.frc.team2832.robot.Controls;
-import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team2832.robot.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -16,19 +12,17 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team2832.robot.commands.ArcadeDriveImproved;;
+import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;;
 
 /**
  * The drive train subsystem which handles encoders, the transmission, and
  * driving
  */
-public class DriveTrain extends Subsystem {
+public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> {
 
 	final static int TRANSMISSION_FORWARD_CHANNEL = 6;
 	final static int TRANSMISSION_REVERSE_CHANNEL = 5;
@@ -38,13 +32,11 @@ public class DriveTrain extends Subsystem {
 	final static int DRIVE_MOTER_BL = 1;
 	final static int DRIVE_MOTER_BR = 13;
 
-	final static double SHIFT_VELOCITY = 9001; // Velocity(pulses/second) to switch to high gear
 	final static double VIBRATE_THRESHOLD = 0.4d;
 
 	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; // Circumference divided by
 																				// pulses/revolution
 	private static final double ENCODER_ERROR_PERCENTAGE = 68d / 66.62d; // Actual/desired distance
-
 
 	private DoubleSolenoid transmission;
 	private DifferentialDrive drive;
@@ -76,7 +68,7 @@ public class DriveTrain extends Subsystem {
 	 * subsystem
 	 */
 	public void initDefaultCommand() {
-		setDefaultCommand(new ArcadeDriveImproved());
+		setDefaultCommand(new ArcadeDrive());
 	}
 
 	/**
@@ -247,5 +239,11 @@ public class DriveTrain extends Subsystem {
 
 	public PigeonIMU getPigeon() {
 		return pigeon;
+	}
+
+	public enum DriveTrainFlags {
+		PIGEON,
+		ENCODER_L,
+		ENCODER_R;
 	}
 }

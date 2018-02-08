@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2832.robot.commands.auton;
+package org.usfirst.frc.team2832.robot.commands.auton.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 

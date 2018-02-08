@@ -1,10 +1,10 @@
-package org.usfirst.frc.team2832.robot.commands.auton.groups;
+package org.usfirst.frc.team2832.robot.commands.auton.autongroups;
 
 import org.usfirst.frc.team2832.robot.commands.MoveLiftPID;
-import org.usfirst.frc.team2832.robot.commands.auton.DriveDistance;
-import org.usfirst.frc.team2832.robot.commands.auton.ExpelCube;
-import org.usfirst.frc.team2832.robot.commands.auton.TurnDegrees;
-import org.usfirst.frc.team2832.robot.subsystems.Lift.POSITION;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
+import org.usfirst.frc.team2832.robot.commands.auton.lift.ExpelCube;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnDegrees;
+import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -20,13 +20,13 @@ public class RightSide extends CommandGroup {
     	
 		//addSequential(new SensorFailsafe(0.5d, 120d, ()->Robot.driveTrain.getEncoderPosition(ENCODER.LEFT), ()->Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT), ()->Robot.driveTrain.getPigeonYaw()));
     	if (gameData.charAt(0) == 'R') { //If the switch is on our side
-    		addParallel(new MoveLiftPID(POSITION.SWITCH));
+    		addParallel(new MoveLiftPID(Lift.Position.SWITCH));
     		addSequential(new DriveDistance(0.6d, 150d, 10d)); //go forward to switch
     		addSequential(new TurnDegrees(90f, false)); //turn 90 degrees
     		addSequential(new ExpelCube());
     		
     	} else if (gameData.charAt(1) == 'R') { //If the scale is on our side
-    		addParallel(new MoveLiftPID(POSITION.SCALE));
+    		addParallel(new MoveLiftPID(Lift.Position.SCALE));
     		addSequential(new DriveDistance(0.6d, 291d, 10d)); // go forward to scale
     		addSequential(new TurnDegrees(90f, false)); //turn 90 degrees
     		addSequential(new ExpelCube());

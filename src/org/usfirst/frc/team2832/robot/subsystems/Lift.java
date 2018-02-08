@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The lift subsystem which handles an encoder, commanding the lift motor, and
  * folding with a pneumatic cylinder
  */
-public class Lift extends Subsystem {
+public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
 	final static private int COLLAPSE_FORWARD_CHANNEL = 2;
 	final static private int COLLAPSE_REVERSE_CHANNEL = 3;
@@ -96,18 +96,18 @@ public class Lift extends Subsystem {
 		}
 		SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command", getCurrentCommandName());
 		/*if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
-			for(int i = POSITION.values().length - 1; i >= 0; i--) {
-				if(POSITION.values()[i].height < getLiftPosition()) {
-					Scheduler.getInstance().add(new MoveLiftPID(POSITION.values()[i]));
+			for(int i = Position.values().length - 1; i >= 0; i--) {
+				if(Position.values()[i].height < getLiftPosition()) {
+					Scheduler.getInstance().add(new MoveLiftPID(Position.values()[i]));
 					break;
 				}
 			}
 			
 		}
 		if(Robot.controls.getButtonPressed(RAISE_LIFT)) {
-			for(int i = 0; i < POSITION.values().length; i++) {
-				if(POSITION.values()[i].height > getLiftPosition()) {
-					Scheduler.getInstance().add(new MoveLiftPID(POSITION.values()[i]));
+			for(int i = 0; i < Position.values().length; i++) {
+				if(Position.values()[i].height > getLiftPosition()) {
+					Scheduler.getInstance().add(new MoveLiftPID(Position.values()[i]));
 					break;
 				}
 			}
@@ -127,13 +127,17 @@ public class Lift extends Subsystem {
 			talonLift.set(0.0);
 		}
 	}
-	public enum POSITION {
+	public enum Position {
 		INGESTOR(0), SWITCH(50), HEIGHT(70), SCALE(84);
 
 		public double height;
 
-		private POSITION(int height) {
+		private Position(int height) {
 			this.height = height;
 		}
 	}
+
+	public enum LiftFlags {
+	    ENCODER
+    }
 }

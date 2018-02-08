@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2832.robot.commands.auton;
+package org.usfirst.frc.team2832.robot.commands.auton.lift;
 
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;

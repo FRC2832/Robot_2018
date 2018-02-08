@@ -1,10 +1,10 @@
-package org.usfirst.frc.team2832.robot.commands.auton.groups;
+package org.usfirst.frc.team2832.robot.commands.auton.autongroups;
 
 import org.usfirst.frc.team2832.robot.commands.MoveLiftPID;
-import org.usfirst.frc.team2832.robot.commands.auton.DriveDistance;
-import org.usfirst.frc.team2832.robot.commands.auton.ExpelCube;
-import org.usfirst.frc.team2832.robot.commands.auton.TurnDegrees;
-import org.usfirst.frc.team2832.robot.subsystems.Lift.POSITION;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
+import org.usfirst.frc.team2832.robot.commands.auton.lift.ExpelCube;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnDegrees;
+import org.usfirst.frc.team2832.robot.subsystems.Lift;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -13,16 +13,15 @@ public class LeftSide extends CommandGroup {
     public LeftSide() {
     	
     	String gameData = DriverStation.getInstance().getGameSpecificMessage();
-    	
-		//addSequential(new SensorFailsafe(0.5d, 120d, ()->Robot.driveTrain.getEncoderPosition(Encoder.LEFT), ()->Robot.driveTrain.getEncoderPosition(Encoder.RIGHT), ()->Robot.driveTrain.getPigeonYaw()));
-    	if (gameData.charAt(0) == 'L') { //If the switch is on our side
-    		addParallel(new MoveLiftPID(POSITION.SWITCH));
-    		addSequential(new DriveDistance(.6f, 150d, 10)); //go forward to switch
+
+		if (gameData.charAt(0) == 'L') { //If the switch is on our side
+			addParallel(new MoveLiftPID(Lift.Position.SWITCH));
+			addSequential(new DriveDistance(.6f, 150d, 10)); //go forward to switch
     		addSequential(new TurnDegrees(90f, true)); //turn 90 degrees
     		addSequential(new ExpelCube());
     		
     	} else if (gameData.charAt(1) == 'L') { //If the scale is on our side
-    		addParallel(new MoveLiftPID(POSITION.SCALE));
+    		addParallel(new MoveLiftPID(Lift.Position.SCALE));
     		addSequential(new DriveDistance(.6f, 291d, 10)); // go forward to scale
     		addSequential(new TurnDegrees(90f, true)); //turn 90 degrees
     		addSequential(new ExpelCube());
