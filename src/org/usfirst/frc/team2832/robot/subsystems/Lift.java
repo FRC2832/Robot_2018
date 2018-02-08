@@ -27,8 +27,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
 	final static private int COLLAPSE_FORWARD_CHANNEL = 2;
 	final static private int COLLAPSE_REVERSE_CHANNEL = 3;
-	final static private int LIFT_MOTOR = 5;
-	final static private int WINCH_MOTOR = 11;
+	final static private int LIFT_MOTOR = 15;
+	final static private int WINCH_MOTOR = 9;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
 
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;

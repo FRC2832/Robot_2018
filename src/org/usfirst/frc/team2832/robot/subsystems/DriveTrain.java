@@ -24,13 +24,13 @@ import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;;
  */
 public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> {
 
-	final static int TRANSMISSION_FORWARD_CHANNEL = 6;
-	final static int TRANSMISSION_REVERSE_CHANNEL = 5;
+	final static int TRANSMISSION_FIRST_GEAR_CHANNEL = 5;
+	final static int TRANSMISSION_SECOND_GEAR_CHANNEL = 6;
 
-	final static int DRIVE_MOTER_FL = 0;
-	final static int DRIVE_MOTER_FR = 14;
-	final static int DRIVE_MOTER_BL = 1;
-	final static int DRIVE_MOTER_BR = 13;
+	final static int DRIVE_MOTER_FL = 10;
+	final static int DRIVE_MOTER_FR = 24;
+	final static int DRIVE_MOTER_BL = 11;
+	final static int DRIVE_MOTER_BR = 23;
 
 	final static double VIBRATE_THRESHOLD = 0.4d;
 
