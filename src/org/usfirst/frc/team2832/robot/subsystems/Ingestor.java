@@ -16,8 +16,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
 	final static int INGESTOR_L = 13; // fix these
 	final static int INGESTOR_R = 14;
-	final static int FORWARD_CHANNEL = 2; // assign these to pneumatics
-	final static int REVERSE_CHANNEL = 3;
+	final static int FORWARD_CHANNEL = 1; // assign these to pneumatics
+	final static int REVERSE_CHANNEL = 0;
 	final static int DIGITAL_PIN = 1; // get proper channel!
 	
 	private DigitalInput di;
@@ -106,10 +106,14 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			Robot.ingestor.toggleTilt();
 		} else if (tLeft > 0.05) {
 			if (digitalVal) {
-				setMotorSpeed(tLeft * 0.8); // max manual motor speed is 0.8
+				setMotorSpeed(tLeft * -0.8); // max manual motor speed is 0.8
+			} else {
+				stopMotors();
 			}
 		} else if (tRight > 0.05) {
-			setMotorSpeed(tRight * 0.8);
+			if (tRight < 0.9) {
+				setMotorSpeed(tRight * 0.8);
+			}
 		} else {
 			stopMotors();
 		}

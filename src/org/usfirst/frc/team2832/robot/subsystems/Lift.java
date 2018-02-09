@@ -48,6 +48,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 		collapserer.set(Value.kForward);
+		talonLift.setNeutralMode(NeutralMode.Brake);
 	}
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
@@ -119,9 +120,9 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 //			if(getCurrentCommand() != null && getCurrentCommand() instanceof MoveLiftPID)
 //				getCurrentCommand().cancel();
 			if(pov > 90 && pov < 270)
-				talonLift.set(-0.4d);
+				talonLift.set(-1d);
 			else
-				talonLift.set(0.4d);
+				talonLift.set(1d);
 		}
 		else {
 			talonLift.set(0.0);

@@ -47,8 +47,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 
 	public DriveTrain() {
 		super();
-		transmission = new DoubleSolenoid(TRANSMISSION_FORWARD_CHANNEL,
-		TRANSMISSION_REVERSE_CHANNEL);
+		transmission = new DoubleSolenoid(TRANSMISSION_FIRST_GEAR_CHANNEL,TRANSMISSION_SECOND_GEAR_CHANNEL);
 		talonFL = new WPI_TalonSRX(DRIVE_MOTER_FL);
 		talonFR = new WPI_TalonSRX(DRIVE_MOTER_FR);
 		talonBL = new WPI_TalonSRX(DRIVE_MOTER_BL);
