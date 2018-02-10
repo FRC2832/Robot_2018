@@ -29,8 +29,8 @@ public class Controls {
 	public Controls() {
 		controllerMain = new Controller(CONTROLLER_MAIN_PORT);
 		controllerSecondary = new Controller(CONTROLLER_SECONDARY_PORT);
-		triggers = new ArrayList<Trigger>();
-		rumbles = new CopyOnWriteArrayList<Rumble>();
+		triggers = new ArrayList<>();
+		rumbles = new CopyOnWriteArrayList<>();
 	}
 
 	/**

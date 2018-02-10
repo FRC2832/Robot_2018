@@ -21,10 +21,7 @@ public class SwitchCenter extends CommandGroup {
 	public SwitchCenter() {
 
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
-		addSequential(new DiagnoseSensors(new SensorTest(()-> Robot.driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT) == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.ENCODER_L),
-				new SensorTest(()-> Robot.driveTrain.getEncoderPosition(DriveTrain.Encoder.RIGHT) == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.ENCODER_R),
-				new SensorTest(()-> Robot.driveTrain.getPigeonYaw() == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.PIGEON)));
-		//addSequential(new SensorFailsafe(0.5d, 120d, ()->Robot.driveTrain.getEncoderPosition(ENCODER.LEFT), ()->Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT), ()->Robot.driveTrain.getPigeonYaw()));
+
 		addParallel(new MoveLiftPID(Lift.Position.SWITCH));
 		addSequential(new DriveDistance(0.5d, 40d, 10d));
 		addSequential(new TurnDegrees(45, (gameData.charAt(0) == 'R'))); //turn towards our switch

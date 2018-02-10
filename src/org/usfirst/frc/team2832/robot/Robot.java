@@ -8,6 +8,9 @@
 
 package org.usfirst.frc.team2832.robot;
 
+import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team2832.robot.commands.auton.DiagnoseSensors;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
@@ -35,9 +38,13 @@ public class Robot extends TimedRobot {
 	//Other
 	public static Controls controls;
 	public static Dashboard dashboard;
+	public static Logger logger;
 
 	private static RobotType robotType;
+
 	private AnalogInput robotTypeInput;
+	private Command diagnostic;
+	private boolean postDiagnosis;
 
 	/**
 	 * Gets which robot the code is running on
@@ -52,6 +59,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
+		logger = new Logger();
+		logger.header("Robot Init");
+
 		controls = new Controls();
 
 		driveTrain = new DriveTrain();
@@ -62,14 +72,23 @@ public class Robot extends TimedRobot {
 
 		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
 		robotType = RobotType.Competition; //Default to competition
+
+		// Create the command to be called before autonomous
+		diagnostic = new DiagnoseSensors(
+				new SensorTest(()-> Robot.driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT) == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.ENCODER_L),
+				new SensorTest(()-> Robot.driveTrain.getEncoderPosition(DriveTrain.Encoder.RIGHT) == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.ENCODER_R),
+				new SensorTest(()-> Robot.driveTrain.getPigeonYaw() == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.PIGEON),
+				new SensorTest(()-> Robot.lift.getLiftPosition() == 0, Robot.lift, Lift.LiftFlags.ENCODER));
+
+		// Create camera
 		new Thread(() -> {
 	    	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-	    	 camera.setResolution(640, 480);
+	    	camera.setResolution(640, 480);
 	    	while(true) {
 	    		try {
 					Thread.sleep(20);
 				} catch (InterruptedException e) {
-
+					logger.error("Camera Thread Interrupted", e.toString());
 				}
 	    	}
 	    }).start();
@@ -77,7 +96,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotPeriodic() {
+		Scheduler.getInstance().run();
 		SmartDashboard.putString(Dashboard.PREFIX_DRIVER + "RobotType", robotType.name());
+		logger.update();
+		controls.update();
 	}
 
 	/**
@@ -85,6 +107,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		logger.header("Disabled Init");
 		Robot.driveTrain.setBrakeMode(false);
 		controls.clearRumbles();
 	}
@@ -94,7 +117,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
 		driveTrain.setPigeonYaw(0);
 
 		// Set the type of robot based on the average voltage of a pin
@@ -113,11 +135,15 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		logger.header("Autonomous Init");
+
 		Robot.driveTrain.setBrakeMode(true);
 		Robot.lift.unpack();
 		Scheduler.getInstance().removeAll();
-		Scheduler.getInstance().add(dashboard.getSelectedCommand());
-		System.out.println(robotType);
+
+		Scheduler.getInstance().add(diagnostic);
+
+		logger.log("Robot Type", robotType.name());
 	}
 
 	/**
@@ -125,7 +151,17 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		Scheduler.getInstance().run();
+		// If diagnostic is done, start either selected command group or just drive forward to line.
+		if(!postDiagnosis && diagnostic.isCompleted()) {
+			postDiagnosis = true;
+			if(Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.PIGEON) || Robot.driveTrain.hasAll(DriveTrain.DriveTrainFlags.ENCODER_L, DriveTrain.DriveTrainFlags.ENCODER_R)) {
+				logger.log("Auton", "Defaulting to driving past line due to critical system failure");
+				Scheduler.getInstance().add(new DriveDistance(.5f, 120d, 10)); // TODO: 2/9/2018 Adjust this time in preparation for when both encoders fail
+			} else {
+				logger.log("Auton", "Starting " + dashboard.getSelectedCommand().getName() + " normally");
+				Scheduler.getInstance().add(dashboard.getSelectedCommand());
+			}
+		}
 	}
 
 	/**
@@ -133,6 +169,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
+		logger.header("Teleop Init");
+
 		Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
 	}
@@ -142,8 +180,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
-		controls.update();
+
 	}
 
 	/**
@@ -151,7 +188,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testInit() {
-
+		logger.header("Test Init");
 	}
 
 	/**

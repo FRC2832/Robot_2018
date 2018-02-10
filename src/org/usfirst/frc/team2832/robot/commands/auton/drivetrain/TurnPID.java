@@ -28,7 +28,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 
 	public TurnPID(double degrees) {
 		requires(Robot.driveTrain);
-
+		this.degrees = degrees;
 		sourceType = PIDSourceType.kDisplacement;
 		controller = new PIDController(P, I, D, F, this, this);
 		controller.setOutputRange(-0.7, 0.7);
@@ -41,6 +41,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 
 	protected void initialize() {
 		targetAngle = Robot.driveTrain.getPigeonYaw() + degrees;
+		Robot.logger.log("Turn PID", "Turning " + degrees + " degrees");
 	}
 
 	protected void execute() {
@@ -63,10 +64,12 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	}
 
 	protected void end() {
+		Robot.logger.log("Turn PID", "Ended");
 		Robot.driveTrain.tankDrive(0, 0);
 	}
 
 	protected void interrupted() {
+		Robot.logger.log("Turn PID", "Interrupted");
 		Robot.driveTrain.tankDrive(0, 0);
 	}
 

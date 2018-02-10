@@ -47,7 +47,7 @@ public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
     }
     
     protected void initialize() {
-    	
+    	Robot.logger.log("Move Lift PID", "Started");
     }
 
     protected void execute() {
@@ -68,10 +68,12 @@ public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
     }
 
     protected void end() {
+		Robot.logger.log("Move Lift PID", "Ended");
     	Robot.lift.setLiftPower(0);
     }
 
     protected void interrupted() {
+		Robot.logger.log("Move Lift PID", "Interrupted");
     	Robot.lift.setLiftPower(0);
     }
     

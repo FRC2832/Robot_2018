@@ -53,9 +53,11 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
 	public void pack() {
+		Robot.logger.log("Lift", "Packed robot");
 		collapserer.set(Value.kForward);
 	}
 	public void unpack() {
+		Robot.logger.log("Lift", "Unpacked robot");
 		collapserer.set(Value.kReverse);
 	}
 	
@@ -69,6 +71,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public void setWinchBrakeMode(boolean value) {
+		Robot.logger.log("Lift", "Winch brake mode " + (value ? "enabled" : "disabled"));
 		if(value)
 			winchMotor.setNeutralMode(NeutralMode.Brake);
 		else

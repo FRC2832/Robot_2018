@@ -7,9 +7,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Expels the cube
  */
 public class ExpelCube extends Command {
+
+    private final double EXPEL_DURATION = 3;
+    private final double EXPEL_SPEED = 1;
 
 	private double startTime;
 	private Ingestor Ingestor = Robot.ingestor;
@@ -21,27 +24,29 @@ public class ExpelCube extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	startTime = Timer.getFPGATimestamp();
+        Robot.logger.log("Expell Cube", "Started");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Ingestor.setMotorSpeed(1.0);;
+    	Ingestor.setMotorSpeed(EXPEL_SPEED);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return startTime + 3 < Timer.getFPGATimestamp();
+    	return startTime + EXPEL_DURATION < Timer.getFPGATimestamp();
     }
 
     // Called once after isFinished returns true
     protected void end() {
+        Robot.logger.log("Expell Cube", "Ended");
     	Ingestor.stopMotors();
-    	
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+        Robot.logger.log("Expell Cube", "Interrrupted");
     	Ingestor.stopMotors();
     }
 }

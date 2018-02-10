@@ -9,26 +9,26 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Climb extends Command {
 
 	private double start;
-	final static double DURATION = 15; //need to figure out the correct value for this
+	final static double DURATION = 15; // TODO: 2/9/2018 Need to figure out the correct value for this
 	
 	public Climb() {
 		requires(Robot.lift);
 	}
 	
 	protected void initialize() {
-		//pack is extending the pistons
 		Robot.lift.pack();
 		this.start = Timer.getFPGATimestamp();
-
+		Robot.logger.log("Climb", "Starting");
+		Robot.lift.setWinchBrakeMode(true);
 	}
 	
 	protected void execute() {
-		//Potentially check motor currrent in the case that limit switch fails
+		// TODO: 2/9/2018 Potentially check motor current in the case that limit switch fails
 		if(Timer.getFPGATimestamp() < start + DURATION) {// && !Robot.lift.getLiftLimitSwitch()) {
 			Robot.lift.setWinchPower(3);
 		} else {
 			Robot.lift.setWinchPower(0);
-			Robot.lift.setWinchBrakeMode(true);
+			Robot.logger.log("Climb", "At top");
 		}
 	}
 	
@@ -38,15 +38,16 @@ public class Climb extends Command {
 	}
 	
 	protected void end() {
+		Robot.logger.log("Climb", "Ended");
 		Robot.lift.setWinchPower(0);
 		Robot.lift.setWinchBrakeMode(false);
 		Robot.lift.unpack();
 	}
 	
 	protected void interrupted() {
+		Robot.logger.log("Climb", "Interrupted");
 		Robot.lift.setWinchPower(0);
 		Robot.lift.setWinchBrakeMode(false);
 		Robot.lift.unpack();
 	}
-
 }

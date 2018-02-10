@@ -88,7 +88,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kRightRumble, 0.5d, 1d);
 		}
 
-		// Vibrate controllers if greater than threshold "Gs"
+		// Vibrate controllers if greater than threshold in "Gs"
 		/*double[] accelerometer = new double[3];
 		pigeon.getAccelerometerAngles(accelerometer);
 		if (accelerometer[0] >= VIBRATE_THRESHOLD || accelerometer[2] >= VIBRATE_THRESHOLD) {
@@ -100,39 +100,32 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	}
 
 	/**
-	 * \ Gets velocity from drive motor encoders
+	 * Gets velocity from drive motor encoders
 	 * 
 	 * @param side
 	 *            of robot to get encoder
 	 * @return velocity of the selected encoder in rotations/second
 	 */
 	public double getEncoderVelocity(Encoder side) {
-		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
-				: side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity()
-				: (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
-				- talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d) / 144d;
+		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity() : hasFlag(DriveTrainFlags.ENCODER_R) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : hasFlag(DriveTrainFlags.ENCODER_L) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity() : (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() - talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d) / 144d;
 	}
 
 	/**
-	 * \ Gets encoder position from drive motor encoders
+	 * Gets encoder position from drive motor encoders
 	 * 
 	 * @param side
 	 *            of robot to get encoder
 	 * @return position of the selected encoder(inches)
 	 */
 	public double getEncoderPosition(Encoder side) {
-		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition()
-				: (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadraturePosition()
-						: (talonPhoenixLeft.getSensorCollection().getQuadraturePosition()
-								+ talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d))
-				* ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE
-				* (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
+		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadraturePosition() : (hasFlag(DriveTrainFlags.ENCODER_L)? talonPhoenixRight.getSensorCollection().getQuadraturePosition(): hasFlag(DriveTrainFlags.ENCODER_R)? talonPhoenixLeft.getSensorCollection().getQuadraturePosition():(talonPhoenixLeft.getSensorCollection().getQuadraturePosition()+ talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d) )) * ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
 	}
 
 	/**
 	 * Turns brake mode on or off for the moters
 	 */
 	public void setBrakeMode(boolean mode) {
+		Robot.logger.log("Drive Train", "Brake mode " + (mode ? "enabled" : "disabled"));
 		NeutralMode brakeMode;
 		if (mode)
 			brakeMode = NeutralMode.Brake;
@@ -152,14 +145,14 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 */
 	public void shift(GEAR gear) {
 		transmission.set(gear.getValue());
+		Robot.logger.log("Transmission", "Shifted to " + gear.name() + " gear");
 	}
 
 	/**
 	 * Toggles selected gear
 	 */
 	public void toggleShift() {
-		transmission.set(transmission.get().equals(GEAR.HIGH.getValue()) ?
-		GEAR.LOW.getValue(): GEAR.HIGH.getValue());
+		transmission.set(transmission.get().equals(GEAR.HIGH.getValue()) ? GEAR.LOW.getValue(): GEAR.HIGH.getValue());
 	}
 
 	/**
@@ -227,7 +220,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 
 	/**
 	 * Retrieves the pitch value from the pigeon IMU
-	 * 
+	 *
 	 * @return current pitch angle
 	 */
 	public double getPigeonPitch() {

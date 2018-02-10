@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  * A command to drive forward for a set amount of time
  */
+@Deprecated
 public class DriveTime extends Command {
 
 	private double startTime, duration, speeed;
@@ -24,6 +25,7 @@ public class DriveTime extends Command {
      */
     protected void initialize() {
     	startTime = Timer.getFPGATimestamp();
+    	Robot.logger.log("Drive Time", "Starting " + duration + " second move at " + speeed + "% power");
     }
 
     /**
@@ -44,6 +46,7 @@ public class DriveTime extends Command {
      * I have forgotten this one too many times
      */
     protected void end() {
+        Robot.logger.log("Drive Time", "Ended");
     	Robot.driveTrain.arcadeDrive(0, 0);
     }
     
@@ -51,6 +54,7 @@ public class DriveTime extends Command {
      * Never again
      */
     protected void interrupted() {
+        Robot.logger.log("Drive Time", "Interrupted");
     	Robot.driveTrain.arcadeDrive(0, 0);
     }
 }

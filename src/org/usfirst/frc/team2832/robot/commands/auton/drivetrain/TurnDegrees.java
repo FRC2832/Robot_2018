@@ -14,6 +14,7 @@ public class TurnDegrees extends Command {
 	private double initialYaw, degrees, currentYaw;
 	private boolean turnRight;
 
+	// TODO: 2/9/2018 Switch this to take in one parameter which reflects direction, as well
 	//set turnRight to true to turn right, set to false to turn left
 	public TurnDegrees(double degrees, boolean turnRight) {
 		requires(Robot.driveTrain);
@@ -26,6 +27,7 @@ public class TurnDegrees extends Command {
 	 * Save the initial angle of the robot
 	 */
 	protected void initialize() {
+		Robot.logger.log("Turn Degrees", "Turning " + degrees + " to the " + (turnRight ? "right" : "left"));
 		initialYaw = Robot.driveTrain.getPigeonYaw();
 	}
 
@@ -61,14 +63,13 @@ public class TurnDegrees extends Command {
 	 */
 	protected boolean isFinished() {
 		return ((Math.abs(initialYaw - currentYaw) > degrees - 2) && (Math.abs(initialYaw - currentYaw) < degrees + 2));
-		//Done when within + or - 2 degrees of target
 	}
 
 	/**
 	 * Oh, are we still turning?
 	 */
 	protected void end() {
-		System.out.println("I'm done turning!");
+		Robot.logger.log("Turn Degrees", "Ended");
 		driveTrain.tankDrive(0, 0);
 	}
 
@@ -76,6 +77,7 @@ public class TurnDegrees extends Command {
 	 * Let's not spin in circles like last year
 	 */
 	protected void interrupted() {
+		Robot.logger.log("Turn Degrees", "Interrupted");
 		driveTrain.tankDrive(0, 0);
 	}
 }

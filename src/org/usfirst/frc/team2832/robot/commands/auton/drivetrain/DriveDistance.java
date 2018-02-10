@@ -14,8 +14,8 @@ public class DriveDistance extends Command {
 
 	public static double CORRECTION = 20;
 	
-	private DriveTrain driveTrain = Robot.driveTrain;
 	private double initialYaw, currentYaw, startLeft, startRight, distance, speeed, timeout, startTime;
+	private boolean usingPigeon;
 
 	// Negative distances work
 	public DriveDistance(double speeed, double distance, double timeout) {
@@ -31,21 +31,27 @@ public class DriveDistance extends Command {
 	protected void initialize() {
 		startLeft = Robot.driveTrain.getEncoderPosition(Encoder.LEFT);
 		startRight = Robot.driveTrain.getEncoderPosition(Encoder.RIGHT);
-		initialYaw = driveTrain.getPigeonYaw();
+		initialYaw = Robot.driveTrain.getPigeonYaw();
 		startTime = Timer.getFPGATimestamp();
+		usingPigeon = !Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.PIGEON);
+		Robot.logger.log("Drive Distance", "Is " + (usingPigeon ? "" : "not") + " using pigeon for " + distance + "inch move");
 	}
 
 	/**
 	 * Drive strait at desired speed
 	 */
 	protected void execute() {
-		currentYaw = driveTrain.getPigeonYaw();
-    	double differenceYaw = initialYaw - currentYaw;
-    	if (differenceYaw > 0) {
-    		driveTrain.tankDrive(speeed - (differenceYaw / CORRECTION), speeed + (differenceYaw / CORRECTION));
-    	} else {
-    		driveTrain.tankDrive(speeed + (differenceYaw / CORRECTION), speeed - (differenceYaw / CORRECTION));
-    	}
+		if(usingPigeon) {
+			currentYaw = Robot.driveTrain.getPigeonYaw();
+			double differenceYaw = initialYaw - currentYaw;
+			if (differenceYaw > 0) {
+				Robot.driveTrain.tankDrive(speeed - (differenceYaw / CORRECTION), speeed + (differenceYaw / CORRECTION));
+			} else {
+				Robot.driveTrain.tankDrive(speeed + (differenceYaw / CORRECTION), speeed - (differenceYaw / CORRECTION));
+			}
+		} else {
+			Robot.driveTrain.tankDrive(speeed, speeed);
+		}
 	}
 
 	/**
@@ -54,25 +60,35 @@ public class DriveDistance extends Command {
 	protected boolean isFinished() {
 		if(Timer.getFPGATimestamp() > startTime + timeout)
 			return true;
-		if (distance >= 0)
-			return averageDist() > distance;
-		else
-			return averageDist() < distance;
+		if(!Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_L) || !Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_R)) {
+			if (distance >= 0)
+				return averageDist() > distance;
+			else
+				return averageDist() < distance;
+		} else {
+			return false;
+		}
 	}
 
 	private double averageDist() {
-		return (Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft
-				+ Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight) / 2f;
+		if(Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_R))
+			return Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft;
+		else if(Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_L))
+			return startLeft + Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight;
+		else
+			return (Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft + Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight) / 2f;
 	}
 
 	/**
 	 * Remember to shut off motors when done
 	 */
 	protected void end() {
-    	driveTrain.tankDrive(0, 0);
+		Robot.logger.log("Drive Distance", "Ended");
+		Robot.driveTrain.tankDrive(0, 0);
 	}
 
 	protected void interrupted() {
-    	driveTrain.tankDrive(0, 0);
+		Robot.logger.log("Drive Distance", "Interrupted");
+		Robot.driveTrain.tankDrive(0, 0);
 	}
 }

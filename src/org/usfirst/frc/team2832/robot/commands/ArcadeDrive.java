@@ -32,6 +32,7 @@ public class ArcadeDrive extends Command {
     }
 
     protected void initialize() {
+        Robot.logger.log("Arcade Drive", "Starting");
     }
 
     /**
@@ -75,6 +76,7 @@ public class ArcadeDrive extends Command {
      * Just a little sanity check
      */
     protected void end() {
+        Robot.logger.log("Arcade Drive", "Ended");
         Robot.driveTrain.arcadeDrive(0, 0);
     }
 
@@ -82,6 +84,7 @@ public class ArcadeDrive extends Command {
      * Yep, still sane.
      */
     protected void interrupted() {
+        Robot.logger.log("Arcade Drive", "Interrupted");
         Robot.driveTrain.arcadeDrive(0, 0);
     }
 }

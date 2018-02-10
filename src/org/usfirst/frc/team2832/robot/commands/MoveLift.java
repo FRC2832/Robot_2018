@@ -1,8 +1,6 @@
 package org.usfirst.frc.team2832.robot.commands;
 
 import org.usfirst.frc.team2832.robot.ButtonMapping;
-import org.usfirst.frc.team2832.robot.Controls.Buttons;
-import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -13,12 +11,11 @@ public class MoveLift extends Command {
 	*of error.  They may need to be adjusted during testing.
 	*/
 	private double currentHeight; //Will be in inches based on encoders
-	private double heightScaleHigh = 67d;
-	private double heightScaleMiddle = 55d;
-	private double heightScaleLow = 43d;
-	private double heightSwitch = 15d;
-	private double heightIntake = 4d;
-	
+	private double HEIGHT_SCALE_HIGH = 67d;
+	private double HEIGHT_SCALE_MIDDLE = 55d;
+	private double HEIGHT_SCALE_LOW = 43d;
+	private double HEIGHT_SWITCH = 15d;
+	private double HEIGHT_INTAKE = 4d;
 	
 	private boolean upPressed = Robot.controls.getButton(ButtonMapping.LEVEL_UP);
 	private boolean downPressed = Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM); 
@@ -33,7 +30,7 @@ public class MoveLift extends Command {
 	//Working on math for the range here
 	//Assuming + for up, - for down
 	private void moveToScaleHigh() {
-		if (currentHeight < (heightScaleHigh - 3)) {
+		if (currentHeight < (HEIGHT_SCALE_HIGH - 3)) {
 			Robot.lift.setLiftPower(0.3d);
 			position = 4;
 		} else {
@@ -41,8 +38,13 @@ public class MoveLift extends Command {
 		}
 		stop = true;
 	}
+
+	protected void initialize() {
+		Robot.logger.log("Move Lift", "Started");
+	}
+
 	private void moveToScaleMiddle() {
-		if (currentHeight < (heightScaleMiddle - 3)) {
+		if (currentHeight < (HEIGHT_SCALE_MIDDLE - 3)) {
 			Robot.lift.setLiftPower(0.3d);
 			position = 3;
 		} else {
@@ -52,7 +54,7 @@ public class MoveLift extends Command {
 
 	}
 	private void moveToScaleLow() {
-		if (currentHeight < (heightScaleLow - 3)) {
+		if (currentHeight < (HEIGHT_SCALE_LOW - 3)) {
 			Robot.lift.setLiftPower(0.3d);
 			position = 2;
 		} else {
@@ -62,7 +64,7 @@ public class MoveLift extends Command {
 
 	}
 	private void moveToSwitch() {
-		if (currentHeight < (heightSwitch - 3)) {
+		if (currentHeight < (HEIGHT_SWITCH - 3)) {
 			Robot.lift.setLiftPower(0.3d);
 			position = 1;
 		} else {
@@ -72,7 +74,7 @@ public class MoveLift extends Command {
 
 	}
 	private void moveToIntake() {
-		if (currentHeight > (heightIntake + 4)) { //Lowest Height
+		if (currentHeight > (HEIGHT_INTAKE + 4)) { //Lowest Height
 			Robot.lift.setLiftPower(-0.3d);
 			position = 0;
 		} else {
@@ -117,10 +119,12 @@ public class MoveLift extends Command {
 	}
 
 	protected void end() {
+		Robot.logger.log("Move Lift", "Ended");
 		Robot.lift.setLiftPower(0);
 	}
 
 	protected void interrupted() {
+		Robot.logger.log("Move Lift", "Interrupted");
 		Robot.lift.setLiftPower(0);
 	}
 }
