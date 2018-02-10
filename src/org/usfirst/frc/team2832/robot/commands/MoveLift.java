@@ -102,7 +102,7 @@ public class MoveLift extends Command {
 						moveToScaleHigh();
 						break;
 					case 4:
-						Robot.lift.setLiftPower(0.0d);
+						Robot.lift.setLiftPower(0d);
 						break;
 				}				
 			} else if (downPressed == true) {
@@ -110,7 +110,7 @@ public class MoveLift extends Command {
 			} else {
 				Robot.lift.setLiftPower(0.0d);
 			}
-		}
+		} else Robot.lift.setLiftPower(0d);
 		
 
 		
