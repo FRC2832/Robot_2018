@@ -144,4 +144,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	public enum LiftFlags {
 	    ENCODER
     }
+	
+	public boolean getPacked() {
+		return collapserer.get() == Value.kForward;
+	}
 }

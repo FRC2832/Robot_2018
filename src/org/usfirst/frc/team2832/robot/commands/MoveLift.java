@@ -85,29 +85,31 @@ public class MoveLift extends Command {
 	}
 
 	protected void execute() {
-		currentHeight = Robot.lift.getLiftPosition();
-		if (upPressed == true) {
-			switch(position) {
-				case 0:
-					moveToSwitch();
-					break;
-				case 1:
-					moveToScaleLow();
-					break;
-				case 2:
-					moveToScaleMiddle();
-					break;
-				case 3:
-					moveToScaleHigh();
-					break;
-				case 4:
-					Robot.lift.setLiftPower(0.0d);
-					break;
-			}				
-		} else if (downPressed == true) {
-			moveToIntake();
-		} else {
-			Robot.lift.setLiftPower(0.0d);
+		if(!Robot.lift.getPacked()) {
+			currentHeight = Robot.lift.getLiftPosition();
+			if (upPressed == true) {
+				switch(position) {
+					case 0:
+						moveToSwitch();
+						break;
+					case 1:
+						moveToScaleLow();
+						break;
+					case 2:
+						moveToScaleMiddle();
+						break;
+					case 3:
+						moveToScaleHigh();
+						break;
+					case 4:
+						Robot.lift.setLiftPower(0.0d);
+						break;
+				}				
+			} else if (downPressed == true) {
+				moveToIntake();
+			} else {
+				Robot.lift.setLiftPower(0.0d);
+			}
 		}
 		
 
