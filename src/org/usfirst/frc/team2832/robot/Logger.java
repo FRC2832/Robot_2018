@@ -41,6 +41,9 @@ public class Logger {
                 log.createNewFile();
             }
             writer = new BufferedWriter(new FileWriter(log));
+            writer.write("Hello\n");
+            writer.newLine();
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -111,7 +114,7 @@ public class Logger {
     }
 
     public void update() {
-        NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setValue(log);
+        NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setValue(log.list());
     }
 
     public void dispose() {
