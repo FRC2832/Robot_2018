@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Logger {
 
     private final String USB_PATH = "/media/sda1/"; // Usb drive
-    private final String SYSTEM_PATH = System.getenv().get("HOME") + "/";
+    private final String SYSTEM_PATH = System.getProperty("user.home") + "/";
     private final String ENTRY_NAME = "Log";
     private final int MAX_LOGS = 200;
 
@@ -21,19 +21,22 @@ public class Logger {
     public Logger() {
         try {
             log = new File(USB_PATH + "Log-Overflow.txt");
-            for(int i = 0; i <= MAX_LOGS; i++) {
+            for (int i = 0; i <= MAX_LOGS; i++) {
                 File file = new File(USB_PATH + "Log-" + i + ".txt");
-                if(!file.exists()) {
+                if (!file.exists()) {
                     log = file;
                     break;
                 }
             }
-            if(log.createNewFile()) {
-                System.out.println("Logging to '" + log.getPath() + "' on USB drive");
-            } else {
+            if (log.exists())
+                log.delete();
+            try {
+                if (log.createNewFile())
+                    System.out.println("Logging to '" + log.getPath() + "' on USB drive");
+            } catch (IOException e) {
                 System.out.println("Logging to '" + SYSTEM_PATH + "Log.txt'");
                 log = new File(SYSTEM_PATH + "Log.txt");
-                if(log.exists())
+                if (log.exists())
                     log.delete();
                 log.createNewFile();
             }
@@ -49,7 +52,7 @@ public class Logger {
 
     public void log(String tag, String message) {
         System.out.println(tag + ": " + message);
-        if(writer != null) {
+        if (writer != null) {
             try {
                 writer.write(tag + ": " + message + ": " + Timer.getFPGATimestamp());
                 writer.newLine();
@@ -62,7 +65,7 @@ public class Logger {
 
     public void critical(String tag, String message) {
         System.out.println("-" + tag + ": " + message);
-        if(writer != null) {
+        if (writer != null) {
             try {
                 writer.write("-" + tag + ": " + message + ": " + Timer.getFPGATimestamp());
                 writer.newLine();
@@ -75,7 +78,7 @@ public class Logger {
 
     public void error(String tag, String message) {
         System.err.println(tag + ": " + message);
-        if(writer != null) {
+        if (writer != null) {
             try {
                 writer.write("**");
                 writer.newLine();
@@ -92,12 +95,12 @@ public class Logger {
 
     public void header(String header) {
         System.out.println();
-        System.out.println(header);
-        if(writer != null) {
+        System.out.println("@" + header);
+        if (writer != null) {
             try {
                 writer.newLine();
                 writer.newLine();
-                writer.write(header + ": " + Timer.getFPGATimestamp());
+                writer.write("@" + header + ": " + Timer.getFPGATimestamp());
                 writer.newLine();
                 writer.newLine();
                 writer.flush();
@@ -115,7 +118,7 @@ public class Logger {
         System.out.println("Disposed logger");
         try {
             writer.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
