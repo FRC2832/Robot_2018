@@ -44,8 +44,10 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	public void toggleTilt() {
 		if (Value.kForward == tilt.get()) {
 			tilt.set(Value.kReverse);
+			Robot.logger.log("Ingestor", "Tilt reverse");
 		} else {
 			tilt.set(Value.kForward);
+			Robot.logger.log("Ingestor", "Tilt forward");
 		}
 	}
 	
@@ -73,6 +75,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	}
 	
 	public void setBrakeMode(boolean mode) {
+		Robot.logger.log("Ingestor", "Brake mode " + (mode ? "enabled" : "disabled"));
     	NeutralMode brakeMode;
     	if (mode) {
     		brakeMode = NeutralMode.Brake;

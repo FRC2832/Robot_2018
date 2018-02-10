@@ -29,7 +29,7 @@ public class Logger {
                 }
             }
             if(log.createNewFile()) {
-                System.out.println("Logging to USB drive");
+                System.out.println("Logging to '" + log.getPath() + "' on USB drive");
             } else {
                 System.out.println("Logging to '" + SYSTEM_PATH + "Log.txt'");
                 log = new File(SYSTEM_PATH + "Log.txt");
