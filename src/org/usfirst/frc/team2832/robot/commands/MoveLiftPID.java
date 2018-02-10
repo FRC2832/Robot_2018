@@ -37,11 +37,11 @@ public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
     	sourceType = PIDSourceType.kDisplacement;
 		controller = new PIDController(P, I, D, F, this, this);
 		controller.setOutputRange(-0.7, 0.7);
-		controller.setContinuous(true);
 		// Maybe uncomment if doesn't work
 		// controller.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
 		controller.setAbsoluteTolerance(TOLERANCE_INCHES);
 		controller.setInputRange(0, Lift.RAIL_HEIGHT);
+		controller.setContinuous(true);
 		controller.setSetpoint(targetHeight);
 		controller.enable();
     }

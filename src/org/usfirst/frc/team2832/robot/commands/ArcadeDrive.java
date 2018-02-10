@@ -20,7 +20,7 @@ public class ArcadeDrive extends Command {
 
     private LinearInterpolation joystickToDD, joystickToDDPrecision, upshift, downshift;
     private double prevVelocity = 0;
-    private boolean firstIteration = true;
+    private boolean firstIteration = true, prevLowGear = true;
 
     public ArcadeDrive() {
         requires(Robot.driveTrain);
@@ -58,10 +58,19 @@ public class ArcadeDrive extends Command {
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityLeft", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.LEFT));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityRight", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.RIGHT));
         if((Math.abs(Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight)) < 0.2)) {
-            if (velocity >= upshift.interpolate(dD))
+            if (velocity >= upshift.interpolate(dD)) {
+                SmartDashboard.putBoolean("High Gear", true);
                 Robot.driveTrain.shift(DriveTrain.GEAR.HIGH);
-            else if (velocity <= downshift.interpolate(dD))
+                if(prevLowGear)
+                    Robot.logger.log("Arcade Drive", "Upshifted");
+                prevLowGear = false;
+            } else if (velocity <= downshift.interpolate(dD)) {
+                SmartDashboard.putBoolean("High Gear", false);
                 Robot.driveTrain.shift(DriveTrain.GEAR.LOW);
+                if(!prevLowGear)
+                    Robot.logger.log("Arcade Drive", "Downshifted");
+                prevLowGear = true;
+            }
         }
 
         Robot.driveTrain.arcadeDrive(-Math.signum(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft)) * dD,

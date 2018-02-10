@@ -15,7 +15,8 @@ public class ButtonMapping {
 	public static final ButtonMapping LOWER_TO_BOTTOM = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
 	public static final ButtonMapping CLIMB_0 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
 	public static final ButtonMapping CLIMB_1 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.B);
-	
+	public static final ButtonMapping PACK_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.START);
+
 	private Controllers controller;
 	private Buttons button;
 	

@@ -21,7 +21,7 @@ import javafx.scene.paint.Color;
 import java.awt.event.ActionEvent;
 import java.io.*;
 
-@Description(name = "Log", dataTypes = File.class)
+@Description(name = "Log", dataTypes = String[].class)
 @ParametrizedController("LogWidget.fxml")
 public class LogWidget extends SimpleAnnotatedWidget<LogData> {
 
@@ -36,7 +36,8 @@ public class LogWidget extends SimpleAnnotatedWidget<LogData> {
     @FXML
     private void initialize() {
         root.backgroundProperty().bind(
-                Bindings.createObjectBinding(() -> new Background(new BackgroundFill(getColor(), null, null)), dataProperty(), hasColor, noHasColor));
+                Bindings.createObjectBinding(() -> createSolidColorBackground(getColor()), dataProperty(), hasColor, noHasColor));
+        exportProperties(hasColor, noHasColor);
         button.addEventHandler(EventType.ROOT, new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
@@ -52,11 +53,13 @@ public class LogWidget extends SimpleAnnotatedWidget<LogData> {
                 }
             }
         });
-        exportProperties(hasColor, noHasColor);
+    }
+
+    private Background createSolidColorBackground(Color color) {
+        return new Background(new BackgroundFill(color, null, null));
     }
 
     private Color getColor() {
-
         final LogData data = getData();
         if (data == null)
             return noHasColor.getValue();

@@ -70,6 +70,8 @@ public class Robot extends TimedRobot {
 
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
 
+		postDiagnosis = false;
+
 		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
 		robotType = RobotType.Competition; //Default to competition
 
@@ -82,7 +84,7 @@ public class Robot extends TimedRobot {
 
 		
 		// Create camera
-		new Thread(() -> {
+		/*new Thread(() -> {
 	    	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	    	camera.setResolution(640, 480);
 	    	while(true) {
@@ -92,13 +94,15 @@ public class Robot extends TimedRobot {
 					logger.error("Camera Thread Interrupted", e.toString());
 				}
 	    	}
-	    }).start();
+	    }).start();*/
+		driveTrain.setPigeonYaw(0);
 	}
 
 	@Override
 	public void robotPeriodic() {
 		Scheduler.getInstance().run();
 		SmartDashboard.putString(Dashboard.PREFIX_DRIVER + "RobotType", robotType.name());
+		SmartDashboard.putNumber("Pin Voltage", robotTypeInput.getAverageVoltage());
 		logger.update();
 		controls.update();
 	}
@@ -108,9 +112,13 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
+	    driveTrain.clearFlags();
+	    lift.clearFlags();
+	    ingestor.clearFlags();
 		logger.header("Disabled Init");
 		Robot.driveTrain.setBrakeMode(false);
 		controls.clearRumbles();
+		lift.pack();
 	}
 
 	/**
@@ -118,8 +126,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledPeriodic() {
-		driveTrain.setPigeonYaw(0);
-
 		// Set the type of robot based on the average voltage of a pin
 		double value = robotTypeInput.getAverageVoltage();
 		if(3.75d <= value && value <= 5d) {
@@ -171,7 +177,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		logger.header("Teleop Init");
-
+		lift.unpack();
 		Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
 	}

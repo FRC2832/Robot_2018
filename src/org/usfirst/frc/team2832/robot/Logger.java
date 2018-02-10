@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class Logger {
 
-    private final String USB_PATH = "/media/sda1/"; // Usb drive
+    private final String USB_PATH = "/u/"; // Usb drive
     private final String SYSTEM_PATH = System.getProperty("user.home") + "/";
     private final String ENTRY_NAME = "Log";
     private final int MAX_LOGS = 200;
@@ -114,7 +114,7 @@ public class Logger {
     }
 
     public void update() {
-   //     NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setValue(log.list());
+        //NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setValue(log.list());
     }
 
     public void dispose() {

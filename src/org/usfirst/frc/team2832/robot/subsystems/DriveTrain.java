@@ -40,7 +40,6 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 
 	private DoubleSolenoid transmission;
 	private DifferentialDrive drive;
-	private SpeedControllerGroup leftMotors, rightMotors;
 	private WPI_TalonSRX talonFL, talonFR, talonBL, talonBR;
 	private TalonSRX talonPhoenixLeft, talonPhoenixRight;
 	private PigeonIMU pigeon;
@@ -56,9 +55,9 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		talonBR = new WPI_TalonSRX(DRIVE_MOTER_BR);
 		talonPhoenixLeft = new TalonSRX(DRIVE_MOTER_FL);
 		talonPhoenixRight = new TalonSRX(DRIVE_MOTER_FR);
-		leftMotors = new SpeedControllerGroup(talonFL, talonBL);
-		rightMotors = new SpeedControllerGroup(talonFR, talonBR);
-		drive = new DifferentialDrive(leftMotors, rightMotors);
+		talonBL.follow(talonFL);
+		talonBR.follow(talonFR);
+		drive = new DifferentialDrive(talonFL, talonFR);
 		pigeon = new PigeonIMU(0);
 		talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
 		talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
@@ -81,6 +80,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Left Position", getEncoderPosition(Encoder.LEFT));
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Right Position", getEncoderPosition(Encoder.RIGHT));
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Yaw Value", getPigeonYaw());
+        SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Pitch Value", getPigeonPitch());
 
 		// Toggles which gear it is in and makes controller rumble
 		if (Robot.controls.getButtonPressed(ButtonMapping.SHIFT_BUTTON.getController(), ButtonMapping.SHIFT_BUTTON.getButton())) {
@@ -100,11 +100,11 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]));
 		}*/
 		
-		if (getPigeonPitch() > 10) {
+		if (getPigeonRoll() > 20) {
 			isTipping = true;
 			drive.tankDrive(1, 1);
 			System.out.println("Correcting a forward fall");
-		} else if (getPigeonPitch() < -10) {
+		} else if (getPigeonRoll() < -20) {
 			isTipping = true;
 			drive.tankDrive(-1, -1);
 			System.out.println("Correcting a backward fall");
@@ -112,7 +112,6 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			isTipping = false;
 			drive.tankDrive(0, 0);
 		}
-		
 	}
 
 	/**
@@ -123,7 +122,11 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 * @return velocity of the selected encoder in rotations/second
 	 */
 	public double getEncoderVelocity(Encoder side) {
-		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity() : hasFlag(DriveTrainFlags.ENCODER_R) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : hasFlag(DriveTrainFlags.ENCODER_L) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity() : (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() - talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d) / 144d;
+		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
+				: side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity()
+				: (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
+				- talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d) / 144d * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
+		//return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity() : hasFlag(DriveTrainFlags.ENCODER_R) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : hasFlag(DriveTrainFlags.ENCODER_L) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity() : (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() - talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d) / 144d;
 	}
 
 	/**
@@ -134,7 +137,13 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 * @return position of the selected encoder(inches)
 	 */
 	public double getEncoderPosition(Encoder side) {
-		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadraturePosition() : (hasFlag(DriveTrainFlags.ENCODER_L)? talonPhoenixRight.getSensorCollection().getQuadraturePosition(): hasFlag(DriveTrainFlags.ENCODER_R)? talonPhoenixLeft.getSensorCollection().getQuadraturePosition():(talonPhoenixLeft.getSensorCollection().getQuadraturePosition()+ talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d) )) * ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
+		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition()
+				: (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadraturePosition()
+				: (talonPhoenixLeft.getSensorCollection().getQuadraturePosition()
+				+ talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d))
+				* ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE
+				* (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
+		//return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadraturePosition() : (hasFlag(DriveTrainFlags.ENCODER_L)? talonPhoenixRight.getSensorCollection().getQuadraturePosition(): hasFlag(DriveTrainFlags.ENCODER_R)? talonPhoenixLeft.getSensorCollection().getQuadraturePosition():(talonPhoenixLeft.getSensorCollection().getQuadraturePosition()+ talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d) )) * ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
 	}
 
 	/**
@@ -161,7 +170,6 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 */
 	public void shift(GEAR gear) {
 		transmission.set(gear.getValue());
-		Robot.logger.log("Transmission", "Shifted to " + gear.name() + " gear");
 	}
 
 	/**
@@ -248,6 +256,12 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		this.pigeon.getYawPitchRoll(rotations);
 		return rotations[1];
 	}
+
+    public double getPigeonRoll() {
+        double[] rotations = new double[3];
+        this.pigeon.getYawPitchRoll(rotations);
+        return rotations[2];
+    }
 
 	public PigeonIMU getPigeon() {
 		return pigeon;

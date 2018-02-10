@@ -25,10 +25,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
-	final static private int COLLAPSE_FORWARD_CHANNEL = 2;
-	final static private int COLLAPSE_REVERSE_CHANNEL = 3;
+	final static private int COLLAPSE_FORWARD_CHANNEL = 7;
+	final static private int COLLAPSE_REVERSE_CHANNEL = 4;
 	final static private int LIFT_MOTOR = 15;
-	final static private int WINCH_MOTOR = 9;
+	final static private int WINCH_MOTOR = 12;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
 
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
@@ -101,6 +101,14 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 			else
 				Scheduler.getInstance().add(new Climb());
 		}
+
+		if(Robot.controls.getButtonPressed(ButtonMapping.PACK_BUTTON)) {
+			if(collapserer.get() == Value.kForward)
+				collapserer.set(Value.kReverse);
+			else
+				collapserer.set(Value.kForward);
+		}
+
 		SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command", getCurrentCommandName());
 		/*if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
 			for(int i = Position.values().length - 1; i >= 0; i--) {
@@ -121,21 +129,10 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		} */
 		
 		//dpad controls
-		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
-		if(pov != -1) {
-//			if(getCurrentCommand() != null && getCurrentCommand() instanceof MoveLiftPID)
-//				getCurrentCommand().cancel();
-			if(pov > 90 && pov < 270)
-				talonLift.set(-1d);
-			else
-				talonLift.set(1d);
-		}
-		else {
-			talonLift.set(0.0);
-		}
+
 	}
 	public enum Position {
-		INGESTOR(0), SWITCH(50), HEIGHT(70), SCALE(84);
+		INGESTOR(0), SWITCH(20), HEIGHT(30), SCALE(84);
 
 		public double height;
 

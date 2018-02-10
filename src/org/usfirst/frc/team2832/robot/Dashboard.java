@@ -8,6 +8,7 @@ import org.usfirst.frc.team2832.robot.commands.auton.autongroups.SwitchCenter;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnPID;
 
 /**
  * This class handles interaction with the dashboard
@@ -20,7 +21,7 @@ public class Dashboard {
 	public static final String PREFIX_PROG = "Prog-";
 	
 	public Dashboard() {
-		chooser = new SendableChooser<AUTON_MODE>();
+		chooser = new SendableChooser<>();
 		chooser.addDefault("Left Side", AUTON_MODE.LEFTSIDE);
 		chooser.addObject("Right Side", AUTON_MODE.RIGHTSIDE);
 		chooser.addObject("Center", AUTON_MODE.CENTER);
@@ -50,7 +51,7 @@ public class Dashboard {
 			case RIGHTSIDE: return new RightSide();
 			case CENTER: return new SwitchCenter();
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
-			case TEST: return new DriveDistance(0.6d, 120.5d, 15);
+			case TEST: return new TurnPID(90);
 			default: return null;
 			
 			}
