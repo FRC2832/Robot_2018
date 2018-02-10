@@ -20,7 +20,8 @@ public class MoveLift extends Command {
 	private boolean upPressed = Robot.controls.getButton(ButtonMapping.LEVEL_UP);
 	private boolean downPressed = Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM); 
 	
-
+	private boolean positionChangeActive = false;
+	private PositionChangeType positionChangeType = PositionChangeType.RAISE;
 	
 	private boolean stop = false;
 	//Add something about encoders and converting to inches
@@ -35,8 +36,11 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPosition(4);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			positionChangeActive = false;
+			stop = true;
 		}
-		stop = true;
+
 	}
 
 	protected void initialize() {
@@ -49,8 +53,10 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPosition(3);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			positionChangeActive = false;
+			stop = true;
 		}
-		stop = true;
 
 	}
 	private void moveToScaleLow() {
@@ -59,8 +65,10 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPosition(2);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			positionChangeActive = false;
+			stop = true;
 		}
-		stop = true;
 
 	}
 	private void moveToSwitch() {
@@ -69,8 +77,10 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPosition(1);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			positionChangeActive = false;
+			stop = true;
 		}
-		stop = true;
 
 	}
 	private void moveToIntake() {
@@ -79,14 +89,16 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPosition(0);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			positionChangeActive = false;
+			stop = true;
 		}
-		stop = true;
 
 	}
 	
 	private void incrementPosition() {
-		if(Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1) <= 5) {
-			switch(Robot.lift.getLiftPosition()) {
+		if(Robot.lift.getLiftPosition() + 1 <= 5) {
+			switch(Robot.lift.getLiftPosition() + 1) {
 				case 1:
 					moveToSwitch();
 					break;
@@ -115,9 +127,22 @@ public class MoveLift extends Command {
 	protected void execute() {
 		if(!Robot.lift.getPacked()) {
 			currentHeight = Robot.lift.getLiftEncoderPosition();
-			if (upPressed == true) incrementPosition();
-			else if (downPressed == true) decrementPosition();
-			else Robot.lift.setLiftPower(0d);
+			if(positionChangeActive) {
+				if(positionChangeType.equals(PositionChangeType.RAISE)) incrementPosition();
+				else decrementPosition();
+			}	else {
+				if(upPressed) {
+					incrementPosition();
+					positionChangeType = PositionChangeType.RAISE;
+					positionChangeActive = true;
+				}
+				else if (downPressed) {
+					decrementPosition();
+					positionChangeType = PositionChangeType.LOWER;
+					positionChangeActive = true;
+				}
+				else Robot.lift.setLiftPower(0d);
+			}
 		} else Robot.lift.setLiftPower(0d);
 		
 
@@ -136,5 +161,9 @@ public class MoveLift extends Command {
 	protected void interrupted() {
 		Robot.logger.log("Move Lift", "Interrupted");
 		Robot.lift.setLiftPower(0);
+	}
+	
+	private enum PositionChangeType {
+		RAISE, LOWER
 	}
 }
