@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
 				new SensorTest(()-> Robot.driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT) == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.ENCODER_L),
 				new SensorTest(()-> Robot.driveTrain.getEncoderPosition(DriveTrain.Encoder.RIGHT) == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.ENCODER_R),
 				new SensorTest(()-> Robot.driveTrain.getPigeonYaw() == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.PIGEON),
-				new SensorTest(()-> Robot.lift.getLiftPosition() == 0, Robot.lift, Lift.LiftFlags.ENCODER));
+				new SensorTest(()-> Robot.lift.getLiftEncoderPosition() == 0, Robot.lift, Lift.LiftFlags.ENCODER));
 
 		// Create camera
 		new Thread(() -> {

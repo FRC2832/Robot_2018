@@ -20,7 +20,7 @@ public class MoveLift extends Command {
 	private boolean upPressed = Robot.controls.getButton(ButtonMapping.LEVEL_UP);
 	private boolean downPressed = Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM); 
 	
-	private int position;
+
 	
 	private boolean stop = false;
 	//Add something about encoders and converting to inches
@@ -32,7 +32,7 @@ public class MoveLift extends Command {
 	private void moveToScaleHigh() {
 		if (currentHeight < (HEIGHT_SCALE_HIGH - 3)) {
 			Robot.lift.setLiftPower(0.3d);
-			position = 4;
+			Robot.lift.setLiftPosition(4);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
@@ -46,7 +46,7 @@ public class MoveLift extends Command {
 	private void moveToScaleMiddle() {
 		if (currentHeight < (HEIGHT_SCALE_MIDDLE - 3)) {
 			Robot.lift.setLiftPower(0.3d);
-			position = 3;
+			Robot.lift.setLiftPosition(3);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
@@ -56,7 +56,7 @@ public class MoveLift extends Command {
 	private void moveToScaleLow() {
 		if (currentHeight < (HEIGHT_SCALE_LOW - 3)) {
 			Robot.lift.setLiftPower(0.3d);
-			position = 2;
+			Robot.lift.setLiftPosition(2);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
@@ -66,7 +66,7 @@ public class MoveLift extends Command {
 	private void moveToSwitch() {
 		if (currentHeight < (HEIGHT_SWITCH - 3)) {
 			Robot.lift.setLiftPower(0.3d);
-			position = 1;
+			Robot.lift.setLiftPosition(1);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
@@ -76,40 +76,48 @@ public class MoveLift extends Command {
 	private void moveToIntake() {
 		if (currentHeight > (HEIGHT_INTAKE + 4)) { //Lowest Height
 			Robot.lift.setLiftPower(-0.3d);
-			position = 0;
+			Robot.lift.setLiftPosition(0);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
 		}
 		stop = true;
 
 	}
+	
+	private void incrementPosition() {
+		if(Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1) <= 5) {
+			switch(Robot.lift.getLiftPosition()) {
+				case 1:
+					moveToSwitch();
+					break;
+				case 2:
+					moveToScaleLow();
+					break;
+				case 3:
+					moveToScaleMiddle();
+					break;
+				case 4:
+					moveToScaleHigh();
+					break;
+				case 5:
+					Robot.lift.setLiftPower(0d);
+					break;
+			}
+		}
+	}
+	
+	private void decrementPosition() {
+		Robot.lift.setLiftPosition(0);
+		moveToIntake();
+	}
+	
 
 	protected void execute() {
 		if(!Robot.lift.getPacked()) {
-			currentHeight = Robot.lift.getLiftPosition();
-			if (upPressed == true) {
-				switch(position) {
-					case 0:
-						moveToSwitch();
-						break;
-					case 1:
-						moveToScaleLow();
-						break;
-					case 2:
-						moveToScaleMiddle();
-						break;
-					case 3:
-						moveToScaleHigh();
-						break;
-					case 4:
-						Robot.lift.setLiftPower(0d);
-						break;
-				}				
-			} else if (downPressed == true) {
-				moveToIntake();
-			} else {
-				Robot.lift.setLiftPower(0.0d);
-			}
+			currentHeight = Robot.lift.getLiftEncoderPosition();
+			if (upPressed == true) incrementPosition();
+			else if (downPressed == true) decrementPosition();
+			else Robot.lift.setLiftPower(0d);
 		} else Robot.lift.setLiftPower(0d);
 		
 

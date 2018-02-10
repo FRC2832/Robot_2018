@@ -34,6 +34,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	
 	public static final double RAIL_HEIGHT = 84;
+	
+	private int liftPosition;
 
 	private DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
@@ -49,6 +51,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 		collapserer.set(Value.kForward);
 		talonLift.setNeutralMode(NeutralMode.Brake);
+		liftPosition = 0;
 	}
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
@@ -62,7 +65,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 	
 	//Adjust for lift motors (see google drive folder)
-	public double getLiftPosition() {
+	public double getLiftEncoderPosition() {
 		return talonPhoenixLift.getSensorCollection().getQuadraturePosition() * ENCODER_COUNT_TO_INCH;
 	}
 
@@ -148,4 +151,15 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	public boolean getPacked() {
 		return collapserer.get() == Value.kForward;
 	}
+	
+	public int setLiftPosition(int a) {
+		liftPosition = a;
+		return liftPosition;
+	}	
+	
+	public int getLiftPosition() {
+		return liftPosition;
+	}
+
+	
 }

@@ -60,7 +60,7 @@ public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
     }
 
     protected boolean isFinished() {
-    	if ((Math.abs(Robot.lift.getLiftPosition() - targetHeight)) <= TOLERANCE_INCHES)
+    	if ((Math.abs(Robot.lift.getLiftEncoderPosition() - targetHeight)) <= TOLERANCE_INCHES)
 			counter++;
 		else
 			counter = 0;
@@ -95,6 +95,6 @@ public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
 
 	@Override
 	public double pidGet() {
-		return Robot.lift.getLiftPosition();
+		return Robot.lift.getLiftEncoderPosition();
 	}
 }
