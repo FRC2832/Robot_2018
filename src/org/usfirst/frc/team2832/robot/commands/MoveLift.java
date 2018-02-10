@@ -32,11 +32,10 @@ public class MoveLift extends Command {
 	//Assuming + for up, - for down
 	private void moveToScaleHigh() {
 		if (currentHeight < (HEIGHT_SCALE_HIGH - 3)) {
-			Robot.lift.setLiftPower(0.3d);
-			Robot.lift.setLiftPosition(4);
+			Robot.lift.setLiftPower(0.5d);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			Robot.lift.setLiftPosition(4);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -49,11 +48,10 @@ public class MoveLift extends Command {
 
 	private void moveToScaleMiddle() {
 		if (currentHeight < (HEIGHT_SCALE_MIDDLE - 3)) {
-			Robot.lift.setLiftPower(0.3d);
-			Robot.lift.setLiftPosition(3);
+			Robot.lift.setLiftPower(0.5d);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			Robot.lift.setLiftPosition(3);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -61,11 +59,10 @@ public class MoveLift extends Command {
 	}
 	private void moveToScaleLow() {
 		if (currentHeight < (HEIGHT_SCALE_LOW - 3)) {
-			Robot.lift.setLiftPower(0.3d);
-			Robot.lift.setLiftPosition(2);
+			Robot.lift.setLiftPower(0.5d);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			Robot.lift.setLiftPosition(2);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -73,11 +70,10 @@ public class MoveLift extends Command {
 	}
 	private void moveToSwitch() {
 		if (currentHeight < (HEIGHT_SWITCH - 3)) {
-			Robot.lift.setLiftPower(0.3d);
-			Robot.lift.setLiftPosition(1);
+			Robot.lift.setLiftPower(0.5d);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			Robot.lift.setLiftPosition(1);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -85,11 +81,11 @@ public class MoveLift extends Command {
 	}
 	private void moveToIntake() {
 		if (currentHeight > (HEIGHT_INTAKE + 4)) { //Lowest Height
-			Robot.lift.setLiftPower(-0.3d);
-			Robot.lift.setLiftPosition(0);
+			Robot.lift.setLiftPower(-0.5d);
+
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(Robot.lift.getLiftPosition() + 1);
+			Robot.lift.setLiftPosition(0);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -97,7 +93,7 @@ public class MoveLift extends Command {
 	}
 	
 	private void incrementPosition() {
-		if(Robot.lift.getLiftPosition() + 1 <= 5) {
+		if(Robot.lift.getLiftPosition() + 1 <= 4) {
 			switch(Robot.lift.getLiftPosition() + 1) {
 				case 1:
 					moveToSwitch();
@@ -111,15 +107,11 @@ public class MoveLift extends Command {
 				case 4:
 					moveToScaleHigh();
 					break;
-				case 5:
-					Robot.lift.setLiftPower(0d);
-					break;
 			}
 		}
 	}
 	
 	private void decrementPosition() {
-		Robot.lift.setLiftPosition(0);
 		moveToIntake();
 	}
 	
@@ -131,18 +123,17 @@ public class MoveLift extends Command {
 				if(positionChangeType.equals(PositionChangeType.RAISE)) incrementPosition();
 				else decrementPosition();
 			}	else {
-				if(upPressed) {
-					incrementPosition();
-					positionChangeType = PositionChangeType.RAISE;
-					positionChangeActive = true;
+					if(upPressed) {
+						incrementPosition();
+						positionChangeType = PositionChangeType.RAISE;
+						positionChangeActive = true;
+					}
+					else if(downPressed) {
+						decrementPosition();
+						positionChangeType = PositionChangeType.LOWER;
+						positionChangeActive = true;
+					}
 				}
-				else if (downPressed) {
-					decrementPosition();
-					positionChangeType = PositionChangeType.LOWER;
-					positionChangeActive = true;
-				}
-				else Robot.lift.setLiftPower(0d);
-			}
 		} else Robot.lift.setLiftPower(0d);
 		
 

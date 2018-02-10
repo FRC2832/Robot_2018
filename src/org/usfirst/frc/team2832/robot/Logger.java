@@ -114,7 +114,7 @@ public class Logger {
     }
 
     public void update() {
-        NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setValue(log.list());
+   //     NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setValue(log.list());
     }
 
     public void dispose() {
