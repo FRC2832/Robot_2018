@@ -34,10 +34,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	
 	public static final double RAIL_HEIGHT = 84;
-	
-	private int liftPosition;
 
-	private DoubleSolenoid collapserer;
+	protected DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
 	private TalonSRX talonPhoenixLift, winchMotor;
 	private AnalogInput limitSwitch;
@@ -51,7 +49,6 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 		collapserer.set(Value.kForward);
 		talonLift.setNeutralMode(NeutralMode.Brake);
-		liftPosition = 0;
 	}
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
@@ -64,7 +61,6 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		collapserer.set(Value.kReverse);
 	}
 	
-	//Adjust for lift motors (see google drive folder)
 	public double getLiftEncoderPosition() {
 		return talonPhoenixLift.getSensorCollection().getQuadraturePosition() * ENCODER_COUNT_TO_INCH;
 	}
@@ -131,32 +127,32 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		//dpad controls
 
 	}
+
+	public Position getPosition() {
+		int closest = 0;
+		double position = getLiftEncoderPosition();
+		for(int i = 0; i < Position.values().length; i++) {
+			if(Math.abs(position - Position.values()[i].height) < Math.abs(position - Position.values()[closest].height))
+				closest = i;
+		}
+		return Position.values()[closest];
+	}
+
 	public enum Position {
 		INGESTOR(0), SWITCH(20), HEIGHT(30), SCALE(84);
 
 		public double height;
 
-		private Position(int height) {
+		Position(int height) {
 			this.height = height;
 		}
 	}
 
 	public enum LiftFlags {
-	    ENCODER
-    }
-	
+	    ENCODER;
+	}
+
 	public boolean getPacked() {
 		return collapserer.get() == Value.kForward;
 	}
-	
-	public int setLiftPosition(int a) {
-		liftPosition = a;
-		return liftPosition;
-	}	
-	
-	public int getLiftPosition() {
-		return liftPosition;
-	}
-
-	
 }

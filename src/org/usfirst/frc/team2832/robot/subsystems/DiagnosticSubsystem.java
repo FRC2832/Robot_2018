@@ -16,6 +16,7 @@ public abstract class DiagnosticSubsystem<E extends Enum> extends Subsystem {
     private List<E> flags;
 
     public DiagnosticSubsystem() {
+        super();
         flags = new ArrayList<>();
     }
 

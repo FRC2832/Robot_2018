@@ -3,10 +3,9 @@ package org.usfirst.frc.team2832.robot;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Logger {
 
@@ -114,7 +113,20 @@ public class Logger {
     }
 
     public void update() {
-        //NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setValue(log.list());
+        if(NetworkTableInstance.getDefault().getEntry("logRequest").getBoolean(false)) {
+            NetworkTableInstance.getDefault().getEntry("logRequest").setBoolean(false);
+            List<String> strings = new ArrayList<>();
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(log.getPath()));
+                String line;
+                while ((line = reader.readLine()) != null)
+                    strings.add(line);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setStringArray(strings.toArray(new String[]{}));
+            NetworkTableInstance.getDefault().flush();
+        }
     }
 
     public void dispose() {

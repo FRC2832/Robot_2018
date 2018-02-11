@@ -16,7 +16,9 @@ public class MoveLift extends Command {
 	private double HEIGHT_SCALE_LOW = 43d;
 	private double HEIGHT_SWITCH = 15d;
 	private double HEIGHT_INTAKE = 4d;
-	
+
+	private int liftPosition;
+
 	private boolean upPressed = Robot.controls.getButton(ButtonMapping.LEVEL_UP);
 	private boolean downPressed = Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM); 
 	
@@ -35,7 +37,7 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPower(0.5d);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(4);
+			setLiftPosition(4);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -51,7 +53,7 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPower(0.5d);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(3);
+			setLiftPosition(3);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -62,7 +64,7 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPower(0.5d);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(2);
+			setLiftPosition(2);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -73,7 +75,7 @@ public class MoveLift extends Command {
 			Robot.lift.setLiftPower(0.5d);
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(1);
+			setLiftPosition(1);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -85,7 +87,7 @@ public class MoveLift extends Command {
 
 		} else {
 			Robot.lift.setLiftPower(0.0d);
-			Robot.lift.setLiftPosition(0);
+			setLiftPosition(0);
 			positionChangeActive = false;
 			stop = true;
 		}
@@ -93,8 +95,8 @@ public class MoveLift extends Command {
 	}
 	
 	private void incrementPosition() {
-		if(Robot.lift.getLiftPosition() + 1 <= 4) {
-			switch(Robot.lift.getLiftPosition() + 1) {
+		if(getLiftPosition() + 1 <= 4) {
+			switch(getLiftPosition() + 1) {
 				case 1:
 					moveToSwitch();
 					break;
@@ -156,5 +158,14 @@ public class MoveLift extends Command {
 	
 	private enum PositionChangeType {
 		RAISE, LOWER
+	}
+
+	public int setLiftPosition(int a) {
+		liftPosition = a;
+		return liftPosition;
+	}
+
+	public int getLiftPosition() {
+		return liftPosition;
 	}
 }
