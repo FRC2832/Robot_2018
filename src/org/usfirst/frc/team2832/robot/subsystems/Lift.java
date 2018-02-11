@@ -128,7 +128,6 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 			}
 		} */
 		
-		//dpad controls
 
 	}
 	public enum Position {
