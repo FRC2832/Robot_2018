@@ -61,15 +61,9 @@ public class ArcadeDrive extends Command {
             if (velocity >= upshift.interpolate(dD)) {
                 SmartDashboard.putBoolean("High Gear", true);
                 Robot.driveTrain.shift(DriveTrain.GEAR.HIGH);
-                if(prevLowGear)
-                    Robot.logger.log("Arcade Drive", "Upshifted");
-                prevLowGear = false;
             } else if (velocity <= downshift.interpolate(dD)) {
                 SmartDashboard.putBoolean("High Gear", false);
                 Robot.driveTrain.shift(DriveTrain.GEAR.LOW);
-                if(!prevLowGear)
-                    Robot.logger.log("Arcade Drive", "Downshifted");
-                prevLowGear = true;
             }
         }
 
