@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2832.robot.commands;
 
 import org.usfirst.frc.team2832.robot.ButtonMapping;
+import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -119,6 +120,7 @@ public class MoveLift extends Command {
 	
 
 	protected void execute() {
+		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
 		if(!Robot.lift.getPacked()) {
 			currentHeight = Robot.lift.getLiftEncoderPosition();
 			if(positionChangeActive) {
@@ -136,7 +138,15 @@ public class MoveLift extends Command {
 						positionChangeActive = true;
 					}
 				}
-		} else Robot.lift.setLiftPower(0d);
+		}else if(pov != -1) {
+
+			if(pov > 90 && pov < 270)
+				Robot.lift.setLiftPower(-1d);
+			else
+				Robot.lift.setLiftPower(1d);
+		} 
+		else Robot.lift.setLiftPower(0d);
+		
 		
 
 		
