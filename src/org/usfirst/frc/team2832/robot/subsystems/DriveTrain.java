@@ -100,15 +100,15 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]));
 		}*/
 		
-		if (false && getPigeonRoll() > 20) {
+		if (getPigeonRoll() > 20) {
 			isTipping = true;
 			drive.tankDrive(1, 1);
 			System.out.println("Correcting a forward fall");
-		} else if (false && getPigeonRoll() < -20) {
+		} else if (getPigeonRoll() < -20) {
 			isTipping = true;
 			drive.tankDrive(-1, -1);
 			System.out.println("Correcting a backward fall");
-		} else {
+		} else if(isTipping){
 			isTipping = false;
 			drive.tankDrive(0, 0);
 		}
