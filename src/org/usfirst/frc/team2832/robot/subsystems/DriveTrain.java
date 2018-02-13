@@ -36,7 +36,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 
 	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; // Circumference divided by
 																				// pulses/revolution
-	private static final double ENCODER_ERROR_PERCENTAGE = 68d / 66.62d; // Actual/desired distance
+	private static final double ENCODER_ERROR_PERCENTAGE_LEFT = 68d / 66.62d; // Actual/desired distance
+	private static final double ENCODER_ERROR_PERCENTAGE_RIGHT = 68d / 66.62d; // Actual/desired distance
 
 	private DoubleSolenoid transmission;
 	private DifferentialDrive drive;
@@ -122,11 +123,20 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 * @return velocity of the selected encoder in rotations/second
 	 */
 	public double getEncoderVelocity(Encoder side) {
-		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
-				: side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity()
-				: (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity()
-				- talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d) / 144d * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
-		//return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity() : hasFlag(DriveTrainFlags.ENCODER_R) ? talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() : hasFlag(DriveTrainFlags.ENCODER_L) ? -talonPhoenixRight.getSensorCollection().getQuadratureVelocity() : (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() - talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d) / 144d;
+		double pulsesPer100Mili;
+		if(side.equals(Encoder.LEFT)) //Left
+			pulsesPer100Mili = talonPhoenixLeft.getSensorCollection().getQuadratureVelocity();
+		else if(side.equals(Encoder.RIGHT)) // Right
+			pulsesPer100Mili = -talonPhoenixRight.getSensorCollection().getQuadratureVelocity();
+		else if(hasAll(DriveTrainFlags.ENCODER_R, DriveTrainFlags.ENCODER_L)) // Average with both encoders flagged
+			pulsesPer100Mili = 0;
+		else if(hasFlag(DriveTrainFlags.ENCODER_R)) // Average with just right flag
+			pulsesPer100Mili = talonPhoenixLeft.getSensorCollection().getQuadratureVelocity();
+		else if(hasFlag(DriveTrainFlags.ENCODER_L)) // Average with just left flagged
+			pulsesPer100Mili = -talonPhoenixRight.getSensorCollection().getQuadratureVelocity();
+		else // Average with no encoder flags
+			pulsesPer100Mili = (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() - talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d;
+		return pulsesPer100Mili / 144d * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
 	}
 
 	/**
@@ -137,13 +147,14 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 * @return position of the selected encoder(inches)
 	 */
 	public double getEncoderPosition(Encoder side) {
-		return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition()
-				: (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadraturePosition()
-				: (talonPhoenixLeft.getSensorCollection().getQuadraturePosition()
-				+ talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d))
-				* ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE
-				* (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
-		//return (side.equals(Encoder.LEFT) ? talonPhoenixLeft.getSensorCollection().getQuadraturePosition() : (side.equals(Encoder.RIGHT) ? -talonPhoenixRight.getSensorCollection().getQuadraturePosition() : (hasFlag(DriveTrainFlags.ENCODER_L)? talonPhoenixRight.getSensorCollection().getQuadraturePosition(): hasFlag(DriveTrainFlags.ENCODER_R)? talonPhoenixLeft.getSensorCollection().getQuadraturePosition():(talonPhoenixLeft.getSensorCollection().getQuadraturePosition()+ talonPhoenixRight.getSensorCollection().getQuadraturePosition()) / 2d) )) * ENCODER_COUNT_TO_INCH * ENCODER_ERROR_PERCENTAGE * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
+		double pulses;
+		if(side.equals(Encoder.LEFT)) //Left
+			pulses = talonPhoenixLeft.getSensorCollection().getQuadraturePosition() * ENCODER_ERROR_PERCENTAGE_LEFT;
+		else if(side.equals(Encoder.RIGHT)) // Right
+			pulses = -talonPhoenixRight.getSensorCollection().getQuadraturePosition() * ENCODER_ERROR_PERCENTAGE_RIGHT;
+		else
+			pulses = 0; // Don't use average, it won't work
+		return pulses * ENCODER_COUNT_TO_INCH * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
 	}
 
 	/**
