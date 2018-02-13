@@ -144,7 +144,9 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		logger.header("Autonomous Init");
 
-		Robot.driveTrain.setBrakeMode(true);
+        lift.resetLiftEncoder();
+
+        Robot.driveTrain.setBrakeMode(true);
 		Robot.lift.unpack();
 		Scheduler.getInstance().removeAll();
 
@@ -177,7 +179,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		logger.header("Teleop Init");
-		lift.unpack();
+        lift.resetLiftEncoder();
+        lift.unpack();
 		Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
 	}

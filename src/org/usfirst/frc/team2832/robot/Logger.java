@@ -113,6 +113,7 @@ public class Logger {
     }
 
     public void update() {
+        /*
         if(NetworkTableInstance.getDefault().getEntry("logRequest").getBoolean(false)) {
             NetworkTableInstance.getDefault().getEntry("logRequest").setBoolean(false);
             List<String> strings = new ArrayList<>();
@@ -126,7 +127,7 @@ public class Logger {
             }
             NetworkTableInstance.getDefault().getEntry(ENTRY_NAME).setStringArray(strings.toArray(new String[]{}));
             NetworkTableInstance.getDefault().flush();
-        }
+        }*/
     }
 
     public void dispose() {

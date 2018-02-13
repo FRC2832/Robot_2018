@@ -32,7 +32,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	final static private int WINCH_MOTOR = 12;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
 
-	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI / 2d;
+	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	
 	public static final double RAIL_HEIGHT = 68;
 
@@ -40,6 +40,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private WPI_TalonSRX talonLift;
 	private TalonSRX talonPhoenixLift, winchMotor;
 	private AnalogInput limitSwitch;
+	private double startingEncoder;
 	
 	public Lift() {
 		super();
@@ -62,9 +63,13 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		Robot.logger.log("Lift", "Unpacked robot");
 		collapserer.set(Value.kReverse);
 	}
-	
+
+	public void resetLiftEncoder() {
+		startingEncoder = -talonPhoenixLift.getSensorCollection().getQuadraturePosition();
+	}
+
 	public double getLiftEncoderPosition() {
-		return talonPhoenixLift.getSensorCollection().getQuadraturePosition() * ENCODER_COUNT_TO_INCH;
+		return (-talonPhoenixLift.getSensorCollection().getQuadraturePosition() - startingEncoder) / ENCODER_COUNT_TO_INCH;
 	}
 
 	public void setLiftPower(double power) {
@@ -106,8 +111,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 			else
 				collapserer.set(Value.kForward);
 		}
-
-		SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command", getCurrentCommandName());
+		SmartDashboard.putNumber("Current lift height", getLiftEncoderPosition());
+		SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command lift", getCurrentCommandName());
 		/*if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
 			for(int i = Position.values().length - 1; i >= 0; i--) {
 				if(Position.values()[i].height < getLiftPosition()) {
