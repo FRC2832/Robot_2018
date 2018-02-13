@@ -25,7 +25,7 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
 
     @Override
     protected void execute() {
-        if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
+        /*if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
             for(int i = 0; i < Lift.Position.values().length; i++)
                 if(Lift.Position.values()[i].height > Robot.lift.getLiftEncoderPosition()) {
                     target = Lift.Position.values()[i].height;
@@ -36,23 +36,23 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
         if(Robot.controls.getButtonPressed(ButtonMapping.LOWER_TO_BOTTOM)) {
             target = 0;
             moving = true;
-        }
-
+        }*/
+        Robot.lift.setLiftPower(0);
         int pov = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_MAIN);
         if (pov != -1) {
             moving = false;
             if (pov > 90 && pov < 270)
-                Robot.lift.setLiftPower(1);
+                Robot.lift.setLiftPower(0.7);
             else
-                Robot.lift.setLiftPower(-1);
-        } else if(moving){
+                Robot.lift.setLiftPower(-0.7);
+        } /*else if(moving){
             Robot.lift.setLiftPower(Math.signum(target - Robot.lift.getLiftEncoderPosition()) * Math.max(0.3, Math.min(1, Math.abs(target - Robot.lift.getLiftEncoderPosition()) / 10d)));
         } else {
             Robot.lift.setLiftPower(0);
         }
 
         if(Math.abs(target - Robot.lift.getLiftEncoderPosition()) <= 1)
-            moving = false;
+            moving = false;*/
     }
 
     @Override

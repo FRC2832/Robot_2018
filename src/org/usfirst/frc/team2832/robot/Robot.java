@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team2832.robot.subsystems.LiftSubsystemWithPID;
 
 /**
  * Main robot class and location for static objects like subsystems and dashboard
@@ -118,7 +119,6 @@ public class Robot extends TimedRobot {
 		logger.header("Disabled Init");
 		Robot.driveTrain.setBrakeMode(false);
 		controls.clearRumbles();
-		lift.pack();
 	}
 
 	/**

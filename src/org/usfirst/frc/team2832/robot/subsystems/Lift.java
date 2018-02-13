@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team2832.robot.commands.MoveLiftUltimateWithoutPidButBetterThanTheRest;
 
 /**
  * The lift subsystem which handles an encoder, commanding the lift motor, and
@@ -31,9 +32,9 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	final static private int WINCH_MOTOR = 12;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
 
-	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
+	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI / 2d;
 	
-	public static final double RAIL_HEIGHT = 84;
+	public static final double RAIL_HEIGHT = 68;
 
 	protected DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
@@ -49,6 +50,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 		collapserer.set(Value.kForward);
 		talonLift.setNeutralMode(NeutralMode.Brake);
+		talonLift.setInverted(true);
 	}
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
@@ -86,7 +88,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public void initDefaultCommand() {
-		setDefaultCommand(new MoveLift());
+		setDefaultCommand(new MoveLiftUltimateWithoutPidButBetterThanTheRest());
 	}
 
 	@Override
