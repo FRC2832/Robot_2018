@@ -114,9 +114,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 				stopMotors();
 			}
 		} else if (tRight > 0.05) {
-			if (tRight < 0.9) {
-				setMotorSpeed(tRight * 0.8);
-			}
+			setMotorSpeed(tRight * 0.8);
 		} else {
 			stopMotors();
 		}
