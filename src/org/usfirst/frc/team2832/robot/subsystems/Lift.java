@@ -38,7 +38,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
 	protected DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
-	private TalonSRX talonPhoenixLift, winchMotor;
+	protected TalonSRX talonPhoenixLift, winchMotor;
 	private AnalogInput limitSwitch;
 	private double startingEncoder;
 	

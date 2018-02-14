@@ -46,6 +46,11 @@ public class LiftSubsystemWithPID extends Lift implements PIDSource, PIDOutput {
                 collapserer.set(DoubleSolenoid.Value.kForward);
         }
 
+        if(talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed())
+            resetLiftEncoder(0);
+        else if(talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed())
+            ;//resetLiftEncoder(0); Todo: Potentially set calculated postion when at top of lift for better precision
+
         SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command", getCurrentCommandName());
 
         if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
