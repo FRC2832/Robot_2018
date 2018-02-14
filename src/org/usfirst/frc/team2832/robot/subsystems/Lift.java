@@ -64,8 +64,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		collapserer.set(Value.kReverse);
 	}
 
-	public void resetLiftEncoder() {
-		startingEncoder = -talonPhoenixLift.getSensorCollection().getQuadraturePosition();
+	public void resetLiftEncoder(double height) {
+		startingEncoder = -talonPhoenixLift.getSensorCollection().getQuadraturePosition() - height;
 	}
 
 	public double getLiftEncoderPosition() {
@@ -111,6 +111,13 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 			else
 				collapserer.set(Value.kForward);
 		}
+
+		// Set encoder position(just in code) to current physical position based on limit switches
+		if(talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed())
+			resetLiftEncoder(0);
+		else if(talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed())
+			;//resetLiftEncoder(0); Todo: Potentially set calculated postion when at top of lift for better precision
+
 		SmartDashboard.putNumber("Current lift height", getLiftEncoderPosition());
 		SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command lift", getCurrentCommandName());
 		/*if(Robot.controls.getButtonPressed(LOWER_LIFT)) {

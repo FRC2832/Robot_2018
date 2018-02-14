@@ -30,7 +30,7 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
         if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
             double currentPos = Robot.lift.getLiftEncoderPosition();
             for(int i = 0; i < Lift.Position.values().length; i++) {
-                if(Math.abs(Lift.Position.values()[i].height - Robot.lift.getLiftEncoderPosition()) < POSITION_TOLERANCE_INCHES) {
+                if(Math.abs(Lift.Position.values()[i].height - Robot.lift.getLiftEncoderPosition()) <= POSITION_TOLERANCE_INCHES) {
                     currentPos = Lift.Position.values()[i].height;
                     break;
                 }
