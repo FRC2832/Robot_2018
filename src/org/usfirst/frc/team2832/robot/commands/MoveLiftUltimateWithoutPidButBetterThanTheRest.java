@@ -9,7 +9,8 @@ import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
 public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
 
-    private static final double TOLERANCE_INCHES = 1;
+    private static final double AUTO_TOLERANCE_INCHES = 1;
+    private static final double POSITION_TOLERANCE_INCHES = 4; // Proximity to set positions
 
     private double target;
     private boolean moving;
@@ -27,12 +28,20 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
     @Override
     protected void execute() {
         if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
-            for(int i = 0; i < Lift.Position.values().length; i++)
-                if(Lift.Position.values()[i].height > Robot.lift.getLiftEncoderPosition()) {
+            double currentPos = Robot.lift.getLiftEncoderPosition();
+            for(int i = 0; i < Lift.Position.values().length; i++) {
+                if(Math.abs(Lift.Position.values()[i].height - Robot.lift.getLiftEncoderPosition()) < POSITION_TOLERANCE_INCHES) {
+                    currentPos = Lift.Position.values()[i].height;
+                    break;
+                }
+            }
+            for(int i = 0; i < Lift.Position.values().length; i++) {
+                if (Lift.Position.values()[i].height > currentPos) {
                     target = Lift.Position.values()[i].height;
                     moving = true;
                     break;
                 }
+            }
         } else if(Robot.controls.getButtonPressed(ButtonMapping.LOWER_TO_BOTTOM)) {
             target = 0;
             moving = true;
@@ -52,7 +61,7 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
             Robot.lift.setLiftPower(0);
         }
 
-        if(Math.abs(target - Robot.lift.getLiftEncoderPosition()) <= 1)
+        if(Math.abs(target - Robot.lift.getLiftEncoderPosition()) <= AUTO_TOLERANCE_INCHES)
             moving = false;
     }
 
