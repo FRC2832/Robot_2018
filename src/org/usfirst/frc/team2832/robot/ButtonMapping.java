@@ -8,7 +8,7 @@ import org.usfirst.frc.team2832.robot.Controls.Controllers;
  */
 public class ButtonMapping {
 
-	public static final ButtonMapping SHIFT_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.STICK_LEFT);
+	public static final ButtonMapping COMPRESSOR_TOGGLE = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.STICK_LEFT);
 	public static final ButtonMapping TOGGLE_TILT_0 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.A);
 	public static final ButtonMapping TOGGLE_TILT_1 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.X);
 	public static final ButtonMapping LEVEL_UP = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);

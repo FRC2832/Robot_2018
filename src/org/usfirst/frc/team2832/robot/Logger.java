@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Logger {
 
-    private final String USB_PATH = "/u/"; // Usb drive
+    private final String USB_PATH = "/U/"; // Usb drive
     private final String SYSTEM_PATH = System.getProperty("user.home") + "/";
     private final String ENTRY_NAME = "Log";
     private final int MAX_LOGS = 200;

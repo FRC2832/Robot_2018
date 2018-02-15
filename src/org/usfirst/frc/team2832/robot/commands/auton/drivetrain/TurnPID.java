@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2832.robot.commands.auton.drivetrain;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import org.usfirst.frc.team2832.robot.Robot;
 
 import edu.wpi.first.wpilibj.PIDController;
@@ -14,12 +15,12 @@ import edu.wpi.first.wpilibj.command.Command;
 public class TurnPID extends Command implements PIDOutput, PIDSource {
 
 	private final double P = 0.1;
-	private final double I = 0.00;
-	private final double D = 0.15;
+	private final double I = -0.001;
+	private final double D = 0.8;
 	private final double F = 0.00;
 
-	private final double TOLERANCE_DEGREES = 1.5f; //Accepted distance from target angle
-	private final int PATIENCE = 20; // Minimum "frames" where it is within angle range, I think
+	private final double TOLERANCE_DEGREES = 3f; //Accepted distance from target angle
+	private final int PATIENCE = 5; // Minimum "frames" where it is within angle range, I think
 
 	private PIDSourceType sourceType;
 	private PIDController controller;
@@ -30,7 +31,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		requires(Robot.driveTrain);
 		this.degrees = degrees;
 		sourceType = PIDSourceType.kDisplacement;
-		controller = new PIDController(P, I, D, F, this, this);
+		controller = new PIDController(P, I, D, F, this, this, 0.02);
 		controller.setOutputRange(-0.7, 0.7);
 		controller.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
 		controller.setContinuous(true);
@@ -39,7 +40,9 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	}
 
 	protected void initialize() {
+		controller.reset();
 		targetAngle = Robot.driveTrain.getPigeonYaw() + degrees;
+		System.out.println("Initial yaw angle " + Robot.driveTrain.getPigeonYaw());
 		Robot.logger.log("Turn PID", "Turning " + degrees + " degrees");
 	}
 
@@ -51,7 +54,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 			turnRate = 0;
 		}
 		
-		Robot.driveTrain.tankDrive(turnRate, -turnRate);
+		Robot.driveTrain.tankDrive(-turnRate, turnRate);
 	}
 
 	protected boolean isFinished() {

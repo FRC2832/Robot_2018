@@ -50,13 +50,13 @@ public class ArcadeDrive extends Command {
             velocity = Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)) * SMOOTHING_CONSTANT_UP + (1 - SMOOTHING_CONSTANT_UP) * prevVelocity;
         prevVelocity = velocity;
 
-        SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "FilteredVelocity", velocity);
+        /*SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "FilteredVelocity", velocity);
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "Velocity", Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "driverDemand", dD);
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityUpshift", upshift.interpolate(dD));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityDownshift", downshift.interpolate(dD));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityLeft", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.LEFT));
-        SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityRight", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.RIGHT));
+        SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityRight", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.RIGHT));*/
         if((Math.abs(Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight)) < 0.2)) {
             if (velocity >= upshift.interpolate(dD)) {
                 SmartDashboard.putBoolean("High Gear", true);

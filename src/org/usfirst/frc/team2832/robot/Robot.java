@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 	private static RobotType robotType;
 
 	private AnalogInput robotTypeInput;
-	private Command diagnostic;
+	private DiagnoseSensors diagnostic;
 	private boolean postDiagnosis;
 
 	/**
@@ -70,8 +70,6 @@ public class Robot extends TimedRobot {
 		ingestor = new Ingestor();
 
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
-
-		postDiagnosis = false;
 
 		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
 		robotType = RobotType.Competition; //Default to competition
@@ -144,6 +142,8 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		logger.header("Autonomous Init");
 
+		postDiagnosis = false;
+
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
 
         Robot.driveTrain.setBrakeMode(true);
@@ -161,7 +161,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic() {
 		// If diagnostic is done, start either selected command group or just drive forward to line.
-		if(!postDiagnosis && diagnostic.isCompleted()) {
+		if(!postDiagnosis && diagnostic.doneDiagnosing()) {
 			postDiagnosis = true;
 			if(Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.PIGEON) || Robot.driveTrain.hasAll(DriveTrain.DriveTrainFlags.ENCODER_L, DriveTrain.DriveTrainFlags.ENCODER_R)) {
 				logger.log("Auton", "Defaulting to driving past line due to critical system failure");

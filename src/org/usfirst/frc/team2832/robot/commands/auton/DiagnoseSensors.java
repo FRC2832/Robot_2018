@@ -14,11 +14,12 @@ import java.lang.reflect.Field;
  */
 public class DiagnoseSensors extends Command {
 
-	private final double TEST_DURATION = 0.6d;
+	private final double TEST_DURATION = 0.3d;
 	private final double SPEEEED = 0.4;
 	
 	private double startTime;
 	private SensorTest[] sensorTests;
+	private boolean hasFinished;
 
 	public DiagnoseSensors(SensorTest... sensorTests) {
 		requires(Robot.driveTrain);
@@ -29,6 +30,7 @@ public class DiagnoseSensors extends Command {
 	protected void initialize() {
 		startTime = Timer.getFPGATimestamp();
 		StringBuilder builder = new StringBuilder();
+		hasFinished = false;
 		for(int i = 0; i < sensorTests.length; i++) {
 			if (i < sensorTests.length - 1)
 				builder.append(sensorTests[i].getFlag().name() + (i == sensorTests.length - 2 ? ", and " : ", "));
@@ -52,10 +54,10 @@ public class DiagnoseSensors extends Command {
 		if (Timer.getFPGATimestamp() < startTime + TEST_DURATION / 2d) {
 			Robot.driveTrain.arcadeDrive(SPEEEED, 0);
 			Robot.lift.setLiftPower(SPEEEED);
-		} else {
+		} /*else {
 			Robot.driveTrain.arcadeDrive(-SPEEEED, 0);
 			Robot.lift.setLiftPower(-SPEEEED);
-		}
+		} */
 	}
 
 	/**
@@ -84,13 +86,7 @@ public class DiagnoseSensors extends Command {
 		Robot.driveTrain.arcadeDrive(0, 0);
 		Robot.lift.setLiftPower(0);
 		testSensors();
-		try {
-			Field field = Command.class.getDeclaredField("m_completed");
-			field.setAccessible(true);
-			field.set(this, true);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			Robot.logger.error("Diagnosis End", e.toString());
-		}
+		hasFinished = true;
 	}
 
 	/**
@@ -101,5 +97,10 @@ public class DiagnoseSensors extends Command {
 		Robot.driveTrain.arcadeDrive(0, 0);
 		Robot.lift.setLiftPower(0);
 		testSensors();
+		hasFinished = true;
+	}
+
+	public boolean doneDiagnosing() {
+		return hasFinished;
 	}
 }

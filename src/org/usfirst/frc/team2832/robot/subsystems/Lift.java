@@ -113,13 +113,16 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		}
 
 		// Set encoder position(just in code) to current physical position based on limit switches
+
+        SmartDashboard.putBoolean("ReverseLiftLimitClosed", talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed());
+        SmartDashboard.putBoolean("ForwardLiftLimitClosed", talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed());
 		if(talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed())
 			resetLiftEncoder(0);
 		else if(talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed())
 			;//resetLiftEncoder(0); Todo: Potentially set calculated postion when at top of lift for better precision
 
 		SmartDashboard.putNumber("Current lift height", getLiftEncoderPosition());
-		SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command lift", getCurrentCommandName());
+		//SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command lift", getCurrentCommandName());
 		/*if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
 			for(int i = Position.values().length - 1; i >= 0; i--) {
 				if(Position.values()[i].height < getLiftPosition()) {
