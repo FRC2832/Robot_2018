@@ -1,6 +1,6 @@
 package org.usfirst.frc.team2832.robot.commands.auton.drivetrain;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
+import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.Robot;
 
 import edu.wpi.first.wpilibj.PIDController;
@@ -8,23 +8,24 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Turns desired degrees using PID
  */
 public class TurnPID extends Command implements PIDOutput, PIDSource {
-
-	private final double P = 0.1;
-	private final double I = -0.001;
-	private final double D = 0.8;
+	
+	private final double P = 0.15;
+	private final double I = 0.0002;
+	private final double D = 0.5;
 	private final double F = 0.00;
-
+	
 	private final double TOLERANCE_DEGREES = 3f; //Accepted distance from target angle
 	private final int PATIENCE = 5; // Minimum "frames" where it is within angle range, I think
 
 	private PIDSourceType sourceType;
 	private PIDController controller;
-	private double targetAngle, degrees, turnRate = 0;
+	private double targetAngle, degrees, startAngle, turnRate = 0;
 	private int counter;
 
 	public TurnPID(double degrees) {
@@ -41,12 +42,16 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 
 	protected void initialize() {
 		controller.reset();
+		startAngle = Robot.driveTrain.getPigeonYaw();		
 		targetAngle = Robot.driveTrain.getPigeonYaw() + degrees;
+
 		System.out.println("Initial yaw angle " + Robot.driveTrain.getPigeonYaw());
 		Robot.logger.log("Turn PID", "Turning " + degrees + " degrees");
 	}
 
 	protected void execute() {
+		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Starting angle", startAngle);
+		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Target angle", targetAngle);
 		// Move to initialize() if this works
 		if (!controller.isEnabled()) {
 			controller.setSetpoint(targetAngle);
