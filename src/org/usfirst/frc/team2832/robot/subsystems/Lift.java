@@ -93,7 +93,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public void initDefaultCommand() {
-		setDefaultCommand(new MoveLiftUltimateWithoutPidButBetterThanTheRest());
+		//setDefaultCommand(new MoveLiftUltimateWithoutPidButBetterThanTheRest());
+		setDefaultCommand(new MoveLift());
 	}
 
 	@Override
@@ -112,6 +113,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 				collapserer.set(Value.kForward);
 		}
 
+		
+		
 		// Set encoder position(just in code) to current physical position based on limit switches
 
         SmartDashboard.putBoolean("ReverseLiftLimitClosed", talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed());

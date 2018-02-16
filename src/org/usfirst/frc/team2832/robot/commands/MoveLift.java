@@ -120,6 +120,8 @@ public class MoveLift extends Command {
 	
 
 	protected void execute() {
+		
+		/*
 		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
 		if(!Robot.lift.getPacked()) {
 			currentHeight = Robot.lift.getLiftEncoderPosition();
@@ -138,22 +140,29 @@ public class MoveLift extends Command {
 						positionChangeActive = true;
 					}
 				}
-		}else if(pov != -1) {
+		} else if(pov != -1) {
 
 			if(pov > 90 && pov < 270)
 				Robot.lift.setLiftPower(-1d);
 			else
 				Robot.lift.setLiftPower(1d);
-		} 
-		else Robot.lift.setLiftPower(0d);
+		} else 
+			Robot.lift.setLiftPower(0d);
+		*/
 		
-		
+		  if (Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {
+				Robot.lift.setLiftPower(-.7);
+			} else if (Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM)) {
+				Robot.lift.setLiftPower(0.7);
+			} else {
+				Robot.lift.setLiftPower(0.0);
+			}
 
 		
 	}
 	@Override
 	protected boolean isFinished() {
-		return stop;
+		return false;
 	}
 
 	protected void end() {
