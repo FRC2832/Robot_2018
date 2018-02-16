@@ -44,7 +44,7 @@ public class DriveDistance extends Command {
 		if(usingPigeon) {
 			currentYaw = Robot.driveTrain.getPigeonYaw();
 			double differenceYaw = initialYaw - currentYaw;
-			if (differenceYaw > 0) {
+			if (differenceYaw < 0) {
 				Robot.driveTrain.tankDrive(speeed - (differenceYaw / CORRECTION), speeed + (differenceYaw / CORRECTION));
 			} else {
 				Robot.driveTrain.tankDrive(speeed + (differenceYaw / CORRECTION), speeed - (differenceYaw / CORRECTION));
