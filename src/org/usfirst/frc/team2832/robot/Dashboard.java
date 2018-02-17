@@ -54,7 +54,7 @@ public class Dashboard {
 			case CENTER: return new SwitchCenter();
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
 			case TEST: return new TurnPID(90);
-			case DRIVEFORWARD: return new DriveDistance(.7, 150.0, 10.0);
+			case DRIVEFORWARD: return new DriveDistance(.7, 100.0, 10.0);
 			case NOTHING: return null;
 			default: return new DriveDistance(.7, 150.0, 10.0);
 			

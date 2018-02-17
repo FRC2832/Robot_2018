@@ -6,6 +6,7 @@ import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.LinearInterpolation;
 import org.usfirst.frc.team2832.robot.Robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
@@ -66,9 +67,11 @@ public class ArcadeDrive extends Command {
                 Robot.driveTrain.shift(DriveTrain.GEAR.LOW);
             }
         }
-
+        if(!DriverStation.getInstance().isAutonomous())
         Robot.driveTrain.arcadeDrive(-Math.signum(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft)) * dD,
                 Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
+        else
+        	Robot.driveTrain.arcadeDrive(0, 0);
     }
 
     protected boolean isFinished() {
