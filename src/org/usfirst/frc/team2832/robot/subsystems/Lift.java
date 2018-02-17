@@ -26,8 +26,8 @@ import org.usfirst.frc.team2832.robot.commands.MoveLiftUltimateWithoutPidButBett
  */
 public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
-	final static private int COLLAPSE_FORWARD_CHANNEL = 7;
-	final static private int COLLAPSE_REVERSE_CHANNEL = 4;
+	final static private int COLLAPSE_FORWARD_CHANNEL = 2;
+	final static private int COLLAPSE_REVERSE_CHANNEL = 3;
 	final static private int LIFT_MOTOR = 15;
 	final static private int WINCH_MOTOR = 12;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
@@ -125,6 +125,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 			;//resetLiftEncoder(0); Todo: Potentially set calculated postion when at top of lift for better precision
 
 		SmartDashboard.putNumber("Current lift height", getLiftEncoderPosition());
+		SmartDashboard.putBoolean("COLLAPSE_FORWARD_CHANNEL", collapserer.get().equals(Value.kForward));
+		SmartDashboard.putBoolean("COLLAPSE_REVERSE_CHANNEL", collapserer.get().equals(Value.kReverse));
 		//SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command lift", getCurrentCommandName());
 		/*if(Robot.controls.getButtonPressed(LOWER_LIFT)) {
 			for(int i = Position.values().length - 1; i >= 0; i--) {

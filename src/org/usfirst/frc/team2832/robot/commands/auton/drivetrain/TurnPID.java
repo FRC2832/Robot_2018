@@ -25,7 +25,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 
 	private PIDSourceType sourceType;
 	private PIDController controller;
-	private double targetAngle, degrees, startAngle, turnRate = 0;
+	private double targetAngle, degrees, startAngle;
 	private int counter;
 
 	public TurnPID(double degrees) {
@@ -56,10 +56,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		if (!controller.isEnabled()) {
 			controller.setSetpoint(targetAngle);
 			controller.enable();
-			turnRate = 0;
 		}
-		
-		Robot.driveTrain.tankDrive(-turnRate, turnRate);
 	}
 
 	protected boolean isFinished() {
@@ -73,16 +70,18 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	protected void end() {
 		Robot.logger.log("Turn PID", "Ended");
 		Robot.driveTrain.tankDrive(0, 0);
+		controller.disable();
 	}
 
 	protected void interrupted() {
 		Robot.logger.log("Turn PID", "Interrupted");
 		Robot.driveTrain.tankDrive(0, 0);
+		controller.disable();
 	}
 
 	@Override
 	public void pidWrite(double output) {
-		turnRate = output;
+		Robot.driveTrain.tankDrive(-output, output);
 	}
 
 	@Override
