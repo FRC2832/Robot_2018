@@ -16,8 +16,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
 	final static int INGESTOR_L = 13; // fix these
 	final static int INGESTOR_R = 14;
-	final static int FORWARD_CHANNEL = 1; // assign these to pneumatics
-	final static int REVERSE_CHANNEL = 4;
+	final static int FORWARD_CHANNEL = 3; // assign these to pneumatics
+	final static int REVERSE_CHANNEL = 2;
 	final static int DIGITAL_PIN = 1; // get proper channel!
 	
 	private DigitalInput di;

@@ -26,8 +26,8 @@ import org.usfirst.frc.team2832.robot.commands.MoveLiftUltimateWithoutPidButBett
  */
 public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
-	final static private int COLLAPSE_FORWARD_CHANNEL = 2;
-	final static private int COLLAPSE_REVERSE_CHANNEL = 3;
+	final static private int COLLAPSE_FORWARD_CHANNEL = 7;
+	final static private int COLLAPSE_REVERSE_CHANNEL = 4;
 	final static private int LIFT_MOTOR = 15;
 	final static private int WINCH_MOTOR = 12;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;

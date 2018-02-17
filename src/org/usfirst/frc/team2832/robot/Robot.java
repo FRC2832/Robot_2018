@@ -8,6 +8,7 @@
 
 package org.usfirst.frc.team2832.robot;
 
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2832.robot.commands.auton.DiagnoseSensors;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
@@ -16,9 +17,6 @@ import org.usfirst.frc.team2832.robot.subsystems.Ingestor;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.subsystems.LiftSubsystemWithPID;
@@ -46,6 +44,7 @@ public class Robot extends TimedRobot {
 	private AnalogInput robotTypeInput;
 	private DiagnoseSensors diagnostic;
 	private boolean postDiagnosis;
+	private Compressor compressor;
 
 	/**
 	 * Gets which robot the code is running on
@@ -73,6 +72,7 @@ public class Robot extends TimedRobot {
 
 		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
 		robotType = RobotType.Competition; //Default to competition
+		compressor = new Compressor();
 
 		// Create the command to be called before autonomous
 		diagnostic = new DiagnoseSensors(
@@ -206,7 +206,16 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-
+		if (Robot.controls.getButtonPressed(ButtonMapping.COMPRESSOR_TOGGLE)) {
+			// System.out.println("Shift");
+			// toggleShift();
+			if(compressor.enabled())
+				compressor.stop();
+			else
+				compressor.start();
+			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kLeftRumble, 0.5d, 1d);
+			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kRightRumble, 0.5d, 1d);
+		}
 	}
 
 	public enum RobotType {

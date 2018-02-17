@@ -45,13 +45,11 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	private WPI_TalonSRX talonFL, talonFR, talonBL, talonBR;
 	private TalonSRX talonPhoenixLeft, talonPhoenixRight;
 	private PigeonIMU pigeon;
-	private Compressor compressor;
-	
+
 	private boolean isTipping = false;
 
 	public DriveTrain() {
 		super();
-		compressor = new Compressor();
 		transmission = new DoubleSolenoid(TRANSMISSION_FIRST_GEAR_CHANNEL,TRANSMISSION_SECOND_GEAR_CHANNEL);
 		talonFL = new WPI_TalonSRX(DRIVE_MOTER_FL);
 		talonFR = new WPI_TalonSRX(DRIVE_MOTER_FR);
@@ -87,16 +85,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
         SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Pitch Value", getPigeonPitch());
 
 		// Toggles which gear it is in and makes controller rumble
-		if (Robot.controls.getButtonPressed(ButtonMapping.COMPRESSOR_TOGGLE)) {
-			// System.out.println("Shift");
-			// toggleShift();
-            if(compressor.enabled())
-                compressor.stop();
-            else
-                compressor.start();
-			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kLeftRumble, 0.5d, 1d);
-			Robot.controls.setRumble(Controllers.CONTROLLER_MAIN, RumbleType.kRightRumble, 0.5d, 1d);
-		}
+
 
 		// Vibrate controllers if greater than threshold in "Gs"
 		/*double[] accelerometer = new double[3];
