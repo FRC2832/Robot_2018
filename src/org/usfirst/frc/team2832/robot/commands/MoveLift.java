@@ -35,9 +35,9 @@ public class MoveLift extends Command {
 	//Assuming + for up, - for down
 	private void moveToScaleHigh() {
 		if (currentHeight < (HEIGHT_SCALE_HIGH - 3)) {
-			Robot.lift.setLiftPower(0.5d);
+			Robot.lift.setLiftPower(-0.5d);
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(4);
 			positionChangeActive = false;
 			stop = true;
@@ -51,9 +51,9 @@ public class MoveLift extends Command {
 
 	private void moveToScaleMiddle() {
 		if (currentHeight < (HEIGHT_SCALE_MIDDLE - 3)) {
-			Robot.lift.setLiftPower(0.5d);
+			Robot.lift.setLiftPower(-0.5d);
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(3);
 			positionChangeActive = false;
 			stop = true;
@@ -62,9 +62,9 @@ public class MoveLift extends Command {
 	}
 	private void moveToScaleLow() {
 		if (currentHeight < (HEIGHT_SCALE_LOW - 3)) {
-			Robot.lift.setLiftPower(0.5d);
+			Robot.lift.setLiftPower(-0.5d);
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(2);
 			positionChangeActive = false;
 			stop = true;
@@ -73,9 +73,9 @@ public class MoveLift extends Command {
 	}
 	private void moveToSwitch() {
 		if (currentHeight < (HEIGHT_SWITCH - 3)) {
-			Robot.lift.setLiftPower(0.5d);
+			Robot.lift.setLiftPower(-0.5d);
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(1);
 			positionChangeActive = false;
 			stop = true;
@@ -84,10 +84,10 @@ public class MoveLift extends Command {
 	}
 	private void moveToIntake() {
 		if (currentHeight > (HEIGHT_INTAKE + 4)) { //Lowest Height
-			Robot.lift.setLiftPower(-0.5d);
+			Robot.lift.setLiftPower(0.5d);
 
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(0);
 			positionChangeActive = false;
 			stop = true;
@@ -121,7 +121,6 @@ public class MoveLift extends Command {
 
 	protected void execute() {
 		
-		/*
 		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
 		if(!Robot.lift.getPacked()) {
 			currentHeight = Robot.lift.getLiftEncoderPosition();
@@ -147,17 +146,16 @@ public class MoveLift extends Command {
 			else
 				Robot.lift.setLiftPower(1d);
 		} else 
-			Robot.lift.setLiftPower(0d);
-		*/
+			Robot.lift.setLiftPower(-.2);
 		
-		  if (Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {
+/*		  if (Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {
 				Robot.lift.setLiftPower(-.7);
 			} else if (Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM)) {
 				Robot.lift.setLiftPower(0.7);
 			} else {
-				Robot.lift.setLiftPower(0.0);
+				Robot.lift.setLiftPower(-0.2);
 			}
-
+*/
 		
 	}
 	@Override

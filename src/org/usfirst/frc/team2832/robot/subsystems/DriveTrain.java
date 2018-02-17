@@ -37,8 +37,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 
 	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; // Circumference divided by
 																				// pulses/revolution
-	private static final double ENCODER_ERROR_PERCENTAGE_LEFT = 68d / 66.62d; // Actual/desired distance
-	private static final double ENCODER_ERROR_PERCENTAGE_RIGHT = 68d / 66.62d; // Actual/desired distance
+	private static final double ENCODER_ERROR_PERCENTAGE_LEFT = 68d / 6.62d; // Actual/desired distance
+	private static final double ENCODER_ERROR_PERCENTAGE_RIGHT = 68d / 6.62d; // Actual/desired distance
 
 	private DoubleSolenoid transmission;
 	private DifferentialDrive drive;
@@ -63,6 +63,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		talonBR.follow(talonFR);
 		drive = new DifferentialDrive(talonFL, talonFR);
 		pigeon = new PigeonIMU(0);
+		talonPhoenixLeft.setSensorPhase(true);
+		talonPhoenixRight.setSensorPhase(true);
 		talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
 		talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
 	}
@@ -85,6 +87,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Right Position", getEncoderPosition(Encoder.RIGHT));
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Yaw Value", getPigeonYaw());
         SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Pitch Value", getPigeonPitch());
+        SmartDashboard.putString(Dashboard.PREFIX_PROG + "Current Gear", transmission.get().equals(Value.kForward) ? "first" : "second");
 
 		// Toggles which gear it is in and makes controller rumble
 		if (Robot.controls.getButtonPressed(ButtonMapping.COMPRESSOR_TOGGLE)) {
@@ -261,7 +264,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	public double getPigeonYaw() {
 		double[] rotations = new double[3];
 		this.pigeon.getYawPitchRoll(rotations);
-		return rotations[0];
+		return -rotations[0];
 	}
 
 	/**

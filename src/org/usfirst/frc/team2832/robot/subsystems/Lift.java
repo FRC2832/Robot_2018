@@ -51,6 +51,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 		collapserer.set(Value.kForward);
 		talonLift.setNeutralMode(NeutralMode.Brake);
+		setWinchBrakeMode(true);
+		talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
 		talonLift.setInverted(true);
 	}
 
