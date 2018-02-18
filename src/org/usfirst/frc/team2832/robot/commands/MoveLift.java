@@ -20,8 +20,6 @@ public class MoveLift extends Command {
 
 	private int liftPosition;
 
-	private boolean upPressed = Robot.controls.getButton(ButtonMapping.LEVEL_UP);
-	private boolean downPressed = Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM); 
 	
 	private boolean positionChangeActive = false;
 	private PositionChangeType positionChangeType = PositionChangeType.RAISE;
@@ -35,9 +33,9 @@ public class MoveLift extends Command {
 	//Assuming + for up, - for down
 	private void moveToScaleHigh() {
 		if (currentHeight < (HEIGHT_SCALE_HIGH - 3)) {
-			Robot.lift.setLiftPower(0.5d);
+			Robot.lift.setLiftPower(-0.7d);
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(4);
 			positionChangeActive = false;
 			stop = true;
@@ -51,9 +49,9 @@ public class MoveLift extends Command {
 
 	private void moveToScaleMiddle() {
 		if (currentHeight < (HEIGHT_SCALE_MIDDLE - 3)) {
-			Robot.lift.setLiftPower(0.5d);
+			Robot.lift.setLiftPower(-0.7d);
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(3);
 			positionChangeActive = false;
 			stop = true;
@@ -62,9 +60,9 @@ public class MoveLift extends Command {
 	}
 	private void moveToScaleLow() {
 		if (currentHeight < (HEIGHT_SCALE_LOW - 3)) {
-			Robot.lift.setLiftPower(0.5d);
+			Robot.lift.setLiftPower(-0.7d);
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(2);
 			positionChangeActive = false;
 			stop = true;
@@ -73,9 +71,9 @@ public class MoveLift extends Command {
 	}
 	private void moveToSwitch() {
 		if (currentHeight < (HEIGHT_SWITCH - 3)) {
-			Robot.lift.setLiftPower(0.5d);
+			Robot.lift.setLiftPower(-0.7d);
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(1);
 			positionChangeActive = false;
 			stop = true;
@@ -84,10 +82,10 @@ public class MoveLift extends Command {
 	}
 	private void moveToIntake() {
 		if (currentHeight > (HEIGHT_INTAKE + 4)) { //Lowest Height
-			Robot.lift.setLiftPower(-0.5d);
+			Robot.lift.setLiftPower(0.7d);
 
 		} else {
-			Robot.lift.setLiftPower(0.0d);
+			Robot.lift.setLiftPower(-0.2d);
 			setLiftPosition(0);
 			positionChangeActive = false;
 			stop = true;
@@ -120,8 +118,6 @@ public class MoveLift extends Command {
 	
 
 	protected void execute() {
-		
-		/*
 		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
 		if(!Robot.lift.getPacked()) {
 			currentHeight = Robot.lift.getLiftEncoderPosition();
@@ -129,35 +125,34 @@ public class MoveLift extends Command {
 				if(positionChangeType.equals(PositionChangeType.RAISE)) incrementPosition();
 				else decrementPosition();
 			}	else {
-					if(upPressed) {
-						incrementPosition();
+					if(Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {
 						positionChangeType = PositionChangeType.RAISE;
 						positionChangeActive = true;
+						incrementPosition();
 					}
-					else if(downPressed) {
-						decrementPosition();
+					else if(Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM)) {
 						positionChangeType = PositionChangeType.LOWER;
 						positionChangeActive = true;
-					}
+						decrementPosition();
+					} else if(pov != -1) {
+						positionChangeActive = false;
+						if(pov > 90 && pov < 270)
+							Robot.lift.setLiftPower(.7d);
+						else
+							Robot.lift.setLiftPower(-.7d);
+					} else 
+						Robot.lift.setLiftPower(-.2);
 				}
-		} else if(pov != -1) {
-
-			if(pov > 90 && pov < 270)
-				Robot.lift.setLiftPower(-1d);
-			else
-				Robot.lift.setLiftPower(1d);
-		} else 
-			Robot.lift.setLiftPower(0d);
-		*/
-		
-		  if (Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {
+		} 
+	/*
+	  if (Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {
 				Robot.lift.setLiftPower(-.7);
 			} else if (Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM)) {
 				Robot.lift.setLiftPower(0.7);
 			} else {
-				Robot.lift.setLiftPower(0.0);
+				Robot.lift.setLiftPower(-0.2);
 			}
-
+	*/
 		
 	}
 	@Override

@@ -34,7 +34,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		sourceType = PIDSourceType.kDisplacement;
 		controller = new PIDController(P, I, D, F, this, this, 0.02);
 		controller.setOutputRange(-0.7, 0.7);
-		controller.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
+		controller.setInputRange(-Double.MAX_VALUE, Double.MAX_VALUE);
 		controller.setContinuous(true);
 		controller.setAbsoluteTolerance(TOLERANCE_DEGREES);
 		controller.disable();
