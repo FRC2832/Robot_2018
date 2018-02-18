@@ -32,16 +32,16 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		talonR = new TalonSRX(INGESTOR_R);
 		tilt = new DoubleSolenoid(FORWARD_CHANNEL, REVERSE_CHANNEL);
 		setBrakeMode(true);
-		lowerTilt();
+		// lowerTilt();
 		talonR.setInverted(true);
 	}
 	
 	@Override
 	protected void initDefaultCommand() {
-		stopMotors();
+		
 	}
 	
-	public void toggleTilt() {
+	/*public void toggleTilt() {
 		if (Value.kForward == tilt.get()) {
 			tilt.set(Value.kReverse);
 			Robot.logger.log("Ingestor", "Tilt reverse");
@@ -57,7 +57,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
 	public void raiseTilt() {
 		tilt.set(Value.kForward);
-	}
+	}*/
 	
 	public void launch() {
 		// FIGURE THIS OUT
@@ -97,14 +97,31 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kLeft )); // intake
 		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kRight)); // expel
 		
-		boolean digitalVal = readDigital();
-		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", digitalVal);
-
-		if (  Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_0.getController(),
-											  ButtonMapping.TOGGLE_TILT_0.getButton()) 
-		   || Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_1.getController(), 
-				   							  ButtonMapping.TOGGLE_TILT_1.getButton()) 
-		   )
+		boolean sensorInIR = readDigital();
+		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", sensorInIR);
+		
+		if (Robot.controls.getButton(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
+			tilt.set(Value.kForward);
+		} else if (Robot.controls.getButton(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
+			tilt.set(Value.kReverse);
+		} else {
+			tilt.set(Value.kOff);
+		}
+		
+		if (tLeft > 0.05) {
+			if (sensorInIR) {
+				setMotorSpeed(tLeft * -0.8); // max manual motor speed is 0.8
+			} else {
+				stopMotors();
+			}
+		} else if (tRight > 0.05) {
+			setMotorSpeed(tRight * 0.8);
+		} else {
+			stopMotors();
+		}
+		
+		/*if (Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_0.getController(), ButtonMapping.TOGGLE_TILT_0.getButton()) || 
+			Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_1.getController(), ButtonMapping.TOGGLE_TILT_1.getButton()) )
 		{
 			Robot.ingestor.toggleTilt();
 		} else if (tLeft > 0.05) {
@@ -117,7 +134,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			setMotorSpeed(tRight * 0.8);
 		} else {
 			stopMotors();
-		}
+		}*/
 		
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Left Trigger Value",  tLeft);
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Right Trigger Value", tRight);

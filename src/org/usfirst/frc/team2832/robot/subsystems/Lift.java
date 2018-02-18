@@ -10,6 +10,7 @@ import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.commands.Climb;
 import org.usfirst.frc.team2832.robot.commands.MoveLift;
+import org.usfirst.frc.team2832.robot.commands.MoveLiftNoBackdrive;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -35,6 +36,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	
 	public static final double RAIL_HEIGHT = 68;
+	final static public int[] liftPositions = {0, 32*20, 32*30, 32*84};
 
 	protected DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
@@ -71,9 +73,17 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	public double getLiftEncoderPosition() {
 		return (-talonPhoenixLift.getSensorCollection().getQuadraturePosition() - startingEncoder) / ENCODER_COUNT_TO_INCH;
 	}
-
+	
+	public double getEncVal() {
+		return (double)(-talonPhoenixLift.getSensorCollection().getQuadraturePosition() - startingEncoder);
+	}
+	
 	public void setLiftPower(double power) {
 		talonLift.set(power);
+	}
+	
+	public void setLiftPos(double target) {
+		talonLift.set(ControlMode.Position, target);
 	}
 
 	public void setWinchBrakeMode(boolean value) {
@@ -94,7 +104,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
 	public void initDefaultCommand() {
 		//setDefaultCommand(new MoveLiftUltimateWithoutPidButBetterThanTheRest());
-		setDefaultCommand(new MoveLift());
+		setDefaultCommand(new MoveLiftNoBackdrive());
 	}
 
 	@Override
@@ -116,7 +126,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		
 		
 		// Set encoder position(just in code) to current physical position based on limit switches
-
+		
+		SmartDashboard.putNumber("Lift Enc", getEncVal());
         SmartDashboard.putBoolean("ReverseLiftLimitClosed", talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed());
         SmartDashboard.putBoolean("ForwardLiftLimitClosed", talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed());
 		if(talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed())

@@ -104,6 +104,17 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Pin Voltage", robotTypeInput.getAverageVoltage());
 		logger.update();
 		controls.update();
+		
+		if (Robot.controls.getButtonPressed(ButtonMapping.COMPRESSOR_TOGGLE)) {
+			// System.out.println("Shift");
+			// toggleShift();
+			if(compressor.enabled())
+				compressor.stop();
+			else
+				compressor.start();
+			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kLeftRumble, 0.5d, 1d);
+			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kRightRumble, 0.5d, 1d);
+		}
 	}
 
 	/**
@@ -206,16 +217,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		if (Robot.controls.getButtonPressed(ButtonMapping.COMPRESSOR_TOGGLE)) {
-			// System.out.println("Shift");
-			// toggleShift();
-			if(compressor.enabled())
-				compressor.stop();
-			else
-				compressor.start();
-			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kLeftRumble, 0.5d, 1d);
-			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kRightRumble, 0.5d, 1d);
-		}
+		
 	}
 
 	public enum RobotType {
