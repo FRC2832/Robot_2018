@@ -81,7 +81,8 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 
 	@Override
 	public void pidWrite(double output) {
-		Robot.driveTrain.tankDrive(-output, output);
+		//TODO test if changing the signs on this fixed it. I think it will have done, since positive is now right.
+		Robot.driveTrain.tankDrive(output, -output);
 	}
 
 	@Override
