@@ -22,18 +22,18 @@ public class RightSide extends CommandGroup {
 		//addSequential(new SensorFailsafe(0.5d, 120d, ()->Robot.driveTrain.getEncoderPosition(ENCODER.LEFT), ()->Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT), ()->Robot.driveTrain.getPigeonYaw()));
     	if (gameData.charAt(0) == 'R') { //If the switch is on our side
     		addParallel(new MoveLiftPID(Lift.Position.SWITCH));
-    		addSequential(new DriveDistance(0.6d, 150d, 10d)); //go forward to switch
+    		addSequential(new DriveDistance(0.6d, -150d, 10d)); //go forward to switch
     		addSequential(new TurnPID(90f)); //turn 90 degrees
     		addSequential(new ExpelCube());
     		
     	} else if (gameData.charAt(1) == 'R') { //If the scale is on our side
     		addParallel(new MoveLiftPID(Lift.Position.SCALE));
-    		addSequential(new DriveDistance(0.6d, 291d, 10d)); // go forward to scale
+    		addSequential(new DriveDistance(0.6d, -291d, 10d)); // go forward to scale
     		addSequential(new TurnPID(90f)); //turn 90 degrees
     		addSequential(new ExpelCube());
     		
     	} else { //if neither the scale or switch is on our side
-    		addSequential(new DriveDistance(0.5d, 120d, 10d)); //go forward past the line
+    		addSequential(new DriveDistance(0.5d, -120d, 1d)); //go forward past the line
     		
     	}
     	

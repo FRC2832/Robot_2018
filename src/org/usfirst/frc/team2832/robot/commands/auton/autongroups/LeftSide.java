@@ -17,18 +17,18 @@ public class LeftSide extends CommandGroup {
 
 		if (gameData.charAt(0) == 'L') { //If the switch is on our side
 			addParallel(new MoveLiftPID(Lift.Position.SWITCH));
-			addSequential(new DriveDistance(.6f, 150d, 10)); //go forward to switch
+			addSequential(new DriveDistance(.6f, -150d, 10)); //go forward to switch
     		addSequential(new TurnPID(-90f)); //turn 90 degrees
     		addSequential(new ExpelCube());
     		
     	} else if (gameData.charAt(1) == 'L') { //If the scale is on our side
     		addParallel(new MoveLiftPID(Lift.Position.SCALE));
-    		addSequential(new DriveDistance(.6f, 291d, 10)); // go forward to scale
+    		addSequential(new DriveDistance(.6f, -291d, 10)); // go forward to scale
     		addSequential(new TurnPID(-90f)); //turn 90 degrees
     		addSequential(new ExpelCube());
     		
     	} else { //If neither is on our side
-    		addSequential(new DriveDistance(.5f, 120d, 10)); //go forward past the line
+    		addSequential(new DriveDistance(.6f, -150d, 15)); //go forward past the line
     		
     		
     	}

@@ -115,6 +115,8 @@ public class Robot extends TimedRobot {
 			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kLeftRumble, 0.5d, 1d);
 			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kRightRumble, 0.5d, 1d);
 		}
+		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser Initialized", lift != null && lift.collapserer != null);
+		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser collapsed", lift == null ? false : lift.getPacked()); 
 	}
 
 	/**
@@ -191,7 +193,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		logger.header("Teleop Init");
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
-        lift.unpack();
+        //lift.unpack();
 		Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
 	}

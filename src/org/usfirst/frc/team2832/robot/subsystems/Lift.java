@@ -38,11 +38,12 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	public static final double RAIL_HEIGHT = 68;
 	final static public int[] liftPositions = {0, 32*20, 32*30, 32*84};
 
-	protected DoubleSolenoid collapserer;
+	public DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
 	protected TalonSRX talonPhoenixLift, winchMotor;
 	private AnalogInput limitSwitch;
 	private double startingEncoder;
+	public static boolean isCollapserered = true;
 	
 	public Lift() {
 		super();
@@ -62,10 +63,12 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	public void pack() {
 		Robot.logger.log("Lift", "Packed robot");
 		collapserer.set(Value.kForward);
+		isCollapserered = true;
 	}
 	public void unpack() {
 		Robot.logger.log("Lift", "Unpacked robot");
 		collapserer.set(Value.kReverse);
+		isCollapserered = false;
 	}
 
 	public void resetLiftEncoder(double height) {
@@ -187,6 +190,6 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public boolean getPacked() {
-		return collapserer.get() == Value.kForward;
+		return isCollapserered;
 	}
 }
