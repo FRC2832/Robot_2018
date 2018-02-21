@@ -2,6 +2,7 @@ package org.usfirst.frc.team2832.robot.commands.auton.autongroups;
 
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.SensorTest;
+import org.usfirst.frc.team2832.robot.commands.LowerIngestor;
 import org.usfirst.frc.team2832.robot.commands.MoveLiftPID;
 import org.usfirst.frc.team2832.robot.commands.auton.DiagnoseSensors;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
@@ -22,7 +23,7 @@ public class SwitchCenter extends CommandGroup {
 	public SwitchCenter() {
 
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
-
+		addParallel(new LowerIngestor());
 		addParallel(new MoveLiftPID(Lift.Position.SWITCH));
 		addSequential(new DriveDistance(0.5d, -20d, 10d));
 		if (gameData.charAt(0) == 'R') {

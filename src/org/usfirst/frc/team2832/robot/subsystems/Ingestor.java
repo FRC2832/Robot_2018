@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team2832.robot.commands.LowerIngestor;
 
 public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
@@ -75,6 +76,10 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		return di.get();
 	}
 
+	public void lowerTilt() {
+		tilt.set(Value.kReverse);
+	}
+
 	public void periodic () {
 		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kLeft )); // intake
 		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kRight)); // expel
@@ -86,7 +91,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			tilt.set(Value.kForward);
 		} else if (Robot.controls.getButton(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
 			tilt.set(Value.kReverse);
-		} else {
+		} else if (!(getCurrentCommand() instanceof LowerIngestor)){
 			tilt.set(Value.kOff);
 		}
 		
