@@ -16,8 +16,9 @@ import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
  */
 public class ArcadeDrive extends Command {
 
-    private static double SMOOTHING_CONSTANT_UP = 0.04;
-    private static double SMOOTHING_CONSTANT_DOWN = 0.074;
+    private final double SMOOTHING_CONSTANT_UP = 0.04;
+    private final double SMOOTHING_CONSTANT_DOWN = 0.074;
+    private final double LIFT_LIMIT = 0.82;
 
     private LinearInterpolation joystickToDD, joystickToDDPrecision, upshift, downshift;
     private double prevVelocity = 0;
@@ -69,7 +70,7 @@ public class ArcadeDrive extends Command {
         }
         if(!DriverStation.getInstance().isAutonomous())
         Robot.driveTrain.arcadeDrive(-Math.signum(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft)) * dD,
-                Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight));
+                Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight) * LIFT_LIMIT);
         else
         	Robot.driveTrain.arcadeDrive(0, 0);
     }

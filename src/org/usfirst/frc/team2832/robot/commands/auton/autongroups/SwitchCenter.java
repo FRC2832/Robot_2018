@@ -7,6 +7,7 @@ import org.usfirst.frc.team2832.robot.commands.auton.DiagnoseSensors;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
 import org.usfirst.frc.team2832.robot.commands.auton.lift.ExpelCube;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnDegrees;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnPID;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -23,11 +24,22 @@ public class SwitchCenter extends CommandGroup {
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		addParallel(new MoveLiftPID(Lift.Position.SWITCH));
-		addSequential(new DriveDistance(0.5d, 40d, 10d));
-		addSequential(new TurnDegrees(45, (gameData.charAt(0) == 'R'))); //turn towards our switch
-		addSequential(new DriveDistance(0.5d, 62d, 10d));
-		addSequential(new TurnDegrees(45, (gameData.charAt(0) == 'L'))); //turn straight back to the switch
-		addSequential(new ExpelCube());
+		addSequential(new DriveDistance(0.5d, -20d, 10d));
+		if (gameData.charAt(0) == 'R') {
+			addSequential(new TurnPID(45));
+			addSequential(new DriveDistance(0.5d, -62d, 10d));
+			addSequential(new TurnPID(-45));
+			addSequential(new ExpelCube());
+			addSequential(new DriveDistance(0.5d, -25d, 10d));
+		} else {
+			addSequential(new TurnPID(-45));
+			addSequential(new DriveDistance(0.5d, -90d, 10d));
+			addSequential(new TurnPID(45));
+			addSequential(new ExpelCube());
+			addSequential(new DriveDistance(0.5d, -5d, 10d));
+		}
+		
+		
 		
 	}
 }

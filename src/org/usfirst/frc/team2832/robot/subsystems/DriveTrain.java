@@ -200,6 +200,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	public void arcadeDrive(double speed, double direction) {
 		if(!isTipping) {
 			drive.arcadeDrive(speed, direction);
+			SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Arcade drive power", speed);
+			SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Arcade drive direction", direction);
 		}	
 	}
 
@@ -214,6 +216,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	public void tankDrive(double leftSpeed, double rightSpeed) {
 		if(!isTipping) {
 			drive.tankDrive(leftSpeed, rightSpeed);
+			SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Tank drive Right side power", rightSpeed);
+			SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Tank drive Left side power", leftSpeed);
 		}
 	}
 

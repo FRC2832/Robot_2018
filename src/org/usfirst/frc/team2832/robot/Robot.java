@@ -194,7 +194,7 @@ public class Robot extends TimedRobot {
 		logger.header("Teleop Init");
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
         //lift.unpack();
-		Robot.driveTrain.setBrakeMode(true);
+		Robot.driveTrain.setBrakeMode(false);
 		Scheduler.getInstance().removeAll();
 	}
 
