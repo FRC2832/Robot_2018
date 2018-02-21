@@ -41,24 +41,6 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		
 	}
 	
-	/*public void toggleTilt() {
-		if (Value.kForward == tilt.get()) {
-			tilt.set(Value.kReverse);
-			Robot.logger.log("Ingestor", "Tilt reverse");
-		} else {
-			tilt.set(Value.kForward);
-			Robot.logger.log("Ingestor", "Tilt forward");
-		}
-	}
-	
-	public void lowerTilt() {
-		tilt.set(Value.kReverse);
-	}
-	
-	public void raiseTilt() {
-		tilt.set(Value.kForward);
-	}*/
-	
 	public void launch() {
 		// FIGURE THIS OUT
 		// via left trigger ???
@@ -120,21 +102,11 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			stopMotors();
 		}
 		
-		/*if (Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_0.getController(), ButtonMapping.TOGGLE_TILT_0.getButton()) || 
-			Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_1.getController(), ButtonMapping.TOGGLE_TILT_1.getButton()) )
-		{
-			Robot.ingestor.toggleTilt();
-		} else if (tLeft > 0.05) {
-			if (digitalVal) {
-				setMotorSpeed(tLeft * -0.8); // max manual motor speed is 0.8
-			} else {
-				stopMotors();
-			}
-		} else if (tRight > 0.05) {
-			setMotorSpeed(tRight * 0.8);
+		if (!sensorInIR) {
+			// code to "pinch" the cube
 		} else {
-			stopMotors();
-		}*/
+			// code to "unpinch" the cube
+		}
 		
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Left Trigger Value",  tLeft);
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Right Trigger Value", tRight);

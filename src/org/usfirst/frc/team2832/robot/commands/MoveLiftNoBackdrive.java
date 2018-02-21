@@ -43,23 +43,29 @@ public class MoveLiftNoBackdrive extends Command {
     	if (manualInput != -1) {
     		moving = false;
     		if (manualInput > 90 && manualInput < 270) {
-    			Robot.lift.setLiftPower(-0.35);
+    			Robot.lift.setLiftPower(0.35);
     		} else {
-    			Robot.lift.setLiftPower(0.7);
+    			Robot.lift.setLiftPower(-0.7); // moves up
     		}
     	} else {
-    		if (!moving) {
-    			target = Robot.lift.getEncVal();
-    			Robot.lift.setLiftPower(0.7);
+    		if (moving) {
+    			if (target == Lift.liftPositions[0]) {
+    				Robot.lift.setLiftPower(0.0);
+    			} else {
+    				Robot.lift.setLiftPower(0.7);
+    			}
+    		} else {
+    			if (Math.abs(Robot.lift.getEncVal() - Lift.liftPositions[0]) <= TOLERANCE) {
+    				Robot.lift.setLiftPower(0.0);
+    			} else {
+    				Robot.lift.setLiftPower(0.35);
+    			}
     		}
-    		Robot.lift.setLiftPower(0.2);
     	}
     	
     	if (Math.abs(Robot.lift.getEncVal() - target) <= TOLERANCE) {
     		moving = false;
     	}
-    	
-    	
     }
 
     @Override
