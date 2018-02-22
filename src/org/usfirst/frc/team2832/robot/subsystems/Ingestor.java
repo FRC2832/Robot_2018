@@ -20,11 +20,14 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	final static int FORWARD_CHANNEL = 3; // assign these to pneumatics
 	final static int REVERSE_CHANNEL = 2;
 	final static int DIGITAL_PIN = 1; // get proper channel!
+	final static int EXTEND_PINTCHER = 0;
+	final static int RETRACT_PINTCHER = 1;
 	
 	private DigitalInput di;
 	private TalonSRX talonL;
 	private TalonSRX talonR;
 	private DoubleSolenoid tilt;
+	private DoubleSolenoid pintcher;
 
 	public Ingestor() {
 		super();
@@ -32,6 +35,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		talonL = new TalonSRX(INGESTOR_L);
 		talonR = new TalonSRX(INGESTOR_R);
 		tilt = new DoubleSolenoid(FORWARD_CHANNEL, REVERSE_CHANNEL);
+		pintcher = new DoubleSolenoid(EXTEND_PINTCHER, RETRACT_PINTCHER);
 		setBrakeMode(true);
 		// lowerTilt();
 		talonR.setInverted(true);
@@ -86,6 +90,12 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		
 		boolean sensorInIR = readDigital();
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", sensorInIR);
+		
+		if (Robot.controls.getButton(ButtonMapping.PINTCH_EXTEND)) {
+			pintcher.set(Value.kForward);
+		} else if (Robot.controls.getButton(ButtonMapping.PINTCH_RETRACT)) {
+			pintcher.set(Value.kReverse);
+		}
 		
 		if (Robot.controls.getButton(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
 			tilt.set(Value.kForward);
