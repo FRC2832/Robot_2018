@@ -10,6 +10,8 @@ public class ButtonMapping {
 
 	final static boolean DEFAULT_CONTROLLER_DUAL = true;
 
+	public static boolean dualControllers;
+
 	public static ButtonMapping COMPRESSOR_TOGGLE;
 	public static ButtonMapping RAISE_TILT;
 	public static ButtonMapping LOWER_TILT;
@@ -25,7 +27,12 @@ public class ButtonMapping {
 		enableDualControllers(DEFAULT_CONTROLLER_DUAL);
 	}
 
+	public boolean hasDualControllers() {
+		return dualControllers;
+	}
+
 	public static void enableDualControllers(boolean enabled) {
+		dualControllers = enabled;
 		if(enabled) {
 			COMPRESSOR_TOGGLE = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.STICK_LEFT);
 			RAISE_TILT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.X);
