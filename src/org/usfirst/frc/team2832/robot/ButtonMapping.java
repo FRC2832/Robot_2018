@@ -8,16 +8,48 @@ import org.usfirst.frc.team2832.robot.Controls.Controllers;
  */
 public class ButtonMapping {
 
-	public static final ButtonMapping COMPRESSOR_TOGGLE = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.STICK_LEFT);
-	public static final ButtonMapping RAISE_TILT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.X);
-	public static final ButtonMapping LOWER_TILT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.A);
-	public static final ButtonMapping LEVEL_UP = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);
-	public static final ButtonMapping LOWER_TO_BOTTOM = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
-	public static final ButtonMapping CLIMB_0 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
-	public static final ButtonMapping CLIMB_1 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.B);
-	public static final ButtonMapping PACK_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.START);
-	public static final ButtonMapping PINTCH_EXTEND = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.A);
-	public static final ButtonMapping PINTCH_RETRACT = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.B);
+	final static boolean DEFAULT_CONTROLLER_DUAL = true;
+
+	public static ButtonMapping COMPRESSOR_TOGGLE;
+	public static ButtonMapping RAISE_TILT;
+	public static ButtonMapping LOWER_TILT;
+	public static ButtonMapping LEVEL_UP;
+	public static ButtonMapping LOWER_TO_BOTTOM;
+	public static ButtonMapping CLIMB_0;
+	public static ButtonMapping CLIMB_1;
+	public static ButtonMapping PACK_BUTTON;
+	public static ButtonMapping PINTCH_EXTEND;
+	public static ButtonMapping PINTCH_RETRACT;
+
+	static {
+		enableDualControllers(DEFAULT_CONTROLLER_DUAL);
+	}
+
+	public static void enableDualControllers(boolean enabled) {
+		if(enabled) {
+			COMPRESSOR_TOGGLE = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.STICK_LEFT);
+			RAISE_TILT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.X);
+			LOWER_TILT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.A);
+			LEVEL_UP = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);
+			LOWER_TO_BOTTOM = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
+			CLIMB_0 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
+			CLIMB_1 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.B);
+			PACK_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.START);
+			PINTCH_EXTEND = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.A);
+			PINTCH_RETRACT = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.B);
+		} else {
+			COMPRESSOR_TOGGLE = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.STICK_LEFT);
+			RAISE_TILT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.X);
+			LOWER_TILT = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.A);
+			LEVEL_UP = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_RIGHT);
+			LOWER_TO_BOTTOM = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.BUMPER_LEFT);
+			CLIMB_0 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.Y);
+			CLIMB_1 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.B);
+			PACK_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.START);
+			PINTCH_EXTEND = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.STICK_RIGHT);
+			PINTCH_RETRACT = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.BACK);
+		}
+	}
 
 	private Controllers controller;
 	private Buttons button;
