@@ -91,10 +91,12 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		boolean sensorInIR = readDigital();
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", sensorInIR);
 		
-		if (Robot.controls.getButton(ButtonMapping.PINTCH_EXTEND)) {
-			pintcher.set(Value.kForward);
-		} else if (Robot.controls.getButton(ButtonMapping.PINTCH_RETRACT)) {
-			pintcher.set(Value.kReverse);
+		if (Robot.controls.getButton(ButtonMapping.PINTCHER)) {
+			if (pintcher.get() == Value.kForward) {
+				pintcher.set(Value.kReverse);
+			} else {
+				pintcher.set(Value.kForward);
+			}
 		}
 		
 		if (Robot.controls.getButton(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {

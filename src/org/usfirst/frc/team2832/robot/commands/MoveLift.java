@@ -118,7 +118,7 @@ public class MoveLift extends Command {
 	
 
 	protected void execute() {
-		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_MAIN);
+		int pov = Robot.controls.getPOV(Controllers.CONTROLLER_SECCONDARY);
 		if(!Robot.lift.getPacked()) {
 			currentHeight = Robot.lift.getLiftEncoderPosition();
 			if(positionChangeActive) {

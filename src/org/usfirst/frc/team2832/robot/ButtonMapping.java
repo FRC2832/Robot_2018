@@ -17,8 +17,7 @@ public class ButtonMapping {
 	public static final ButtonMapping CLIMB_1 = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.B);
 	public static final ButtonMapping PACK_BUTTON = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.START);
 	public static final ButtonMapping SHIFT_BUTTON = new ButtonMapping(Controllers.CONTROLLER_MAIN, Buttons.STICK_LEFT);
-	public static final ButtonMapping PINTCH_EXTEND = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.A);
-	public static final ButtonMapping PINTCH_RETRACT = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.B);
+	public static final ButtonMapping PINTCHER = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, Buttons.A);
 
 	private Controllers controller;
 	private Buttons button;

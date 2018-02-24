@@ -48,7 +48,7 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
         }
         //Robot.lift.setLiftPower(0);
         SmartDashboard.putBoolean("Auto-moving", moving);
-        int pov = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_MAIN);
+        int pov = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_SECCONDARY);
         if (pov != -1) {
             moving = false;
             if (pov > 90 && pov < 270)
