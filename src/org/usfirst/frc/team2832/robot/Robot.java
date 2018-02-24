@@ -160,9 +160,9 @@ public class Robot extends TimedRobot {
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
 
         Robot.driveTrain.setBrakeMode(true);
-		Robot.lift.unpack();
-		Scheduler.getInstance().removeAll();
 
+		Scheduler.getInstance().removeAll();
+		Robot.lift.unpack();
 		Scheduler.getInstance().add(diagnostic);
 
 		logger.log("Robot Type", robotType.name());
