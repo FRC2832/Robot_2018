@@ -52,7 +52,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
-		collapserer.set(Value.kForward);
+		//collapserer.set(Value.kForward);
 		talonLift.setNeutralMode(NeutralMode.Brake);
 		setWinchBrakeMode(true);
 		talonPhoenixLift.setNeutralMode(NeutralMode.Brake);

@@ -85,8 +85,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	}
 
 	public void periodic () {
-		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kLeft )); // intake
-		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kRight)); // expel
+		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft )); // intake
+		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight)); // expel
 		
 		boolean sensorInIR = readDigital();
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", sensorInIR);
@@ -116,13 +116,13 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		} else {
 			stopMotors();
 		}
-		
+		/*
 		if (!sensorInIR) {
 			// code to "pinch" the cube
 		} else {
 			// code to "unpinch" the cube
 		}
-		
+		*/
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Left Trigger Value",  tLeft);
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Right Trigger Value", tRight);
 	}
