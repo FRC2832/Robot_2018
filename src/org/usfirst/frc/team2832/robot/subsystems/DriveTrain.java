@@ -47,7 +47,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	private PigeonIMU pigeon;
 
 	private boolean isTipping = false;
-
+	
 	public DriveTrain() {
 		super();
 		transmission = new DoubleSolenoid(TRANSMISSION_FIRST_GEAR_CHANNEL,TRANSMISSION_SECOND_GEAR_CHANNEL);
@@ -66,7 +66,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
 		talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
 	}
-
+	
 	/**
 	 * Runs the {@link ArcadeDrive} command when no other command is running on this
 	 * subsystem
