@@ -99,9 +99,9 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			}
 		}
 		
-		if (Robot.controls.getButton(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
+		if (Robot.controls.getButtonPressed(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
 			tilt.set(Value.kForward);
-		} else if (Robot.controls.getButton(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
+		} else if (Robot.controls.getButtonPressed(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
 			tilt.set(Value.kReverse);
 		} else if (!(getCurrentCommand() instanceof LowerIngestor)){
 			tilt.set(Value.kOff);
