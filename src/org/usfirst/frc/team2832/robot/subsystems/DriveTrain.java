@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
+import org.usfirst.frc.team2832.robot.RobotPosition;
 import org.usfirst.frc.team2832.robot.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -150,6 +151,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		if(side.equals(Encoder.LEFT)) //Left
 			pulses = talonPhoenixLeft.getSensorCollection().getQuadraturePosition() * ENCODER_ERROR_PERCENTAGE_LEFT;
 		else if(side.equals(Encoder.RIGHT)) // Right
+			
 			pulses = -talonPhoenixRight.getSensorCollection().getQuadraturePosition() * ENCODER_ERROR_PERCENTAGE_RIGHT;
 		else
 			pulses = 0; // Don't use average, it won't work

@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
 	public static Controls controls;
 	public static Dashboard dashboard;
 	public static Logger logger;
+	public static RobotPosition robotPosition;
 
 	private static RobotType robotType;
 
@@ -61,7 +62,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		logger = new Logger();
 		logger.header("Robot Init");
-
+		
 		controls = new Controls();
 
 		driveTrain = new DriveTrain();
@@ -81,7 +82,8 @@ public class Robot extends TimedRobot {
 				new SensorTest(()-> Robot.driveTrain.getPigeonYaw() == 0, Robot.driveTrain, DriveTrain.DriveTrainFlags.PIGEON),
 				new SensorTest(()-> Robot.lift.getLiftEncoderPosition() == 0, Robot.lift, Lift.LiftFlags.ENCODER));
 
-		
+		robotPosition = new RobotPosition();
+
 		// Create camera
 		/*new Thread(() -> {
 	    	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -104,6 +106,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Pin Voltage", robotTypeInput.getAverageVoltage());
 		logger.update();
 		controls.update();
+		robotPosition.updatePosition();
 		
 		if (Robot.controls.getButtonPressed(ButtonMapping.COMPRESSOR_TOGGLE)) {
 			// System.out.println("Shift");
@@ -117,6 +120,10 @@ public class Robot extends TimedRobot {
 		}
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser Initialized", lift != null && lift.collapserer != null);
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser collapsed", lift == null ? false : lift.getPacked()); 
+		
+		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Robot X Position", (Robot.robotPosition.getLeftX() + Robot.robotPosition.getRightX()) / 2);
+        SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Robot Y Position", (Robot.robotPosition.getLeftY() + Robot.robotPosition.getRightY()) / 2);
+
 	}
 
 	/**

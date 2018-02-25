@@ -22,6 +22,8 @@ public class SwitchCenter extends CommandGroup {
 
 	public SwitchCenter() {
 
+		Robot.robotPosition.startingInCenter();
+		
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		addParallel(new LowerIngestor());
 		addParallel(new MoveLiftPID(Lift.Position.SWITCH));

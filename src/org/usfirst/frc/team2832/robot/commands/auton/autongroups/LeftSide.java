@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2832.robot.commands.auton.autongroups;
 
+import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.commands.LowerIngestor;
 import org.usfirst.frc.team2832.robot.commands.MoveLiftPID;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
@@ -17,7 +18,8 @@ public class LeftSide extends CommandGroup {
     public LeftSide() {
     	
     	String gameData = DriverStation.getInstance().getGameSpecificMessage();
-
+    	Robot.robotPosition.startingOnLeft();
+    	
 		if (gameData.charAt(0) == 'L') { //If the switch is on our side
 			//addParallel(new MoveLiftPID(Lift.Position.SWITCH));
 			addParallel(new LowerIngestor());
