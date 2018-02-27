@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team2832.robot.commands.LowerIngestor;
 
 public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
@@ -19,18 +20,22 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	final static int FORWARD_CHANNEL = 3; // assign these to pneumatics
 	final static int REVERSE_CHANNEL = 2;
 	final static int DIGITAL_PIN = 1; // get proper channel!
+	final static int EXTEND_PINTCHER = 0;
+	final static int RETRACT_PINTCHER = 1;
 	
 	private DigitalInput di;
 	private TalonSRX talonL;
 	private TalonSRX talonR;
 	private DoubleSolenoid tilt;
-
+	private DoubleSolenoid pintcher;
+	
 	public Ingestor() {
 		super();
 		di = new DigitalInput(DIGITAL_PIN);
 		talonL = new TalonSRX(INGESTOR_L);
 		talonR = new TalonSRX(INGESTOR_R);
 		tilt = new DoubleSolenoid(FORWARD_CHANNEL, REVERSE_CHANNEL);
+		pintcher = new DoubleSolenoid(EXTEND_PINTCHER, RETRACT_PINTCHER);
 		setBrakeMode(true);
 		// lowerTilt();
 		talonR.setInverted(true);
@@ -40,24 +45,6 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	protected void initDefaultCommand() {
 		
 	}
-	
-	/*public void toggleTilt() {
-		if (Value.kForward == tilt.get()) {
-			tilt.set(Value.kReverse);
-			Robot.logger.log("Ingestor", "Tilt reverse");
-		} else {
-			tilt.set(Value.kForward);
-			Robot.logger.log("Ingestor", "Tilt forward");
-		}
-	}
-	
-	public void lowerTilt() {
-		tilt.set(Value.kReverse);
-	}
-	
-	public void raiseTilt() {
-		tilt.set(Value.kForward);
-	}*/
 	
 	public void launch() {
 		// FIGURE THIS OUT
@@ -93,18 +80,30 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		return di.get();
 	}
 
+	public void lowerTilt() {
+		tilt.set(Value.kReverse);
+	}
+
 	public void periodic () {
-		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kLeft )); // intake
-		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_MAIN, Hand.kRight)); // expel
+		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft )); // intake
+		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight)); // expel
 		
 		boolean sensorInIR = readDigital();
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", sensorInIR);
 		
-		if (Robot.controls.getButton(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
+		if (Robot.controls.getButton(ButtonMapping.PINTCHER)) {
+			if (pintcher.get() == Value.kForward) {
+				pintcher.set(Value.kReverse);
+			} else {
+				pintcher.set(Value.kForward);
+			}
+		}
+		
+		if (Robot.controls.getButtonPressed(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
 			tilt.set(Value.kForward);
-		} else if (Robot.controls.getButton(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
+		} else if (Robot.controls.getButtonPressed(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
 			tilt.set(Value.kReverse);
-		} else {
+		} else if (!(getCurrentCommand() instanceof LowerIngestor)){
 			tilt.set(Value.kOff);
 		}
 		
@@ -119,23 +118,13 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		} else {
 			stopMotors();
 		}
-		
-		/*if (Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_0.getController(), ButtonMapping.TOGGLE_TILT_0.getButton()) || 
-			Robot.controls.getButtonPressed(ButtonMapping.TOGGLE_TILT_1.getController(), ButtonMapping.TOGGLE_TILT_1.getButton()) )
-		{
-			Robot.ingestor.toggleTilt();
-		} else if (tLeft > 0.05) {
-			if (digitalVal) {
-				setMotorSpeed(tLeft * -0.8); // max manual motor speed is 0.8
-			} else {
-				stopMotors();
-			}
-		} else if (tRight > 0.05) {
-			setMotorSpeed(tRight * 0.8);
+		/*
+		if (!sensorInIR) {
+			// code to "pinch" the cube
 		} else {
-			stopMotors();
-		}*/
-		
+			// code to "unpinch" the cube
+		}
+		*/
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Left Trigger Value",  tLeft);
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Right Trigger Value", tRight);
 	}

@@ -39,7 +39,7 @@ public class MoveLiftNoBackdrive extends Command {
     		moving = true;
     	}
     	
-    	int manualInput = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_MAIN);
+    	int manualInput = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_SECCONDARY);
     	if (manualInput != -1) {
     		moving = false;
     		if (manualInput > 90 && manualInput < 270) {
