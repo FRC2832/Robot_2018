@@ -78,7 +78,7 @@ public class ArcadeDrive extends Command {
         			doingFadeCurve = false;
         		}
         	}else{
-        		if(dD != dDTo) { //driver demand changed again mid curve, so we will restart 
+        		if(Math.abs(dD - dDTo) > .0001) { //driver demand changed again mid curve, so we will restart 
         						 //the curve. Better than reversing it mid-curve, most of the time.
         			prevDDChange = fade(prevDDChange, dD, ((double)(System.currentTimeMillis()-timeDDChanged))/1000d);
         			timeDDChanged = System.currentTimeMillis();
