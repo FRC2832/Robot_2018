@@ -43,9 +43,9 @@ public class MoveLiftNoBackdrive extends Command {
     	if (manualInput != -1) {
     		moving = false;
     		if (manualInput > 90 && manualInput < 270) {
-    			Robot.lift.setLiftPower(0.35);
+    			Robot.lift.setLiftPower(1);
     		} else {
-    			Robot.lift.setLiftPower(-0.7); // moves up
+    			Robot.lift.setLiftPower(-1); // moves up
     		}
     	} else {
     		if (moving) {

@@ -69,8 +69,8 @@ public class ArcadeDrive extends Command {
             }
         }
         if(!DriverStation.getInstance().isAutonomous())
-        Robot.driveTrain.arcadeDrive(-Math.signum(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft)) * dD,
-                Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight) * LIFT_LIMIT);
+        	Robot.driveTrain.arcadeDrive(-Math.signum(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft)) * dD,
+            Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight) * LIFT_LIMIT);
         else
         	Robot.driveTrain.arcadeDrive(0, 0);
     }

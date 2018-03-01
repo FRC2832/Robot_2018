@@ -139,9 +139,9 @@ public class MoveLift extends Command {
 				} else if(pov != -1) {
 					positionChangeActive = false;
 					if(pov > 90 && pov < 270)
-						Robot.lift.setLiftPower(.7d);
+						Robot.lift.setLiftPower(1d);
 					else
-						Robot.lift.setLiftPower(-.7d);
+						Robot.lift.setLiftPower(-1d);
 				} else
 					Robot.lift.setLiftPower(-.2);
 			}
