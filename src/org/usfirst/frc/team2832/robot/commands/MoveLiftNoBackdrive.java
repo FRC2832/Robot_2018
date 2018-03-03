@@ -8,64 +8,105 @@ import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
 public class MoveLiftNoBackdrive extends Command {
-
-    private static final int TOLERANCE = 12;
-
-    private double target;
-    private boolean moving;
-
+	
+	private static final double [] targets = {0, 32*20, 32*30, 32*84};
+	private static final int TOLERANCE = 12;
+	
+	private String autoMotion;
+	private double target;
+    
     public MoveLiftNoBackdrive() {
         requires(Robot.lift);
     }
 
     @Override
     protected void initialize() {
-        target = Robot.lift.getLiftEncoderPosition();
-        moving = false;
+        target = Robot.lift.getEncVal();
+    	autoMotion = "not moving";
     }
 
     @Override
     protected void execute() {
-    	if (Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
-    		for (int i = 0; i < Lift.liftPositions.length; i++) {
-    			if (Lift.liftPositions[i] - Robot.lift.getEncVal() > TOLERANCE) {
-    				target = Lift.liftPositions[i];
-    				moving = true;
-    				break;
-    			}
-    		}
-    	} else if (Robot.controls.getButtonPressed(ButtonMapping.LOWER_TO_BOTTOM)) {
-    		target = Lift.liftPositions[0];
-    		moving = true;
+    	
+    	if (Robot.controls.getButtonPressed(ButtonMapping.LIFT_RAISE)) {
+    		autoMotion = "moving up";
+    	}
+    	else if (Robot.controls.getButtonPressed(ButtonMapping.LIFT_LOWER)) {
+    		autoMotion = "moving down";
     	}
     	
-    	int manualInput = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_SECCONDARY);
-    	if (manualInput != -1) {
-    		moving = false;
-    		if (manualInput > 90 && manualInput < 270) {
-    			Robot.lift.setLiftPower(1);
-    		} else {
-    			Robot.lift.setLiftPower(-1); // moves up
+    	if (autoMotion.equals("not moving")) {
+    		/*
+        	 * runs manual control using left & right 
+        	 * triggers on the secondary controller
+        	 */
+	    	double [] triggers = Robot.lift.getTriggers();
+	    	
+	    	if (triggers[0] > 0.05) {
+	    		Robot.lift.setLiftPower(triggers[0]);
+	    	}
+	    	else if (triggers[1] > 0.05) {
+	    		Robot.lift.setLiftPower(-triggers[1]);
+	    	}
+	    	else {
+	    		Robot.lift.setLiftPower(0.35);
+	    	}
+    	}
+    	else {
+    		/*
+    		 * runs prepositioned control using A and 
+    		 * B buttons on the secondary controller
+    		 */
+    		if (autoMotion.equals("moving up")) {
+    			Robot.lift.setLiftPower(0.7);
+    			target = getNextTarget();
     		}
-    	} else {
-    		if (moving) {
-    			if (target == Lift.liftPositions[0]) {
-    				Robot.lift.setLiftPower(0.0);
-    			} else {
-    				Robot.lift.setLiftPower(0.7);
-    			}
-    		} else {
-    			if (Math.abs(Robot.lift.getEncVal() - Lift.liftPositions[0]) <= TOLERANCE) {
-    				Robot.lift.setLiftPower(0.0);
-    			} else {
-    				Robot.lift.setLiftPower(0.35);
-    			}
+    		else {
+    			Robot.lift.setLiftPower(-0.35);
+    			target = getNextTarget();
     		}
+    	}
+    	/*
+    	 * terminates prepositioned motion
+    	 * if close enough to the target
+    	 */
+    	if (Math.abs(target - Robot.lift.getEncVal()) < TOLERANCE) {
+    		autoMotion = "not moving";
     	}
     	
-    	if (Math.abs(Robot.lift.getEncVal() - target) <= TOLERANCE) {
-    		moving = false;
+    }
+    
+    private double getNextTarget() {
+    	
+    	double encVal = Robot.lift.getEncVal();
+    	
+    	if (autoMotion.equals("moving up") ) {
+    		/*
+        	 * returns the next highest
+        	 * target encoder count value
+        	 */
+    		for (int i = 0; i < targets.length; i++) {
+    			if (encVal < targets[i]) {
+    				return targets[i];
+    			}
+    		}
     	}
+    	else {
+    		/*
+        	 * returns the next lowest
+        	 * target encoder count value
+        	 */
+    		for (int i = targets.length - 1; i >= 0; i--) {
+    			if (encVal > targets[i]) {
+    				return targets[i];
+    			}
+    		}
+    	}
+    	/*
+    	 * if no valid targets found
+    	 * returns current position
+    	 */
+    	return encVal;
     }
 
     @Override

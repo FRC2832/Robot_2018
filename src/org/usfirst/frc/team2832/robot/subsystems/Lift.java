@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
+import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.Robot;
@@ -17,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.commands.MoveLiftUltimateWithoutPidButBetterThanTheRest;
@@ -36,7 +38,6 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	
 	public static final double RAIL_HEIGHT = 68;
-	final static public int[] liftPositions = {0, 32*20, 32*30, 32*84};
 
 	public DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
@@ -44,6 +45,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private AnalogInput limitSwitch;
 	private double startingEncoder;
 	public static boolean isCollapserered = true;
+	private double liftTriggerL, liftTriggerR;
 	
 	public Lift() {
 		super();
@@ -108,12 +110,20 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public void initDefaultCommand() {
-		//setDefaultCommand(new MoveLiftUltimateWithoutPidButBetterThanTheRest());
 		setDefaultCommand(new MoveLiftNoBackdrive());
+	}
+	
+	public double [] getTriggers() {
+		double [] vals = {liftTriggerL, liftTriggerR};
+		return vals;
 	}
 
 	@Override
     public void periodic() {
+		
+		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft));
+		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight));
+		
 		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if(getCurrentCommand() instanceof Climb)
 				getCurrentCommand().cancel();
