@@ -27,7 +27,7 @@ public class ArcadeDrive extends Command {
     /**Time for the fade curve to complete, in seconds.
      * Max rate of change is .5 * pi / FADE_TIME
      */
-	private static final double FADE_TIME = .75;
+	private static final double FADE_TIME = 1.0;
 	/**Stores the speed from the interpolation tables from the last time the joystick moved.*/
 	private double prevDDChange = 0;
 	private double dDTo = 0;
@@ -63,22 +63,26 @@ public class ArcadeDrive extends Command {
         else
             velocity = Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)) * SMOOTHING_CONSTANT_UP + (1 - SMOOTHING_CONSTANT_UP) * prevVelocity;
         prevVelocity = velocity;
+        //apply fade curve
         double fadedDD = dD;
         if(Math.abs(dD - prevDDChange) > .01) { //speed has changed since the end of the last started fade.
         	if(System.currentTimeMillis() > FADE_TIME * 1000 + timeDDChanged) {
-        		//have to start the fade curve
+        		//have to start the fade curve, since the last one to start already ended
         		if(!doingFadeCurve) {
         			timeDDChanged = System.currentTimeMillis();
         			dDTo = dD;//used only for mid-curve change detection
         			doingFadeCurve = true;
         		}else{
-        			//have to end the fade curve
+        			//have to end the fade curve, since the last one to start is still running
         			prevDDChange = dD;
         			doingFadeCurve = false;
         		}
         	}else{
-        		if(Math.abs(dD - dDTo) > .0001) { //driver demand changed again mid curve, so we will restart 
+        		if(Math.abs(dD - dDTo) > .0001 && Math.signum(dD-dDTo) == Math.signum(prevDDChange-dDTo)) { 
+        			//driver demand changed again mid curve, so we will restart 
         						 //the curve. Better than reversing it mid-curve, most of the time.
+        					//However, it is worse if the curve is changing the same direction. 
+        			//set curve starting point to the value the fade curve currently produces
         			prevDDChange = fade(prevDDChange, dD, ((double)(System.currentTimeMillis()-timeDDChanged))/1000d);
         			timeDDChanged = System.currentTimeMillis();
         			dDTo = dD;
@@ -95,27 +99,28 @@ public class ArcadeDrive extends Command {
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityLeft", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.LEFT));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityRight", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.RIGHT));*/
         if((Math.abs(Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight)) < 0.2)) {
-            if (velocity >= upshift.interpolate(fadedDD)) {
+            if (velocity >= upshift.interpolate(dD)) {
                 SmartDashboard.putBoolean("High Gear", true);
                 Robot.driveTrain.shift(DriveTrain.GEAR.HIGH);
-            } else if (velocity <= downshift.interpolate(fadedDD)) {
+            } else if (velocity <= downshift.interpolate(dD)) {
                 SmartDashboard.putBoolean("High Gear", false);
                 Robot.driveTrain.shift(DriveTrain.GEAR.LOW);
             }
         }
         if(!DriverStation.getInstance().isAutonomous())
         	Robot.driveTrain.arcadeDrive(-Math.signum(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft)) * fadedDD,
-            Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight) * LIFT_LIMIT);
+        				Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight) * LIFT_LIMIT);
         else
         	Robot.driveTrain.arcadeDrive(0, 0);
     }
 
     /**
-	 * Produces the fade curve for regulating velocity over time
+	 * Produces the fade curve for regulating velocity and acceleration over time when driver demand changes
+	 * Acceleration is changed to and from 0 gradually through the use of a cosine curve.
 	 * 
 	 * @param start the speed at time=0
 	 * @param end the speed at time=FADE_TIME
-	 * @param time the current time, relative to the start of the curve. 
+	 * @param time the current time in seconds, relative to the start of the curve. 
 	 */
 	
 	public static double fade(double start, double end, double time) {
