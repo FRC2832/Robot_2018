@@ -27,7 +27,7 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
 
     @Override
     protected void execute() {
-        if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
+        /*if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
             double currentPos = Robot.lift.getLiftEncoderPosition();
             for(int i = 0; i < Lift.Position.values().length; i++) {
                 if(Math.abs(Lift.Position.values()[i].height - Robot.lift.getLiftEncoderPosition()) <= POSITION_TOLERANCE_INCHES) {
@@ -45,7 +45,7 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
         } else if(Robot.controls.getButtonPressed(ButtonMapping.LOWER_TO_BOTTOM)) {
             target = 0;
             moving = true;
-        }
+        }*/
         //Robot.lift.setLiftPower(0);
         SmartDashboard.putBoolean("Auto-moving", moving);
         int pov = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_SECCONDARY);

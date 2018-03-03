@@ -126,25 +126,31 @@ public class MoveLift extends Command {
 					incrementPosition();
 				else 
 					decrementPosition();
-			}else {
-				if(Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {
-					positionChangeType = PositionChangeType.RAISE;
-					positionChangeActive = true;
-					incrementPosition();
-				}
-				else if(Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM)) {
-					positionChangeType = PositionChangeType.LOWER;
-					positionChangeActive = true;
-					decrementPosition();
-				} else if(pov != -1) {
-					positionChangeActive = false;
-					if(pov > 90 && pov < 270)
-						Robot.lift.setLiftPower(1d);
-					else
-						Robot.lift.setLiftPower(-1d);
-				} else
-					Robot.lift.setLiftPower(-.2);
 			}
+			else {
+				if(pov != -1) {
+						positionChangeActive = false;
+						if(pov > 90 && pov < 270)
+						Robot.lift.setLiftPower(1d);
+						else
+						Robot.lift.setLiftPower(-1d);
+				} 
+				else {
+					Robot.lift.setLiftPower(-.2);
+				}
+			}
+				/*if(Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {
+				positionChangeType = PositionChangeType.RAISE;
+				positionChangeActive = true;
+				incrementPosition();
+			}
+			else if(Robot.controls.getButton(ButtonMapping.LOWER_TO_BOTTOM)) {
+				positionChangeType = PositionChangeType.LOWER;
+				positionChangeActive = true;
+				decrementPosition();
+			}
+			*/
+			
 		} 
 	/*
 	  if (Robot.controls.getButton(ButtonMapping.LEVEL_UP)) {

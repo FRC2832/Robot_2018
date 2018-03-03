@@ -53,7 +53,7 @@ public class LiftSubsystemWithPID extends Lift implements PIDSource, PIDOutput {
 
         SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command", getCurrentCommandName());
 
-        if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
+        /*if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
             for(int i = 0; i < Lift.Position.values().length; i++)
                 if(Lift.Position.values()[i].height > getLiftEncoderPosition()) {
                     setPosition(Lift.Position.values()[i].height);
@@ -62,7 +62,7 @@ public class LiftSubsystemWithPID extends Lift implements PIDSource, PIDOutput {
         }
         if(Robot.controls.getButtonPressed(ButtonMapping.LOWER_TO_BOTTOM)) {
             setPosition(0);
-        }
+        }*/
 
         int pov = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_MAIN);
         if (pov != -1) {
