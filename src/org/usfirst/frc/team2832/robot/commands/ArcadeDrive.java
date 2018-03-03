@@ -63,7 +63,6 @@ public class ArcadeDrive extends Command {
         else
             velocity = Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)) * SMOOTHING_CONSTANT_UP + (1 - SMOOTHING_CONSTANT_UP) * prevVelocity;
         prevVelocity = velocity;
-        //Do we want to fade dD instead of velocity?
         double fadedDD = dD;
         if(Math.abs(dD - prevDDChange) > .01) { //speed has changed since the end of the last started fade.
         	if(System.currentTimeMillis() > FADE_TIME * 1000 + timeDDChanged) {
@@ -116,7 +115,7 @@ public class ArcadeDrive extends Command {
 	 * 
 	 * @param start the speed at time=0
 	 * @param end the speed at time=FADE_TIME
-	 * @param time the current time
+	 * @param time the current time, relative to the start of the curve. 
 	 */
 	
 	public static double fade(double start, double end, double time) {
