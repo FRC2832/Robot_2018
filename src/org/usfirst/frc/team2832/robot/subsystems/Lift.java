@@ -58,10 +58,13 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 		//collapserer.set(Value.kForward);
 		talonLift.setNeutralMode(NeutralMode.Brake);
-		setWinchBrakeMode(true);
-		talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
-		talonLift.setInverted(true);
-	}
+        setWinchBrakeMode(true);
+        talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
+        talonLift.setInverted(true);
+
+        Robot.controls.whilePressed(ButtonMapping.CLIMB_0, new Climb());
+        Robot.controls.whilePressed(ButtonMapping.CLIMB_1, new Climb());
+    }
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
 	public void pack() {
@@ -132,13 +135,13 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		
 		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft  )); // rise
 		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight )); // fall
-		
-		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
+
+		/*if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if(getCurrentCommand() instanceof Climb)
 				getCurrentCommand().cancel();
 			else
 				Scheduler.getInstance().add(new Climb());
-		}
+		}*/
 
 		if(Robot.controls.getButtonPressed(ButtonMapping.PACK_BUTTON)) {
 			if(collapserer.get() == Value.kForward)
@@ -146,8 +149,6 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 			else
 				collapserer.set(Value.kForward);
 		}
-
-		
 		
 		// Set encoder position(just in code) to current physical position based on limit switches
 		
