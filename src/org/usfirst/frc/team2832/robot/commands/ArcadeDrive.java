@@ -25,9 +25,9 @@ public class ArcadeDrive extends Command {
     private boolean firstIteration = true, prevLowGear = true;
     
     /**Time for the fade curve to complete, in seconds.
-     * Max rate of change is .5 * pi / FADE_TIME
+     * Max rate of change is .5 * pi / time
      */
-	private static final double FADE_TIME = 1.0;
+	private static final double FADE_TIME_FORWARD = 1.0, FADE_TIME_BACK = .85;
 	/**Stores the speed from the interpolation tables from the last time the joystick moved.*/
 	private double prevDDChange = 0;
 	private double dDTo = 0;
@@ -65,8 +65,9 @@ public class ArcadeDrive extends Command {
         prevVelocity = velocity;
         //apply fade curve
         double fadedDD = dD;
+        double fadeTime = dD < prevDDChange ? FADE_TIME_BACK : FADE_TIME_FORWARD;
         if(Math.abs(dD - prevDDChange) > .01) { //speed has changed since the end of the last started fade.
-        	if(System.currentTimeMillis() > FADE_TIME * 1000 + timeDDChanged) {
+        	if(System.currentTimeMillis() > fadeTime * 1000 + timeDDChanged) {
         		//have to start the fade curve, since the last one to start already ended
         		if(!doingFadeCurve) {
         			timeDDChanged = System.currentTimeMillis();
@@ -81,13 +82,13 @@ public class ArcadeDrive extends Command {
         		if(Math.abs(dD - dDTo) > .0001 && Math.signum(dD-dDTo) == Math.signum(prevDDChange-dDTo)) { 
         			//driver demand changed again mid curve, so we will restart 
         						 //the curve. Better than reversing it mid-curve, most of the time.
-        					//However, it is worse if the curve is changing the same direction. 
+        					//However, it is worse if the curve is changing the same direction that it already did. 
         			//set curve starting point to the value the fade curve currently produces
-        			prevDDChange = fade(prevDDChange, dD, ((double)(System.currentTimeMillis()-timeDDChanged))/1000d);
+        			prevDDChange = fade(prevDDChange, dD, ((double)(System.currentTimeMillis()-timeDDChanged))/1000d, fadeTime);
         			timeDDChanged = System.currentTimeMillis();
         			dDTo = dD;
         		}
-        		fadedDD = fade(prevDDChange, dD, ((double)(System.currentTimeMillis()-timeDDChanged))/1000d);
+        		fadedDD = fade(prevDDChange, dD, ((double)(System.currentTimeMillis()-timeDDChanged))/1000d, fadeTime);
         	}
         }
         
@@ -123,8 +124,8 @@ public class ArcadeDrive extends Command {
 	 * @param time the current time in seconds, relative to the start of the curve. 
 	 */
 	
-	public static double fade(double start, double end, double time) {
-		return (start + end) / 2 + .5 * (start - end) * Math.cos(Math.PI * time/FADE_TIME);
+	public static double fade(double start, double end, double time, double fadeTime) {
+		return (start + end) / 2 + .5 * (start - end) * Math.cos(Math.PI * time/fadeTime);
 	}
     
     protected boolean isFinished() {
