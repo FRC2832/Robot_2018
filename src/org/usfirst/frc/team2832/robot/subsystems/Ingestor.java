@@ -85,48 +85,26 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	}
 
 	public void periodic () {
-		double tLeft =  Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft )); // intake
-		double tRight = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight)); // expel
-		
 		boolean sensorInIR = readDigital();
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", sensorInIR);
 		
-		if (Robot.controls.getButton(ButtonMapping.PINTCHER)) {
-			if (pintcher.get() == Value.kForward) {
-				pintcher.set(Value.kReverse);
-			} else {
-				pintcher.set(Value.kForward);
-			}
+		if (Robot.controls.getButton(ButtonMapping.PINTCHER_0) || Robot.controls.getButton(ButtonMapping.PINTCHER_1)) {
+			pintcher.set(Value.kReverse);
+		}
+		else {
+			pintcher.set(Value.kForward);
 		}
 		
-		if (Robot.controls.getButtonPressed(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
+		if (Robot.controls.getButton(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
 			tilt.set(Value.kForward);
-		} else if (Robot.controls.getButtonPressed(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
+		} else if (Robot.controls.getButton(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
 			tilt.set(Value.kReverse);
 		} else if (!(getCurrentCommand() instanceof LowerIngestor)){
 			tilt.set(Value.kOff);
 		}
+		talonL.set(ControlMode.PercentOutput, -Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft));
+		talonR.set(ControlMode.PercentOutput, -Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight));
 		
-		if (tLeft > 0.05) {
-			if (sensorInIR) {
-				setMotorSpeed(tLeft * -0.8); // max manual motor speed is 0.8
-			} else {
-				stopMotors();
-			}
-		} else if (tRight > 0.05) {
-			setMotorSpeed(tRight * 0.8);
-		} else {
-			stopMotors();
-		}
-		/*
-		if (!sensorInIR) {
-			// code to "pinch" the cube
-		} else {
-			// code to "unpinch" the cube
-		}
-		*/
-		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Left Trigger Value",  tLeft);
-		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Right Trigger Value", tRight);
 	}
 
 	enum IngestorFlags {

@@ -16,20 +16,20 @@ public class Climb extends Command {
 	}
 	
 	protected void initialize() {
-		Robot.lift.pack();
+	/*	Robot.lift.pack();
 		this.start = Timer.getFPGATimestamp();
 		Robot.logger.log("Climb", "Starting");
-		Robot.lift.setWinchBrakeMode(true);
+		Robot.lift.setWinchBrakeMode(true);*/
 	}
 	
 	protected void execute() {
 		// TODO: 2/9/2018 Potentially check motor current in the case that limit switch fails
-		if(Timer.getFPGATimestamp() < start + DURATION) {// && !Robot.lift.getLiftLimitSwitch()) {
+		/*if(Timer.getFPGATimestamp() < start + DURATION) {// && !Robot.lift.getLiftLimitSwitch()) {
 			Robot.lift.setWinchPower(3);
 		} else {
 			Robot.lift.setWinchPower(0);
 			Robot.logger.log("Climb", "At top");
-		}
+		}*/
 	}
 	
 	@Override
@@ -38,16 +38,16 @@ public class Climb extends Command {
 	}
 	
 	protected void end() {
-		Robot.logger.log("Climb", "Ended");
+		/*Robot.logger.log("Climb", "Ended");
 		Robot.lift.setWinchPower(0);
 		Robot.lift.setWinchBrakeMode(false);
-		Robot.lift.unpack();
+		Robot.lift.unpack();*/
 	}
 	
 	protected void interrupted() {
-		Robot.logger.log("Climb", "Interrupted");
+		/*Robot.logger.log("Climb", "Interrupted");
 		Robot.lift.setWinchPower(0);
-		Robot.lift.setWinchBrakeMode(false);
-		Robot.lift.unpack();
+		Robot.lift.setWi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               nchBrakeMode(false);
+		Robot.lift.unpack();*/
 	}
 }

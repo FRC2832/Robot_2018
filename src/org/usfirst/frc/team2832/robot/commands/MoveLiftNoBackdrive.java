@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Robot;
+import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
 public class MoveLiftNoBackdrive extends Command {
@@ -13,6 +14,8 @@ public class MoveLiftNoBackdrive extends Command {
 
     private double target;
     private boolean moving;
+    
+    private boolean ended;
 
     public MoveLiftNoBackdrive() {
         requires(Robot.lift);
@@ -26,61 +29,53 @@ public class MoveLiftNoBackdrive extends Command {
 
     @Override
     protected void execute() {
-    	if (Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) {
-    		for (int i = 0; i < Lift.liftPositions.length; i++) {
-    			if (Lift.liftPositions[i] - Robot.lift.getEncVal() > TOLERANCE) {
-    				target = Lift.liftPositions[i];
-    				moving = true;
-    				break;
-    			}
-    		}
-    	} else if (Robot.controls.getButtonPressed(ButtonMapping.LOWER_TO_BOTTOM)) {
-    		target = Lift.liftPositions[0];
-    		moving = true;
-    	}
+
+    	/*
+    	 * currently only runs on manual control
+    	 * manual controls are entered with controller 2's triggers
+    	 */
     	
-    	int manualInput = Robot.controls.getPOV(Controls.Controllers.CONTROLLER_SECCONDARY);
-    	if (manualInput != -1) {
-    		moving = false;
-    		if (manualInput > 90 && manualInput < 270) {
-    			Robot.lift.setLiftPower(0.35);
-    		} else {
-    			Robot.lift.setLiftPower(-0.7); // moves up
-    		}
-    	} else {
-    		if (moving) {
-    			if (target == Lift.liftPositions[0]) {
-    				Robot.lift.setLiftPower(0.0);
-    			} else {
-    				Robot.lift.setLiftPower(0.7);
-    			}
-    		} else {
-    			if (Math.abs(Robot.lift.getEncVal() - Lift.liftPositions[0]) <= TOLERANCE) {
-    				Robot.lift.setLiftPower(0.0);
-    			} else {
-    				Robot.lift.setLiftPower(0.35);
-    			}
-    		}
-    	}
+    	//double [] triggers = Robot.lift.getTriggers();
     	
-    	if (Math.abs(Robot.lift.getEncVal() - target) <= TOLERANCE) {
-    		moving = false;
+    	if (Lift.liftTriggerR > 0.1) { // if commanded to rise
+    		Robot.lift.setLiftPower(-1d);
+    		Robot.logger.log("Lift", "Moving up at " + -Robot.lift.getLiftPower());
+
+    	}
+    	else if (Lift.liftTriggerL > 0.1) { // else if commanded to fall
+    		Robot.lift.setLiftPower(1d);
+    		Robot.logger.log("Lift", "Moving down at " + Robot.lift.getLiftPower());
+
+    	}
+    	else { // if not being commanded
+    		Robot.lift.setLiftPower(-0.1);
+    		Robot.logger.log("Lift", "Holding position with " + -Robot.lift.getLiftPower());
+
     	}
     }
 
     @Override
     protected void end() {
         Robot.lift.setLiftPower(0);
+		Robot.logger.log("Lift", "Ended");
+
     }
 
     @Override
     protected void interrupted() {
         Robot.lift.setLiftPower(0);
+		Robot.logger.log("Lift", "Interrupted");
+
     }
     
     @Override
     protected boolean isFinished() {
-        return false;
+    	if (Lift.liftTriggerR < 0.1d && Lift.liftTriggerL < 0) {
+    		ended = true;
+    	} else {
+    		ended = false;
+    	}
+    	return ended; 
     }
 
 

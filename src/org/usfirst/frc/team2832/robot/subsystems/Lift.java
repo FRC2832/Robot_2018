@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
+import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.Robot;
@@ -17,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.commands.MoveLiftUltimateWithoutPidButBetterThanTheRest;
@@ -44,6 +46,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private AnalogInput limitSwitch;
 	private double startingEncoder;
 	public static boolean isCollapserered = true;
+	public static double liftTriggerL;
+	public static double liftTriggerR;
 	
 	public Lift() {
 		super();
@@ -108,12 +112,27 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public void initDefaultCommand() {
-		//setDefaultCommand(new MoveLiftUltimateWithoutPidButBetterThanTheRest());
 		setDefaultCommand(new MoveLiftNoBackdrive());
+	}
+	public double getLiftPower() {
+		return talonLift.get();
+	}
+	
+	/**
+	 * @return double array where index 0 is left
+	 * trigger and index 1 is right trigger 
+	 */
+	public double [] getTriggers() {
+		double [] vals  = {liftTriggerL, liftTriggerR};
+		return vals;
 	}
 
 	@Override
     public void periodic() {
+		
+		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft  )); // rise
+		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight )); // fall
+		
 		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if(getCurrentCommand() instanceof Climb)
 				getCurrentCommand().cancel();
