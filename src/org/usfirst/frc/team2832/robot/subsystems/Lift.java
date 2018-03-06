@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
+import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.Robot;
@@ -17,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.commands.MoveLiftUltimateWithoutPidButBetterThanTheRest;
@@ -44,6 +46,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private AnalogInput limitSwitch;
 	private double startingEncoder;
 	public static boolean isCollapserered = true;
+	public static double liftTriggerL;
+	public static double liftTriggerR;
 	
 	public Lift() {
 		super();
@@ -52,12 +56,15 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
-		collapserer.set(Value.kForward);
+		//collapserer.set(Value.kForward);
 		talonLift.setNeutralMode(NeutralMode.Brake);
-		setWinchBrakeMode(true);
-		talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
-		talonLift.setInverted(true);
-	}
+        setWinchBrakeMode(true);
+        talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
+        talonLift.setInverted(true);
+
+        Robot.controls.whilePressed(ButtonMapping.CLIMB_0, new Climb());
+        Robot.controls.whilePressed(ButtonMapping.CLIMB_1, new Climb());
+    }
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
 	public void pack() {
@@ -108,18 +115,33 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public void initDefaultCommand() {
-		//setDefaultCommand(new MoveLiftUltimateWithoutPidButBetterThanTheRest());
 		setDefaultCommand(new MoveLiftNoBackdrive());
+	}
+	public double getLiftPower() {
+		return talonLift.get();
+	}
+	
+	/**
+	 * @return double array where index 0 is left
+	 * trigger and index 1 is right trigger 
+	 */
+	public double [] getTriggers() {
+		double [] vals  = {liftTriggerL, liftTriggerR};
+		return vals;
 	}
 
 	@Override
     public void periodic() {
-		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
+		
+		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft  )); // rise
+		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight )); // fall
+
+		/*if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if(getCurrentCommand() instanceof Climb)
 				getCurrentCommand().cancel();
 			else
 				Scheduler.getInstance().add(new Climb());
-		}
+		}*/
 
 		if(Robot.controls.getButtonPressed(ButtonMapping.PACK_BUTTON)) {
 			if(collapserer.get() == Value.kForward)
@@ -127,8 +149,6 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 			else
 				collapserer.set(Value.kForward);
 		}
-
-		
 		
 		// Set encoder position(just in code) to current physical position based on limit switches
 		
