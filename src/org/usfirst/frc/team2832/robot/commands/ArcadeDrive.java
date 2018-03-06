@@ -67,9 +67,9 @@ public class ArcadeDrive extends Command {
         double fadedDD = dD;
         double fadeTime = dD < prevDDChange ? FADE_TIME_BACK : FADE_TIME_FORWARD;
         if(Math.abs(dD - prevDDChange) > .01) { //speed has changed since the end of the last started fade.
-        	if(System.currentTimeMillis() > fadeTime * 1000 + timeDDChanged) {
-        		//have to start the fade curve, since the last one to start already ended
+        	if(System.currentTimeMillis() > fadeTime * 1000 + timeDDChanged) {//beyond the edge of the last curve to start
         		if(!doingFadeCurve) {
+        			//have to start the fade curve, since the last one to start already ended
         			timeDDChanged = System.currentTimeMillis();
         			dDTo = dD;//used only for mid-curve change detection
         			doingFadeCurve = true;
@@ -122,6 +122,7 @@ public class ArcadeDrive extends Command {
 	 * @param start the speed at time=0
 	 * @param end the speed at time=FADE_TIME
 	 * @param time the current time in seconds, relative to the start of the curve. 
+	 * @param fadeTime the current time the curve will take to complete. 
 	 */
 	
 	public static double fade(double start, double end, double time, double fadeTime) {
