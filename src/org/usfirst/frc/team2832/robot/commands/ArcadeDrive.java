@@ -80,9 +80,11 @@ public class ArcadeDrive extends Command {
         		}
         	}else{
         		if(Math.abs(dD - dDTo) > .0001 && Math.signum(dD-dDTo) == Math.signum(prevDDChange-dDTo)) { 
-        			//driver demand changed again mid curve, so we will restart 
-        						 //the curve. Better than reversing it mid-curve, most of the time.
-        					//However, it is worse if the curve is changing the same direction that it already did. 
+        			/*driver demand changed again mid curve, so we will restart 
+        			 * the curve. Better than reversing it mid-curve, most of the time.
+        			 * However, it is worse if the curve is changing the same direction that it already did. 
+        			 * for instance, if the driver demand was fading between .2 and .5, and is now going to .7.
+        			 */
         			//set curve starting point to the value the fade curve currently produces
         			prevDDChange = fade(prevDDChange, dD, ((double)(System.currentTimeMillis()-timeDDChanged))/1000d, fadeTime);
         			timeDDChanged = System.currentTimeMillis();
