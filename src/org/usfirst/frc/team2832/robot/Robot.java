@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
 
 		driveTrain = new DriveTrain();
 		lift = new Lift();
+		Lift.setControls();
 		ingestor = new Ingestor();
 
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls

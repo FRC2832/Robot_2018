@@ -62,10 +62,13 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
         talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
         talonLift.setInverted(true);
 
-        Robot.controls.whilePressed(ButtonMapping.CLIMB_0, new Climb());
-        Robot.controls.whilePressed(ButtonMapping.CLIMB_1, new Climb());
     }
 
+	public static void setControls() {
+        Robot.controls.whilePressed(ButtonMapping.CLIMB_0, new Climb());
+        Robot.controls.whilePressed(ButtonMapping.CLIMB_1, new Climb());
+	}
+	
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
 	public void pack() {
 		Robot.logger.log("Lift", "Packed robot");
