@@ -15,6 +15,8 @@ public class MoveLiftNoBackdrive extends Command {
 	private double target;
 	private boolean moving;
 	private boolean ended;
+	/**A value used to prevent spam by preventing repeating the same message*/
+	int lastLogged = -1;
 
 	public MoveLiftNoBackdrive() {
 		requires(Robot.lift);
@@ -38,16 +40,25 @@ public class MoveLiftNoBackdrive extends Command {
 
 		if (Lift.liftTriggerR > 0.1) { // if commanded to rise
 			Robot.lift.setLiftPower(-1d);
-			Robot.logger.log("Lift", "Moving up at " + -Robot.lift.getLiftPower());
+			if(lastLogged != 0) {
+				Robot.logger.log("Lift", "Moving up at " + -Robot.lift.getLiftPower());
+				lastLogged = 0;
+			}
 
 		} else if (Lift.liftTriggerL > 0.1) { // else if commanded to fall
 			Robot.lift.setLiftPower(1d);
-			Robot.logger.log("Lift", "Moving down at " + Robot.lift.getLiftPower());
-
+			if(lastLogged != 1) {
+				Robot.logger.log("Lift", "Moving down at " + Robot.lift.getLiftPower());
+				lastLogged = 1;
+			}
 		} else { // if not being commanded
 			Robot.lift.setLiftPower(-0.1);
-			Robot.logger.log("Lift", "Holding position with " + -Robot.lift.getLiftPower());
-
+			if(lastLogged != 2) {
+				Robot.logger.log("Lift", "Holding position with " + -Robot.lift.getLiftPower());
+				lastLogged = 2;
+				
+				
+			}
 		}
 	}
 
