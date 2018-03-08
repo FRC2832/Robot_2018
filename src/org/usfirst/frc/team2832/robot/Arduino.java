@@ -43,7 +43,7 @@ public class Arduino {
 	/**
 	 * 
 	 * @return
-	 * @throws CANMessageUnavailableException
+	 *
 	 */
 	public byte[] read() throws CANMessageNotFoundException {
 		ByteBuffer dataBuffer = ByteBuffer.wrap(readBuffer());

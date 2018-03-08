@@ -10,6 +10,8 @@ package org.usfirst.frc.team2832.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.can.CANExceptionFactory;
+import edu.wpi.first.wpilibj.can.CANJNI;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2832.robot.commands.auton.DiagnoseSensors;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
@@ -21,6 +23,10 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.subsystems.LiftSubsystemWithPID;
+
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.Arrays;
 
 /**
  * Main robot class and location for static objects like subsystems and dashboard
@@ -120,13 +126,29 @@ public class Robot extends TimedRobot {
 			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kRightRumble, 0.5d, 1d);
 		}
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser Initialized", lift != null && lift.collapserer != null);
-		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser collapsed", lift == null ? false : lift.getPacked()); 
-		
-		System.out.println("Hello world.");
-		byte[] sensorVals = teensy.read();
-		for(byte temp:sensorVals)
-			System.out.println(temp);
-	
+		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser collapsed", lift == null ? false : lift.getPacked());
+
+		IntBuffer status = ByteBuffer.allocateDirect(4).asIntBuffer();
+		IntBuffer messageId = ByteBuffer.allocateDirect(4).asIntBuffer();
+		ByteBuffer timestamp = ByteBuffer.allocate(4);
+
+		messageId.clear();
+		messageId.put(0, Integer.reverseBytes(0x612));
+
+		status.clear();
+		byte[] data = CANJNI.FRCNetCommCANSessionMuxReceiveMessage(
+				messageId,
+				CANJNI.CAN_IS_FRAME_11BIT,
+				timestamp
+		);
+
+		for(byte b: data) {
+			System.out.println("Received a message: " + b);
+		}
+
+		//byte[] sensorVals = teensy.read();
+		//for(byte temp:sensorVals)
+		//	System.out.println(temp);
 	}
 	
 
