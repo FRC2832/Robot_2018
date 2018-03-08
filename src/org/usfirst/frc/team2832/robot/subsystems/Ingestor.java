@@ -62,7 +62,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	}
 	
 	public void setBrakeMode(boolean mode) {
-		Robot.logger.log("Ingestor", "Brake mode " + (mode ? "enabled" : "disabled"));
+		//Robot.logger.log("Ingestor", "Brake mode " + (mode ? "enabled" : "disabled"));
     	NeutralMode brakeMode;
     	if (mode) {
     		brakeMode = NeutralMode.Brake;
@@ -81,7 +81,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	}
 
 	public void lowerTilt() {
-		tilt.set(Value.kReverse);
+		tilt.set(Value.kForward);
 	}
 
 	public void periodic () {

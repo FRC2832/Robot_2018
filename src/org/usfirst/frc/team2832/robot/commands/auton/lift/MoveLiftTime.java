@@ -26,12 +26,12 @@ public class MoveLiftTime extends Command {
 
     @Override
     protected void end() {
-        Robot.lift.setLiftPower(0);
+        Robot.lift.setLiftPower(.1);
     }
 
     @Override
     protected void interrupted() {
-        Robot.lift.setLiftPower(0);
+        Robot.lift.setLiftPower(.1);
     }
 
     @Override

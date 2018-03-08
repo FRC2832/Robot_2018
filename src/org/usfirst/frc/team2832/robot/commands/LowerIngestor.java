@@ -7,11 +7,18 @@ import org.usfirst.frc.team2832.robot.Robot;
 public class LowerIngestor extends Command {
 
     private double startTime;
+    private double duration;
 
     public LowerIngestor() {
         requires(Robot.ingestor);
+        duration = 2d;
     }
 
+    public LowerIngestor(double time) {
+    	requires(Robot.ingestor);
+    	duration = time;
+    }
+    
     @Override
     protected void initialize() {
         startTime = Timer.getFPGATimestamp();
@@ -34,6 +41,6 @@ public class LowerIngestor extends Command {
 
     @Override
     protected boolean isFinished() {
-        return Timer.getFPGATimestamp() > startTime + 2d;
+        return Timer.getFPGATimestamp() > startTime + duration;
     }
 }

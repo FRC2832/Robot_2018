@@ -94,7 +94,9 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 	
 	public void setLiftPower(double power) {
-		talonLift.set(power);
+		if(collapserer.get().equals(Value.kReverse)) {
+			talonLift.set(power);
+		}
 	}
 	
 	public void setLiftPos(double target) {
