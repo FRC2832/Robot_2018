@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
 	private DiagnoseSensors diagnostic;
 	private boolean postDiagnosis;
 	private Compressor compressor;
+	private Arduino teensy;
 
 	/**
 	 * Gets which robot the code is running on
@@ -96,6 +97,7 @@ public class Robot extends TimedRobot {
 	    	}
 	    }).start();*/
 		driveTrain.setPigeonYaw(0);
+		teensy = new Arduino();
 	}
 
 	@Override
@@ -118,7 +120,14 @@ public class Robot extends TimedRobot {
 		}
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser Initialized", lift != null && lift.collapserer != null);
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser collapsed", lift == null ? false : lift.getPacked()); 
+		
+		System.out.println("Hello world.");
+		byte[] sensorVals = teensy.read();
+		for(byte temp:sensorVals)
+			System.out.println(temp);
+	
 	}
+	
 
 	/**
 	 * Called when when robot is disabled
