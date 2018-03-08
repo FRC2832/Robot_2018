@@ -9,6 +9,7 @@
 package org.usfirst.frc.team2832.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2832.robot.commands.auton.DiagnoseSensors;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
@@ -169,8 +170,8 @@ public class Robot extends TimedRobot {
 
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
 
+        lift.unpack();
         Robot.driveTrain.setBrakeMode(true);
-		Robot.lift.unpack();
 		Scheduler.getInstance().removeAll();
 
 		Scheduler.getInstance().add(diagnostic);

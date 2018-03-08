@@ -39,20 +39,20 @@ public class MoveLiftNoBackdrive extends Command {
 		// double [] triggers = Robot.lift.getTriggers();
 
 		if (Lift.liftTriggerR > 0.1) { // if commanded to rise
-			Robot.lift.setLiftPower(-1d);
+			Robot.lift.setLiftPower(1d);
 			if(lastLogged != 0) {
 				Robot.logger.log("Lift", "Moving up at " + -Robot.lift.getLiftPower());
 				lastLogged = 0;
 			}
 
 		} else if (Lift.liftTriggerL > 0.1) { // else if commanded to fall
-			Robot.lift.setLiftPower(1d);
+			Robot.lift.setLiftPower(-1d);
 			if(lastLogged != 1) {
 				Robot.logger.log("Lift", "Moving down at " + Robot.lift.getLiftPower());
 				lastLogged = 1;
 			}
 		} else { // if not being commanded
-			Robot.lift.setLiftPower(-0.1);
+			Robot.lift.setLiftPower(0.1);
 			if(lastLogged != 2) {
 				Robot.logger.log("Lift", "Holding position with " + -Robot.lift.getLiftPower());
 				lastLogged = 2;
