@@ -128,24 +128,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser Initialized", lift != null && lift.collapserer != null);
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser collapsed", lift == null ? false : lift.getPacked());
 
-		IntBuffer status = ByteBuffer.allocateDirect(4).asIntBuffer();
-		IntBuffer messageId = ByteBuffer.allocateDirect(4).asIntBuffer();
-		ByteBuffer timestamp = ByteBuffer.allocate(4);
-
-		messageId.clear();
-		messageId.put(0, Integer.reverseBytes(0x612));
-
-		status.clear();
-		byte[] data = CANJNI.FRCNetCommCANSessionMuxReceiveMessage(
-				messageId,
-				CANJNI.CAN_IS_FRAME_11BIT,
-				timestamp
-		);
-
-		for(byte b: data) {
-			System.out.println("Received a message: " + b);
-		}
-
 		//byte[] sensorVals = teensy.read();
 		//for(byte temp:sensorVals)
 		//	System.out.println(temp);
