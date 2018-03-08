@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class SwitchCenter extends CommandGroup {
 
 	public SwitchCenter() {
-
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		addSequential(new DriveDistance(0.5d, -20d, 10d));
 		addParallel(new MoveLiftTime(1.2, 1));
