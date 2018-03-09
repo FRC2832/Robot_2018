@@ -1,27 +1,22 @@
 package org.usfirst.frc.team2832.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls;
-import org.usfirst.frc.team2832.robot.Controls.Controllers;
-import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.commands.Climb;
-import org.usfirst.frc.team2832.robot.commands.MoveLift;
 import org.usfirst.frc.team2832.robot.commands.MoveLiftNoBackdrive;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team2832.robot.commands.MoveLiftUltimateWithoutPidButBetterThanTheRest;
 
 /**
  * The lift subsystem which handles an encoder, commanding the lift motor, and
@@ -29,8 +24,8 @@ import org.usfirst.frc.team2832.robot.commands.MoveLiftUltimateWithoutPidButBett
  */
 public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
-	final static private int COLLAPSE_FORWARD_CHANNEL = 4;
-	final static private int COLLAPSE_REVERSE_CHANNEL = 7;
+	final static private int COLLAPSE_FORWARD_CHANNEL = 7;
+	final static private int COLLAPSE_REVERSE_CHANNEL = 4;
 	final static private int LIFT_MOTOR = 15;
 	final static private int WINCH_MOTOR = 12;
 	final static private int LIFT_LIMIT_SWITCH_PIN = 1;
@@ -38,7 +33,6 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private static final double ENCODER_COUNT_TO_INCH = 96 / Math.PI;
 	
 	public static final double RAIL_HEIGHT = 68;
-	final static public int[] liftPositions = {0, 32*20, 32*30, 32*84};
 
 	public DoubleSolenoid collapserer;
 	private WPI_TalonSRX talonLift;
@@ -46,8 +40,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	private AnalogInput limitSwitch;
 	private double startingEncoder;
 	public static boolean isCollapserered = true;
-	public static double liftTriggerL;
-	public static double liftTriggerR;
+	private double liftTriggerL, liftTriggerR;
 	
 	public Lift() {
 		super();
@@ -58,17 +51,18 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 		//collapserer.set(Value.kForward);
 		talonLift.setNeutralMode(NeutralMode.Brake);
-        setWinchBrakeMode(true);
-        talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
-        talonLift.setInverted(true);
-
-    }
-
-	public static void setControls() {
-        Robot.controls.whilePressed(ButtonMapping.CLIMB_0, new Climb());
-        Robot.controls.whilePressed(ButtonMapping.CLIMB_1, new Climb());
+		setWinchBrakeMode(true);
+		talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
+		talonLift.setInverted(true);
 	}
 	
+	public static void setControls() {
+		Robot.controls.whilePressed(ButtonMapping.CLIMB_0, new Climb());
+		Robot.controls.whilePressed(ButtonMapping.CLIMB_1, new Climb());
+		Robot.controls.whilePressed(ButtonMapping.CLIMB_2, new Climb());
+		Robot.controls.whilePressed(ButtonMapping.CLIMB_3, new Climb());
+	}
+
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
 	public void pack() {
 		Robot.logger.log("Lift", "Packed robot");
@@ -82,7 +76,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public void resetLiftEncoder(double height) {
-		startingEncoder = -talonPhoenixLift.getSensorCollection().getQuadraturePosition() - height;
+		//startingEncoder = -talonPhoenixLift.getSensorCollection().getQuadraturePosition() - height;
 	}
 
 	public double getLiftEncoderPosition() {
@@ -90,11 +84,11 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 	
 	public double getEncVal() {
-		return (double)(-talonPhoenixLift.getSensorCollection().getQuadraturePosition() - startingEncoder);
+		return -talonPhoenixLift.getSensorCollection().getQuadraturePosition() - startingEncoder;
 	}
 	
 	public void setLiftPower(double power) {
-		if(collapserer.get().equals(Value.kReverse)) {
+		if (collapserer.get().equals(Value.kReverse)) {
 			talonLift.set(power);
 		}
 	}
@@ -122,31 +116,24 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	public void initDefaultCommand() {
 		setDefaultCommand(new MoveLiftNoBackdrive());
 	}
-	public double getLiftPower() {
-		return talonLift.get();
-	}
 	
-	/**
-	 * @return double array where index 0 is left
-	 * trigger and index 1 is right trigger 
-	 */
 	public double [] getTriggers() {
-		double [] vals  = {liftTriggerL, liftTriggerR};
+		double [] vals = {liftTriggerL, liftTriggerR};
 		return vals;
 	}
 
 	@Override
     public void periodic() {
 		
-		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft  )); // rise
-		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight )); // fall
-
-		/*if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
+		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft));
+		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight));
+		
+		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if(getCurrentCommand() instanceof Climb)
 				getCurrentCommand().cancel();
 			else
 				Scheduler.getInstance().add(new Climb());
-		}*/
+		}
 
 		if(Robot.controls.getButtonPressed(ButtonMapping.PACK_BUTTON)) {
 			if(collapserer.get() == Value.kForward)
@@ -154,6 +141,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 			else
 				collapserer.set(Value.kForward);
 		}
+
+		
 		
 		// Set encoder position(just in code) to current physical position based on limit switches
 		
