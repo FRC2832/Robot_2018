@@ -50,10 +50,12 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
 		//collapserer.set(Value.kForward);
-		talonLift.setNeutralMode(NeutralMode.Brake);
-		setWinchBrakeMode(true);
-		talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
-		talonLift.setInverted(true);
+		if(Robot.isReal()) {
+			talonLift.setNeutralMode(NeutralMode.Brake);
+			setWinchBrakeMode(true);
+			talonPhoenixLift.setNeutralMode(NeutralMode.Brake);
+			talonLift.setInverted(true);
+		}
 	}
 	
 	public static void setControls() {
@@ -80,10 +82,14 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 
 	public double getLiftEncoderPosition() {
+		if(Robot.isSimulation())
+			return 0;
 		return (-talonPhoenixLift.getSensorCollection().getQuadraturePosition() - startingEncoder) / ENCODER_COUNT_TO_INCH;
 	}
 	
 	public double getEncVal() {
+		if(Robot.isSimulation())
+			return 0;
 		return -talonPhoenixLift.getSensorCollection().getQuadraturePosition() - startingEncoder;
 	}
 	
@@ -99,6 +105,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 
 	public void setWinchBrakeMode(boolean value) {
 		Robot.logger.log("Lift", "Winch brake mode " + (value ? "enabled" : "disabled"));
+		if(Robot.isSimulation())
+			return;
 		if(value)
 			winchMotor.setNeutralMode(NeutralMode.Brake);
 		else
@@ -147,13 +155,16 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		// Set encoder position(just in code) to current physical position based on limit switches
 		
 		SmartDashboard.putNumber("Lift Enc", getEncVal());
-        SmartDashboard.putBoolean("ReverseLiftLimitClosed", talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed());
-        SmartDashboard.putBoolean("ForwardLiftLimitClosed", talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed());
-		if(talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed())
-			resetLiftEncoder(0);
-		else if(talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed())
-			;//resetLiftEncoder(0); Todo: Potentially set calculated postion when at top of lift for better precision
-
+		if(Robot.isReal()) {
+			SmartDashboard.putBoolean("ReverseLiftLimitClosed", talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed());
+			SmartDashboard.putBoolean("ForwardLiftLimitClosed", talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed());
+		}
+        if(Robot.isReal()) {
+			if (talonPhoenixLift.getSensorCollection().isRevLimitSwitchClosed())
+				resetLiftEncoder(0);
+			else if (talonPhoenixLift.getSensorCollection().isFwdLimitSwitchClosed())
+				;//resetLiftEncoder(0); Todo: Potentially set calculated postion when at top of lift for better precision
+		}
 		SmartDashboard.putNumber("Current lift height", getLiftEncoderPosition());
 		SmartDashboard.putBoolean("COLLAPSE_FORWARD_CHANNEL", collapserer.get().equals(Value.kForward));
 		SmartDashboard.putBoolean("COLLAPSE_REVERSE_CHANNEL", collapserer.get().equals(Value.kReverse));

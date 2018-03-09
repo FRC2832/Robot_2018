@@ -1,0 +1,30 @@
+!!com.snobot.simulator.config.SimulatorConfig
+mAccelerometers: []
+mAnalogIO:
+- mHandle: 1
+  mName: Analog 1
+- mHandle: 3
+  mName: Analog 3
+mDefaultI2CWrappers: {}
+mDefaultSpiWrappers: {}
+mDigitalIO:
+- mHandle: 1
+  mName: Digital Source1
+mEncoders: []
+mGyros: []
+mPwm: []
+mRelays: []
+mSimulatorComponents: []
+mSolenoids:
+- mHandle: 2
+  mName: Solenoid 2
+- mHandle: 3
+  mName: Solenoid 3
+- mHandle: 4
+  mName: Solenoid 4
+- mHandle: 5
+  mName: Solenoid 5
+- mHandle: 6
+  mName: Solenoid 6
+- mHandle: 7
+  mName: Solenoid 7

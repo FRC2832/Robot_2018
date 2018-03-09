@@ -38,7 +38,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		pintcher = new DoubleSolenoid(EXTEND_PINTCHER, RETRACT_PINTCHER);
 		setBrakeMode(true);
 		// lowerTilt();
-		talonR.setInverted(true);
+		if(Robot.isReal())
+			talonR.setInverted(true);
 	}
 	
 	@Override
@@ -63,6 +64,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
 	public void setBrakeMode(boolean mode) {
 		//Robot.logger.log("Ingestor", "Brake mode " + (mode ? "enabled" : "disabled"));
+		if(Robot.isSimulation())
+			return;
     	NeutralMode brakeMode;
     	if (mode) {
     		brakeMode = NeutralMode.Brake;

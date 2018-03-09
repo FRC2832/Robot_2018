@@ -61,10 +61,12 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		talonBR.follow(talonFR);
 		drive = new DifferentialDrive(talonFL, talonFR);
 		pigeon = new PigeonIMU(0);
-		talonPhoenixLeft.setSensorPhase(true);
-		talonPhoenixRight.setSensorPhase(true);
-		talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
-		talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
+		if(Robot.isReal()) {
+			talonPhoenixLeft.setSensorPhase(true);
+			talonPhoenixRight.setSensorPhase(true);
+			talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
+			talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
+		}
 	}
 	
 	/**
@@ -122,6 +124,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 * @return velocity of the selected encoder in rotations/second
 	 */
 	public double getEncoderVelocity(Encoder side) {
+		if(Robot.isSimulation())
+			return 0;
 		double pulsesPer100Mili;
 		if(side.equals(Encoder.LEFT)) //Left
 			pulsesPer100Mili = talonPhoenixLeft.getSensorCollection().getQuadratureVelocity();
@@ -146,6 +150,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 * @return position of the selected encoder(inches)
 	 */
 	public double getEncoderPosition(Encoder side) {
+		if(Robot.isSimulation())
+			return 0;
 		double pulses;
 		if(side.equals(Encoder.LEFT)) //Left
 			pulses = talonPhoenixLeft.getSensorCollection().getQuadraturePosition() * ENCODER_ERROR_PERCENTAGE_LEFT;
@@ -161,6 +167,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 */
 	public void setBrakeMode(boolean mode) {
 		Robot.logger.log("Drive Train", "Brake mode " + (mode ? "enabled" : "disabled"));
+		if(Robot.isSimulation())
+			return;
 		NeutralMode brakeMode;
 		if (mode)
 			brakeMode = NeutralMode.Brake;
@@ -198,7 +206,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 *            to drive in between -1 and 1
 	 */
 	public void arcadeDrive(double speed, double direction) {
-		if(!isTipping) {
+		if(!isTipping && Robot.isReal()) {
 			drive.arcadeDrive(speed, direction);
 		}	
 	}
@@ -212,7 +220,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 *            between 0 and 1
 	 */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		if(!isTipping) {
+		if(!isTipping && Robot.isReal()) {
 			drive.tankDrive(leftSpeed, rightSpeed);
 		}
 	}
@@ -242,7 +250,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 *            to set
 	 */
 	public void setPigeonYaw(double angle) {
-		pigeon.setYaw(angle, 100);
+		if(Robot.isReal())
+			pigeon.setYaw(angle, 100);
 	}
 
 	/**
@@ -252,6 +261,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 */
 	public double getPigeonYaw() {
 		double[] rotations = new double[3];
+			if(Robot.isReal())
 		this.pigeon.getYawPitchRoll(rotations);
 		return -rotations[0];
 	}
@@ -263,13 +273,15 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 */
 	public double getPigeonPitch() {
 		double[] rotations = new double[3];
-		this.pigeon.getYawPitchRoll(rotations);
+		if(Robot.isReal())
+			this.pigeon.getYawPitchRoll(rotations);
 		return rotations[1];
 	}
 
     public double getPigeonRoll() {
         double[] rotations = new double[3];
-        this.pigeon.getYawPitchRoll(rotations);
+        if(Robot.isReal())
+        	this.pigeon.getYawPitchRoll(rotations);
         return rotations[2];
     }
 
