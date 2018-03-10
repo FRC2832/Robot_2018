@@ -105,6 +105,16 @@ public class Robot extends TimedRobot {
 	    }).start();*/
 		driveTrain.setPigeonYaw(0);
 		teensy = new Arduino();
+
+		logger.addLoggedValue(() -> robotTypeInput.getAverageVoltage());
+		logger.addLoggedValue(() -> lift.getLiftEncoderPosition());
+		logger.addLoggedValue(() -> driveTrain.getPigeonYaw());
+		logger.addLoggedValue(() -> driveTrain.getPigeonPitch());
+		logger.addLoggedValue(() -> driveTrain.getPigeonRoll());
+		logger.addLoggedValue(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT));
+		logger.addLoggedValue(() -> driveTrain.getEncoderVelocity(DriveTrain.Encoder.LEFT));
+		logger.addLoggedValue(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.RIGHT));
+		logger.addLoggedValue(() -> driveTrain.getEncoderVelocity(DriveTrain.Encoder.RIGHT));
 	}
 
 	@Override
@@ -188,6 +198,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		Robot.driveTrain.shift(DriveTrain.GEAR.LOW);
 		// If diagnostic is done, start either selected command group or just drive forward to line.
 		if(!postDiagnosis && diagnostic.doneDiagnosing()) {
 			postDiagnosis = true;

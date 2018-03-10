@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2832.robot.commands.auton.autongroups;
 
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.usfirst.frc.team2832.robot.commands.LowerIngestor;
 import org.usfirst.frc.team2832.robot.commands.MoveLiftPID;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
@@ -31,9 +32,11 @@ public class RightSide extends CommandGroup {
 			addSequential(new ExpelCube());
 			
     	} else if (gameData.charAt(1) == 'R') { //If the scale is on our side
+			addSequential(new TimedCommand(.5));
     		addParallel(new MoveLiftTime(2.7, 1));
     		addSequential(new DriveDistance(.6f, -288d, 10)); // go forward to scale
     		addSequential(new LowerIngestor(.1));
+            addSequential(new TimedCommand(.5));
     		addSequential(new TurnPID(-50f)); //turn 90 degrees
     		addSequential(new ExpelCube());
     		

@@ -45,22 +45,22 @@ public class MoveLiftNoBackdrive extends Command {
 		 
 		if (triggers[0] > 0.05) {
 			Robot.lift.setLiftPower(triggers[0]);
-			Robot.logger.log("lift", "moving up manual");
+			//Robot.logger.log("lift", "moving up manual");
 			autoMotion = 0;
 		}
 		else if (triggers[1] > 0.05) {
 			Robot.lift.setLiftPower(-triggers[1]);
-			Robot.logger.log("lift", "moving down manual");
+			//Robot.logger.log("lift", "moving down manual");
 			autoMotion = 0;
 		}
 		else if (autoMotion == 1) {
 			Robot.lift.setLiftPower(0.7);
-			Robot.logger.log("lift", "moving up automatic");
+			//Robot.logger.log("lift", "moving up automatic");
 			target = getNextTarget();
 		}
 		else if (autoMotion == -1) {
 			Robot.lift.setLiftPower(-0.35);
-			Robot.logger.log("lift", "moving down automatic");
+			//Robot.logger.log("lift", "moving down automatic");
 			target = getNextTarget();
 		}
 		else {
