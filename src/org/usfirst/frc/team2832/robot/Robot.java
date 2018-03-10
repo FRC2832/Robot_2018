@@ -174,7 +174,7 @@ public class Robot extends TimedRobot {
 
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
 
-        lift.unpack();
+        lift.collapserer.set(Value.kReverse);
         Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
 
@@ -206,6 +206,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
+		
 		logger.header("Teleop Init");
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
         //lift.unpack();

@@ -9,7 +9,9 @@ import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnDegrees;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnPID;
 import org.usfirst.frc.team2832.robot.subsystems.Lift;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 
 public class LeftSide extends CommandGroup {
 
@@ -26,9 +28,11 @@ public class LeftSide extends CommandGroup {
 			addSequential(new ExpelCube());
     		
     	} else if (gameData.charAt(1) == 'L') { //If the scale is on our side
+    		addSequential(new TimedCommand(.5));
     		addParallel(new MoveLiftTime(2.7, 1));
-    		addSequential(new DriveDistance(.6f, -288d, 10)); // go forward to scale
+    		addSequential(new DriveDistance(.6f, -288d, 10)); // go forward to scale    		
     		addSequential(new LowerIngestor(.1));
+    		addSequential(new TimedCommand(.5));
     		addSequential(new TurnPID(50f)); //turn 90 degrees
     		addSequential(new ExpelCube());
     		

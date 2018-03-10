@@ -31,8 +31,8 @@ public class RightSide extends CommandGroup {
 			addSequential(new ExpelCube());
 			
     	} else if (gameData.charAt(1) == 'R') { //If the scale is on our side
-    		addSequential(new DriveDistance(.6f, -288d, 10)); // go forward to scale
     		addParallel(new MoveLiftTime(2.7, 1));
+    		addSequential(new DriveDistance(.6f, -288d, 10)); // go forward to scale
     		addSequential(new LowerIngestor(.1));
     		addSequential(new TurnPID(-50f)); //turn 90 degrees
     		addSequential(new ExpelCube());
