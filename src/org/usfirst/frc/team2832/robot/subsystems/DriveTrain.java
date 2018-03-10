@@ -206,7 +206,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 *            to drive in between -1 and 1
 	 */
 	public void arcadeDrive(double speed, double direction) {
-		if(!isTipping && Robot.isReal()) {
+		if(!isTipping) {
 			drive.arcadeDrive(speed, direction);
 		}	
 	}
@@ -220,7 +220,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 *            between 0 and 1
 	 */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		if(!isTipping && Robot.isReal()) {
+		if(!isTipping) {
 			drive.tankDrive(leftSpeed, rightSpeed);
 		}
 	}
