@@ -1,11 +1,11 @@
 package org.usfirst.frc.team2832.robot;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class Logger {
 
@@ -14,35 +14,46 @@ public class Logger {
     private final String ENTRY_NAME = "Log";
     private final int MAX_LOGS = 200;
 
-    private BufferedWriter writer;
-    private File log;
+    private BufferedWriter logWriter, csvWriter;
+    private File log, csv;
+
+    private List<Supplier<Double>> suppliers;
 
     public Logger() {
+        suppliers = new ArrayList<>();
         try {
             log = new File(USB_PATH + "Log-Overflow.txt");
             for (int i = 0; i <= MAX_LOGS; i++) {
                 File file = new File(USB_PATH + "Log-" + i + ".txt");
                 if (!file.exists()) {
                     log = file;
+                    csv = new File(USB_PATH + "CSV-" + i + ".txt");
                     break;
                 }
             }
             if (log.exists())
                 log.delete();
+            if (csv.exists())
+                csv.delete();
             try {
-                if (log.createNewFile())
+                if (log.createNewFile() && csv.createNewFile())
                     System.out.println("Logging to '" + log.getPath() + "' on USB drive");
             } catch (IOException e) {
                 System.out.println("Logging to '" + SYSTEM_PATH + "Log.txt'");
                 log = new File(SYSTEM_PATH + "Log.txt");
+                csv = new File(SYSTEM_PATH + "CSV.txt");
                 if (log.exists())
                     log.delete();
+                if (csv.exists())
+                    csv.delete();
+                csv.createNewFile();
                 log.createNewFile();
             }
-            writer = new BufferedWriter(new FileWriter(log));
-            writer.write("Hello\n");
-            writer.newLine();
-            writer.flush();
+            logWriter = new BufferedWriter(new FileWriter(log));
+            logWriter.write("Hello\n");
+            logWriter.newLine();
+            logWriter.flush();
+            csvWriter = new BufferedWriter(new FileWriter(csv));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,11 +65,11 @@ public class Logger {
 
     public void log(String tag, String message) {
         System.out.println(tag + ": " + message);
-        if (writer != null) {
+        if (logWriter != null) {
             try {
-                writer.write(tag + ": " + message + ": " + Timer.getFPGATimestamp());
-                writer.newLine();
-                writer.flush();
+                logWriter.write(tag + ": " + message + ": " + Timer.getFPGATimestamp());
+                logWriter.newLine();
+                logWriter.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -67,11 +78,11 @@ public class Logger {
 
     public void critical(String tag, String message) {
         System.out.println("-" + tag + ": " + message);
-        if (writer != null) {
+        if (logWriter != null) {
             try {
-                writer.write("-" + tag + ": " + message + ": " + Timer.getFPGATimestamp());
-                writer.newLine();
-                writer.flush();
+                logWriter.write("-" + tag + ": " + message + ": " + Timer.getFPGATimestamp());
+                logWriter.newLine();
+                logWriter.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -80,15 +91,15 @@ public class Logger {
 
     public void error(String tag, String message) {
         System.err.println(tag + ": " + message);
-        if (writer != null) {
+        if (logWriter != null) {
             try {
-                writer.write("**");
-                writer.newLine();
-                writer.write(">>>" + tag + ": " + message + ": " + Timer.getFPGATimestamp());
-                writer.newLine();
-                writer.write("**");
-                writer.newLine();
-                writer.flush();
+                logWriter.write("**");
+                logWriter.newLine();
+                logWriter.write(">>>" + tag + ": " + message + ": " + Timer.getFPGATimestamp());
+                logWriter.newLine();
+                logWriter.write("**");
+                logWriter.newLine();
+                logWriter.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -98,21 +109,40 @@ public class Logger {
     public void header(String header) {
         System.out.println();
         System.out.println("@" + header);
-        if (writer != null) {
+        if (logWriter != null) {
             try {
-                writer.newLine();
-                writer.newLine();
-                writer.write("@" + header + ": " + Timer.getFPGATimestamp());
-                writer.newLine();
-                writer.newLine();
-                writer.flush();
+                logWriter.newLine();
+                logWriter.newLine();
+                logWriter.write("@" + header + ": " + Timer.getFPGATimestamp());
+                logWriter.newLine();
+                logWriter.newLine();
+                logWriter.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    public void addLoggedValue(Supplier<Double> supplier) {
+        suppliers.add(supplier);
+    }
+
     public void update() {
+        StringBuilder builder = new StringBuilder(Double.toString(Timer.getFPGATimestamp()));
+        for(Supplier<Double> value: suppliers) {
+            try {
+                builder.append(",").append(Double.toString(value.get()));
+            } catch (Exception err) {
+                builder.append(",").append("0");
+            }
+        }
+        try {
+            csvWriter.write(builder.toString());
+            csvWriter.newLine();
+            csvWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         /*
         if(NetworkTableInstance.getDefault().getEntry("logRequest").getBoolean(false)) {
             NetworkTableInstance.getDefault().getEntry("logRequest").setBoolean(false);
@@ -133,7 +163,7 @@ public class Logger {
     public void dispose() {
         System.out.println("Disposed logger");
         try {
-            writer.close();
+            logWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

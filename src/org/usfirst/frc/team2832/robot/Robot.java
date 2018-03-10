@@ -105,6 +105,16 @@ public class Robot extends TimedRobot {
 	    }).start();*/
 		driveTrain.setPigeonYaw(0);
 		teensy = new Arduino();
+
+		logger.addLoggedValue(() -> robotTypeInput.getAverageVoltage());
+		logger.addLoggedValue(() -> lift.getLiftEncoderPosition());
+		logger.addLoggedValue(() -> driveTrain.getPigeonYaw());
+		logger.addLoggedValue(() -> driveTrain.getPigeonPitch());
+		logger.addLoggedValue(() -> driveTrain.getPigeonRoll());
+		logger.addLoggedValue(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT));
+		logger.addLoggedValue(() -> driveTrain.getEncoderVelocity(DriveTrain.Encoder.LEFT));
+		logger.addLoggedValue(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.RIGHT));
+		logger.addLoggedValue(() -> driveTrain.getEncoderVelocity(DriveTrain.Encoder.RIGHT));
 	}
 
 	@Override
