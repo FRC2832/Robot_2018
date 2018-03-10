@@ -11,7 +11,7 @@ public class MoveLiftNoBackdrive extends Command {
 	private static final double [] targets = {0, 32*20, 32*30, 32*84};
 	private static final int TOLERANCE = 12;
 	
-	private String autoMotion;
+	private int autoMotion; // 0 is not moving, -1 is moving down, 1 is moving up
 	private double target;
     
     public MoveLiftNoBackdrive() {
@@ -21,22 +21,22 @@ public class MoveLiftNoBackdrive extends Command {
     @Override
     protected void initialize() {
         target = Robot.lift.getEncVal();
-    	autoMotion = "not moving";
+    	autoMotion = 0;
     }
 
     @Override
     protected void execute() {
     	
     	if (Robot.controls.getButtonPressed(ButtonMapping.RAISE_LIFT)) {
-    		autoMotion = "moving up";
+    		autoMotion = 1;
     	}
     	else if (Robot.controls.getButtonPressed(ButtonMapping.LOWER_LIFT)) {
-    		autoMotion = "moving down";
+    		autoMotion = -1;
     	}
     	
     	double [] triggers = Robot.lift.getTriggers();
     	
-    	if (autoMotion.equals("not moving")) {
+    	if (autoMotion == 0) {
     		/*
         	 * Runs manual control using left & right 
         	 * triggers on the secondary controller.
@@ -63,7 +63,7 @@ public class MoveLiftNoBackdrive extends Command {
     		 * Runs prepositioned control using A and 
     		 * B buttons on the secondary controller.
     		 */
-    		if (autoMotion.equals("moving up")) {
+    		if (autoMotion == 1) {
     			Robot.lift.setLiftPower(0.7);
     			Robot.logger.log("lift", "moving up automatic");
     			target = getNextTarget();
@@ -79,10 +79,10 @@ public class MoveLiftNoBackdrive extends Command {
     	 * if close enough to the target.
     	 */
     	if (Math.abs(target - Robot.lift.getEncVal()) < TOLERANCE) {
-    		autoMotion = "not moving";
+    		autoMotion = 0;
     	}
     	
-    	SmartDashboard.putString("autoMotionMLNB", autoMotion);
+    	SmartDashboard.putNumber("autoMotionMLNB", autoMotion);
     	SmartDashboard.putNumberArray("triggersLR", triggers);
     	
     }
@@ -91,7 +91,7 @@ public class MoveLiftNoBackdrive extends Command {
     	
     	double encVal = Robot.lift.getEncVal();
     	
-    	if (autoMotion.equals("moving up") ) {
+    	if (autoMotion == 1) {
     		/*
         	 * Returns the next highest
         	 * target encoder count value.
