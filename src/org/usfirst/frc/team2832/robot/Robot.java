@@ -45,7 +45,9 @@ public class Robot extends TimedRobot {
 	public static Controls controls;
 	public static Dashboard dashboard;
 	public static Logger logger;
-
+	private final int PRESSURE_SENSOR_PIN = 0;
+	PowerDistributionPanel pdp;
+	AnalogInput pressureSensor;
 	private static RobotType robotType;
 
 	private AnalogInput robotTypeInput;
@@ -53,6 +55,7 @@ public class Robot extends TimedRobot {
 	private boolean postDiagnosis;
 	private Compressor compressor;
 	private Arduino teensy;
+	private double pressureVoltage;
 
 	/**
 	 * Gets which robot the code is running on
@@ -76,6 +79,9 @@ public class Robot extends TimedRobot {
 		lift = new Lift();
 		Lift.setControls();
 		ingestor = new Ingestor();
+		compressor = new Compressor();
+		pdp = new PowerDistributionPanel();
+		pressureSensor = new AnalogInput(PRESSURE_SENSOR_PIN);
 
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
 
@@ -92,7 +98,7 @@ public class Robot extends TimedRobot {
 
 		
 		// Create camera
-		/*new Thread(() -> {
+		new Thread(() -> {
 	    	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	    	camera.setResolution(640, 480);
 	    	while(true) {
@@ -102,7 +108,8 @@ public class Robot extends TimedRobot {
 					logger.error("Camera Thread Interrupted", e.toString());
 				}
 	    	}
-	    }).start();*/
+	    }).start();
+	    
 		driveTrain.setPigeonYaw(0);
 		teensy = new Arduino();
 	}
@@ -114,6 +121,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Pin Voltage", robotTypeInput.getAverageVoltage());
 		logger.update();
 		controls.update();
+		pressureVoltage =  pressureSensor.getAverageVoltage();
 		
 		if (Robot.controls.getButtonPressed(ButtonMapping.COMPRESSOR_TOGGLE)) {
 			// System.out.println("Shift");
@@ -125,9 +133,13 @@ public class Robot extends TimedRobot {
 			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kLeftRumble, 0.5d, 1d);
 			Robot.controls.setRumble(Controls.Controllers.CONTROLLER_MAIN, GenericHID.RumbleType.kRightRumble, 0.5d, 1d);
 		}
+		
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser Initialized", lift != null && lift.collapserer != null);
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser collapsed", lift == null ? false : lift.getPacked());
-
+		SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "voltage", pdp.getVoltage());
+		SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "pressure", 250*(pressureVoltage/5)-25);
+		//SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "voltage", 10);
+		//SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "pressure", 40);
 		//byte[] sensorVals = teensy.read();
 		//for(byte temp:sensorVals)
 		//	System.out.println(temp);
