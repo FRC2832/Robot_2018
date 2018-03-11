@@ -109,6 +109,9 @@ public class Logger {
         System.out.println("@" + header);
         if (logWriter != null) {
             try {
+                csvWriter.write("\"" + header + "\"");
+                csvWriter.newLine();
+                csvWriter.flush();
                 logWriter.newLine();
                 logWriter.newLine();
                 logWriter.write("@" + header + ": " + Timer.getFPGATimestamp());
@@ -162,6 +165,7 @@ public class Logger {
         System.out.println("Disposed logger");
         try {
             logWriter.close();
+            csvWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
