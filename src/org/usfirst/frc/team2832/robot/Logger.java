@@ -52,6 +52,9 @@ public class Logger {
             logWriter.newLine();
             logWriter.flush();
             csvWriter = new BufferedWriter(new FileWriter(csv));
+            csvWriter.write("\"Time\",\"Type voltz\",\"Lift pos\",\"Yaw\",\"Pitch\",\"Roll\",\"Left pos\",\"Left vel\",\"Right pos\",\"Right vel\"");
+            csvWriter.newLine();
+            csvWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
