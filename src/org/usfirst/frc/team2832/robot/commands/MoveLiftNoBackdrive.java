@@ -8,10 +8,10 @@ import org.usfirst.frc.team2832.robot.Robot;
 
 public class MoveLiftNoBackdrive extends Command {
 	
-	private static final double [] targets = {0, 32*20, 32*30, 32*84};
-	private static final int TOLERANCE = 12;
+	private static final double [] targets = {0, 32*20, 32*30, 32*84}; 	// fix this
+	private static final int TOLERANCE = 32; 							// fix this
 	
-	private int autoMotion; // 0 is not moving, -1 is moving down, 1 is moving up
+	private int autoMotion; // 0:not moving, 1:moving up, -1:moving down
 	private double target;
     
     public MoveLiftNoBackdrive() {
@@ -26,52 +26,43 @@ public class MoveLiftNoBackdrive extends Command {
 
     @Override
     protected void execute() {
-    	
+    	// Receives controller inputs
     	if (Robot.controls.getButtonPressed(ButtonMapping.RAISE_LIFT)) {
     		autoMotion = 1;
     	}
     	else if (Robot.controls.getButtonPressed(ButtonMapping.LOWER_LIFT)) {
     		autoMotion = -1;
     	}
-    	
     	double [] triggers = Robot.lift.getTriggers();
-	
 		/* 
 		 * Manual control takes priority over preposition control.
 		 * 
 		 * Raising the lift takes priority over lowering the lift
 		 * in both circumstances.
 		 */
-		 
 		if (triggers[0] > 0.05) {
 			Robot.lift.setLiftPower(triggers[0]);
-			//Robot.logger.log("lift", "moving up manual");
 			autoMotion = 0;
 		}
 		else if (triggers[1] > 0.05) {
 			Robot.lift.setLiftPower(-triggers[1]);
-			//Robot.logger.log("lift", "moving down manual");
 			autoMotion = 0;
 		}
 		else if (autoMotion == 1) {
 			Robot.lift.setLiftPower(0.7);
-			//Robot.logger.log("lift", "moving up automatic");
 			target = getNextTarget();
 		}
 		else if (autoMotion == -1) {
 			Robot.lift.setLiftPower(-0.35);
-			//Robot.logger.log("lift", "moving down automatic");
-			target = getNextTarget();
+			target = targets[0];
 		}
 		else {
 			Robot.lift.setLiftPower(0.1);
 		}
-		
     	/*
     	 * Terminates prepositioned motion
     	 * if close enough to the target.
     	 */
-		
     	if (Math.abs(target - Robot.lift.getEncVal()) < TOLERANCE) {
     		autoMotion = 0;
     	}
@@ -91,7 +82,7 @@ public class MoveLiftNoBackdrive extends Command {
         	 * target encoder count value.
         	 */
     		for (int i = 0; i < targets.length; i++) {
-    			if (encVal < targets[i]) {
+    			if (encVal + TOLERANCE < targets[i]) {
     				return targets[i];
     			}
     		}
@@ -102,32 +93,25 @@ public class MoveLiftNoBackdrive extends Command {
         	 * target encoder count value.
         	 */
     		for (int i = targets.length - 1; i >= 0; i--) {
-    			if (encVal > targets[i]) {
+    			if (encVal - TOLERANCE > targets[i]) {
     				return targets[i];
     			}
     		}
     	}
     	/*
     	 * If no valid targets found or if not
-		 * intended to move, returns currnt position
+		 * intended to move, returns current position
     	 */
     	return encVal;
     }
 
     @Override
-    protected void end() {
-        Robot.lift.setLiftPower(0);
-    }
+    protected void end() {Robot.lift.setLiftPower(0);}
 
     @Override
-    protected void interrupted() {
-        Robot.lift.setLiftPower(0);
-    }
+    protected void interrupted() {Robot.lift.setLiftPower(0);}
     
     @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-
+    protected boolean isFinished() {return false;}
+    
 }
