@@ -77,6 +77,18 @@ public class Robot extends TimedRobot {
 		logger = new Logger();
 		logger.header("Robot Init");
 
+        robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
+        robotType = RobotType.Competition; //Default to competition
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(new File("/home/lvuser/RobotType.txt")))) {
+            String type = reader.readLine();
+            if(!"".equals(type))
+                robotType = RobotType.valueOf(type);
+        } catch(Exception e) {
+            logger.error("ReadTypeFile", e.toString());
+            robotType = RobotType.Competition;
+        }
+
 		controls = new Controls();
 
 		driveTrain = new DriveTrain();
@@ -88,19 +100,6 @@ public class Robot extends TimedRobot {
 		pressureSensor = new AnalogInput(PRESSURE_SENSOR_PIN);
 
 		dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
-
-		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
-		robotType = RobotType.Competition; //Default to competition
-
-		try(BufferedReader reader = new BufferedReader(new FileReader(new File("/home/lvuser/RobotType.txt")))) {
-			String type = reader.readLine();
-			if(!"".equals(type))
-				robotType = RobotType.valueOf(type);
-		} catch(Exception e) {
-			e.printStackTrace();
-			logger.error("ReadTypeFile", e.toString());
-			robotType = RobotType.Competition;
-		}
 
 		compressor = new Compressor();
 

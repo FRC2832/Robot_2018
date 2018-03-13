@@ -49,6 +49,13 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		talonLift = new WPI_TalonSRX(LIFT_MOTOR);
 		talonPhoenixLift = new TalonSRX(LIFT_MOTOR);
 		collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
+
+		/*if(Robot.getRobotType().equals(Robot.RobotType.Competition)) {
+			collapserer = new DoubleSolenoid(COLLAPSE_FORWARD_CHANNEL, COLLAPSE_REVERSE_CHANNEL);
+		} else {
+			collapserer = new DoubleSolenoid(COLLAPSE_REVERSE_CHANNEL, COLLAPSE_FORWARD_CHANNEL);
+		}*/
+
 		//collapserer.set(Value.kForward);
 		if(Robot.isReal()) {
 			talonLift.setNeutralMode(NeutralMode.Brake);
