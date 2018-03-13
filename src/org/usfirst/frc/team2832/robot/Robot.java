@@ -24,6 +24,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.subsystems.LiftSubsystemWithPID;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -87,6 +91,17 @@ public class Robot extends TimedRobot {
 
 		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
 		robotType = RobotType.Competition; //Default to competition
+
+		try(BufferedReader reader = new BufferedReader(new FileReader(new File("/home/lvuser/RobotType.txt")))) {
+			String type = reader.readLine();
+			if(!"".equals(type))
+				robotType = RobotType.valueOf(type);
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error("ReadTypeFile", e.toString());
+			robotType = RobotType.Competition;
+		}
+
 		compressor = new Compressor();
 
 		// Create the command to be called before autonomous
@@ -175,14 +190,15 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledPeriodic() {
 		// Set the type of robot based on the average voltage of a pin
-		double value = robotTypeInput.getAverageVoltage();
+
+		/*double value = robotTypeInput.getAverageVoltage();
 		if(3.75d <= value && value <= 5d) {
 			robotType = RobotType.Programming;
 		} else if(1.25d < value && value < 3.75d) {
 			robotType = RobotType.Practice;
 		} else {
 			robotType = RobotType.Competition;
-		}
+		}*/
 	}
 
 	/**
