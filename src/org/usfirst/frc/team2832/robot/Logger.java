@@ -13,6 +13,8 @@ public class Logger {
     private final String SYSTEM_PATH = System.getProperty("user.home") + "/";
     private final String ENTRY_NAME = "Log";
     private final int MAX_LOGS = 200;
+    
+    public boolean isOpen = false;
 
     private BufferedWriter logWriter, csvWriter;
     private File log, csv;
@@ -55,8 +57,10 @@ public class Logger {
             csvWriter.write("\"Time\",\"Type voltz\",\"Lift pos\",\"Yaw\",\"Pitch\",\"Roll\",\"Left pos\",\"Left vel\",\"Right pos\",\"Right vel\"");
             csvWriter.newLine();
             csvWriter.flush();
+            isOpen = true;
         } catch (IOException e) {
             e.printStackTrace();
+            dispose();
         }
     }
 
@@ -65,6 +69,8 @@ public class Logger {
     }
 
     public void log(String tag, String message) {
+    	if(!isOpen)
+    		return;
         System.out.println(tag + ": " + message);
         if (logWriter != null) {
             try {
@@ -78,6 +84,8 @@ public class Logger {
     }
 
     public void critical(String tag, String message) {
+    	if(!isOpen)
+    		return;
         System.out.println("-" + tag + ": " + message);
         if (logWriter != null) {
             try {
@@ -91,6 +99,8 @@ public class Logger {
     }
 
     public void error(String tag, String message) {
+    	if(!isOpen)
+    		return;
         System.err.println(tag + ": " + message);
         if (logWriter != null) {
             try {
@@ -108,6 +118,8 @@ public class Logger {
     }
 
     public void header(String header) {
+    	if(!isOpen)
+    		return;
         System.out.println();
         System.out.println("@" + header);
         if (logWriter != null) {
@@ -141,9 +153,11 @@ public class Logger {
             }
         }
         try {
-            csvWriter.write(builder.toString());
-            csvWriter.newLine();
-            csvWriter.flush();
+        	if(isOpen) {
+	            csvWriter.write(builder.toString());
+	            csvWriter.newLine();
+	            csvWriter.flush();
+        	}
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -169,6 +183,7 @@ public class Logger {
         try {
             logWriter.close();
             csvWriter.close();
+            isOpen = false;
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -79,14 +79,23 @@ public class Robot extends TimedRobot {
 
         robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
         robotType = RobotType.Competition; //Default to competition
-
-        try(BufferedReader reader = new BufferedReader(new FileReader(new File("/home/lvuser/RobotType.txt")))) {
+        BufferedReader reader = null;
+        try {
+        	reader = new BufferedReader(new FileReader(new File("/home/lvuser/RobotType.txt")));
             String type = reader.readLine();
             if(!"".equals(type))
                 robotType = RobotType.valueOf(type);
         } catch(Exception e) {
             logger.error("ReadTypeFile", e.toString());
             robotType = RobotType.Competition;
+        }finally {//runs whether the try block finishes or not, after catch if it doesn't.
+        	try {
+        		if(reader != null)
+        			reader.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
 		controls = new Controls();
@@ -117,7 +126,7 @@ public class Robot extends TimedRobot {
 	    	camera.setResolution(640, 480);
 	    	while(true) {
 	    		try {
-					Thread.sleep(20);
+					Thread.sleep(50);
 				} catch (InterruptedException e) {
 					logger.error("Camera Thread Interrupted", e.toString());
 				}
@@ -181,6 +190,7 @@ public class Robot extends TimedRobot {
 		logger.header("Disabled Init");
 		Robot.driveTrain.setBrakeMode(false);
 		controls.clearRumbles();
+		logger.dispose();
 	}
 
 	/**
@@ -205,6 +215,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		if(logger.isOpen)
+			logger = new Logger();
 		logger.header("Autonomous Init");
 
 		postDiagnosis = false;
@@ -244,7 +256,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
-		
+		if(logger.isOpen)
+			logger = new Logger();
 		logger.header("Teleop Init");
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
         //lift.unpack();
@@ -265,6 +278,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testInit() {
+		if(logger.isOpen)
+			logger = new Logger();
 		logger.header("Test Init");
 	}
 

@@ -66,6 +66,7 @@ public class ArcadeDrive extends Command {
         prevVelocity = velocity;
         //apply fade curve
         double fadedDD = dD;
+        /* Add another / at the start of this line to uncomment this quickly
         long time = (long) Timer.getFPGATimestamp() * 1000;
         double fadeTime = dD < prevDDChange ? FADE_TIME_BACK : FADE_TIME_FORWARD;
         if(Math.abs(dD - prevDDChange) > .08) { //speed has changed since the end of the last started fade.
@@ -82,11 +83,11 @@ public class ArcadeDrive extends Command {
         		}
         	}else{
         		if(Math.abs(dD - dDTo) > .1 && Math.signum(dD-dDTo) == Math.signum(prevDDChange-dDTo)) { 
-        			/*driver demand changed again mid curve, so we will restart 
-        			 * the curve. Better than reversing it mid-curve, most of the time.
-        			 * However, it is worse if the curve is changing the same direction that it already did. 
-        			 * for instance, if the driver demand was fading between .2 and .5, and is now going to .7.
-        			 */
+        			//driver demand changed again mid curve, so we will restart 
+        			// the curve. Better than reversing it mid-curve, most of the time.
+        			// However, it is worse if the curve is changing the same direction that it already did. 
+        			// for instance, if the driver demand was fading between .2 and .5, and is now going to .7.
+        			
         			//set curve starting point to the value the fade curve currently produces
         			prevDDChange = fade(prevDDChange, dD, ((double)(time-timeDDChanged))/1000d, fadeTime);
         			timeDDChanged = time;
@@ -97,7 +98,7 @@ public class ArcadeDrive extends Command {
         }else {//small enough of a difference to not need to worry about. 
         	prevDDChange = dD;
         }
-        
+        //*/
         /*SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "FilteredVelocity", velocity);
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "Velocity", Math.abs(Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.AVERAGE)));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "driverDemand", dD);
