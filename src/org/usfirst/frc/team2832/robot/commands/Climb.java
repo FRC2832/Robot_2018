@@ -13,13 +13,13 @@ public class Climb extends Command {
 	}
 	
 	protected void initialize() {
-		Robot.lift.pack();
+		//Robot.lift.pack();
 		Robot.logger.log("Climb", "Starting");
 		Robot.lift.setWinchBrakeMode(true);
 	}
 	
 	protected void execute() {
-		Robot.lift.setWinchPower(3);
+		Robot.lift.setWinchPower(1);
 	}
 	
 	@Override
@@ -31,13 +31,13 @@ public class Climb extends Command {
 		Robot.logger.log("Climb", "Ended");
 		Robot.lift.setWinchPower(0);
 		Robot.lift.setWinchBrakeMode(false);
-		Robot.lift.unpack();
+		//Robot.lift.unpack();
 	}
 	
 	protected void interrupted() {
 		Robot.logger.log("Climb", "Interrupted");
 		Robot.lift.setWinchPower(0);
 		Robot.lift.setWinchBrakeMode(false);
-		Robot.lift.unpack();
+		//Robot.lift.unpack();
 	}
 }
