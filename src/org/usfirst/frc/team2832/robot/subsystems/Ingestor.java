@@ -17,8 +17,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	
 	final static int INGESTOR_L = 13; // fix these
 	final static int INGESTOR_R = 14;
-	final static int FORWARD_CHANNEL = 3; // assign these to pneumatics
-	final static int REVERSE_CHANNEL = 2;
+	final static int FORWARD_CHANNEL = 2; // assign these to pneumatics
+	final static int REVERSE_CHANNEL = 3;
 	final static int DIGITAL_PIN = 1; // get proper channel!
 	final static int EXTEND_PINTCHER = 0;
 	final static int RETRACT_PINTCHER = 1;
@@ -87,6 +87,10 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		tilt.set(Value.kForward);
 	}
 
+	public void unpinch() {
+		pintcher.set(Value.kReverse);
+	}
+	
 	public void periodic () {
 		boolean sensorInIR = readDigital();
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", sensorInIR);

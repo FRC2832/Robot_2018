@@ -25,14 +25,14 @@ public class SwitchCenter extends CommandGroup {
 			addSequential(new DriveDistance(0.5d, -62d, 10d));
 			addSequential(new TurnPID(-45));
 			addParallel(new LowerIngestor(.5));
-			addSequential(new DriveDistance(0.5d, -25d, 10d));
+			addSequential(new DriveDistance(0.5d, -30d, 10d));
 			addSequential(new ExpelCube());
 		} else {
 			addSequential(new TurnPID(-45));
 			addSequential(new DriveDistance(0.5d, -90d, 10d));
 			addSequential(new TurnPID(45));
 			addParallel(new LowerIngestor(.5));
-			addSequential(new DriveDistance(0.5d, -5d, 4d));
+			addSequential(new DriveDistance(0.5d, -30d, 4d));
 			addSequential(new ExpelCube());
 		}
 		
