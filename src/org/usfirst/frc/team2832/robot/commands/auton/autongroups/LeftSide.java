@@ -24,7 +24,7 @@ public class LeftSide extends CommandGroup {
 			addSequential(new DriveDistance(.6f, -150d, 10)); //go forward to switch
 			addParallel(new MoveLiftTime(1.2, 1));
     		addSequential(new TurnPID(90f)); //turn 90 degrees
-			addSequential(new DriveDistance(.6f, -10d, 10)); //go forward to switch
+			addSequential(new DriveDistance(.6f, -25d, 10)); //go forward to switch
 			addSequential(new ExpelCube());
     		
     	} else if (gameData.charAt(1) == 'L') { //If the scale is on our side

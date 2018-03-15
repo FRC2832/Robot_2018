@@ -30,6 +30,7 @@ public class ExpelCube extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Ingestor.setMotorSpeed(EXPEL_SPEED);
+    	Robot.ingestor.unpinch();
     }
 
     // Make this return true when this Command no longer needs to run execute()
