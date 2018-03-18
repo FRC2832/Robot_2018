@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
 	public static Controls controls;
 	public static Dashboard dashboard;
 	public static Logger logger;
+
 	private final int PRESSURE_SENSOR_PIN = 0;
 	PowerDistributionPanel pdp;
 	AnalogInput pressureSensor;
@@ -79,23 +80,13 @@ public class Robot extends TimedRobot {
 
         robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
         robotType = RobotType.Competition; //Default to competition
-        BufferedReader reader = null;
-        try {
-        	reader = new BufferedReader(new FileReader(new File("/home/lvuser/RobotType.txt")));
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(System.getProperty("user.home") + File.separator + "RobotType.txt")))){
             String type = reader.readLine();
             if(!"".equals(type))
                 robotType = RobotType.valueOf(type);
         } catch(Exception e) {
-            logger.error("ReadTypeFile", e.toString());
+            logger.error("ReadTypeFile", "RobotType.txt is missing from " + System.getProperty("user.home") + File.separator);
             robotType = RobotType.Competition;
-        }finally {//runs whether the try block finishes or not, after catch if it doesn't.
-        	try {
-        		if(reader != null)
-        			reader.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
         }
 
 		controls = new Controls();
@@ -137,8 +128,19 @@ public class Robot extends TimedRobot {
 		teensy = new Arduino();
 
 		logger.addLoggedValue(() -> robotTypeInput.getAverageVoltage());
-		logger.addLoggedValue(() -> lift.getLiftEncoderPosition());
-		logger.addLoggedValue(() -> driveTrain.getPigeonYaw());
+		logger.addLoggedValue(() -> (double)(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000d);
+        logger.addLoggedValue(() -> pdp.getVoltage());
+        logger.addLoggedValue(() -> pdp.getCurrent(0)); //  | These ones might be interchanged
+        logger.addLoggedValue(() -> pdp.getCurrent(1)); //  |
+        logger.addLoggedValue(() -> pdp.getCurrent(14)); // |
+        logger.addLoggedValue(() -> pdp.getCurrent(15)); // |
+        logger.addLoggedValue(() -> pdp.getCurrent(7)); //      | I picked random for these
+        logger.addLoggedValue(() -> pdp.getCurrent(8)); //      |
+        logger.addLoggedValue(() -> pdp.getCurrent(3)); // | Probably ingestors
+        logger.addLoggedValue(() -> pdp.getCurrent(4)); // |
+        logger.addLoggedValue(() -> pdp.getCurrent(52)); //      Probably compressor
+        logger.addLoggedValue(() -> lift.getLiftEncoderPosition());
+        logger.addLoggedValue(() -> driveTrain.getPigeonYaw());
 		logger.addLoggedValue(() -> driveTrain.getPigeonPitch());
 		logger.addLoggedValue(() -> driveTrain.getPigeonRoll());
 		logger.addLoggedValue(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT));
@@ -190,7 +192,7 @@ public class Robot extends TimedRobot {
 		logger.header("Disabled Init");
 		Robot.driveTrain.setBrakeMode(false);
 		controls.clearRumbles();
-		logger.dispose();
+		logger.flush();
 	}
 
 	/**
@@ -215,8 +217,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		if(logger.isOpen)
-			logger = new Logger();
 		logger.header("Autonomous Init");
 
 		postDiagnosis = false;
@@ -256,8 +256,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
-		if(logger.isOpen)
-			logger = new Logger();
 		logger.header("Teleop Init");
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
         //lift.unpack();
@@ -278,8 +276,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testInit() {
-		if(logger.isOpen)
-			logger = new Logger();
 		logger.header("Test Init");
 	}
 
