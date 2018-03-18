@@ -1,4 +1,4 @@
-package data;
+package org.usfirst.frc.team2832.widgets.data;
 
 import edu.wpi.first.shuffleboard.api.data.ComplexData;
 import edu.wpi.first.shuffleboard.api.data.NamedData;

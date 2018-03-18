@@ -1,7 +1,7 @@
-group 'com.logicmaster63.plugin'
+group 'org.usfirst.frc.team2832.widgets'
 version '1.0'
 
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 sourceCompatibility = 1.8
 
@@ -12,4 +12,15 @@ repositories {
 
 dependencies {
     implementation(group: "edu.wpi.first.shuffleboard", name: "api", version: "1.2.0")
+    implementation group: 'edu.wpi.first.shuffleboard.plugin', name: 'base', version: '1.0.0'
+    compile group: 'com.jcraft', name: 'jsch', version: '0.1.44-1'
+}
+
+task exportPlugin(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'org.usfirst.frc.team2832.widgets.WarriorsPlugin'
+    }
+    baseName = 'WarriorsPlugin'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
