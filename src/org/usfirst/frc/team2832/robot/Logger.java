@@ -70,6 +70,10 @@ public class Logger {
         this.csv = csv;
     }
 
+    public void clearSingletons() {
+        singletons.clear();
+    }
+
     public void logOnce(Object object) {
         logOnce(object.toString());
     }

@@ -193,6 +193,7 @@ public class Robot extends TimedRobot {
 		Robot.driveTrain.setBrakeMode(false);
 		controls.clearRumbles();
 		logger.flush();
+		logger.clearSingletons();
 	}
 
 	/**
