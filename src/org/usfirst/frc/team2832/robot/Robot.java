@@ -10,6 +10,7 @@ package org.usfirst.frc.team2832.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.can.CANExceptionFactory;
 import edu.wpi.first.wpilibj.can.CANJNI;
 import edu.wpi.first.wpilibj.command.Command;
@@ -39,7 +40,8 @@ import java.util.Arrays;
 public class Robot extends TimedRobot {
 
 	private final static int ROBOT_TYPE_PIN = 3;
-
+	private final static int IMAGERY_OUTPUT_PIN = 3;
+	
 	//Subsystems
 	public static DriveTrain driveTrain;
 	public static Lift lift;
@@ -55,6 +57,7 @@ public class Robot extends TimedRobot {
 	private static RobotType robotType;
 
 	private AnalogInput robotTypeInput;
+	private DigitalOutput doImagery;
 	private DiagnoseSensors diagnostic;
 	private boolean postDiagnosis;
 	private Compressor compressor;
@@ -76,8 +79,10 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		logger = new Logger();
 		logger.header("Robot Init");
-
-        robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
+		
+		doImagery = new DigitalOutput(IMAGERY_OUTPUT_PIN);
+        
+		robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
         robotType = RobotType.Competition; //Default to competition
         BufferedReader reader = null;
         try {
@@ -156,6 +161,8 @@ public class Robot extends TimedRobot {
 		controls.update();
 		pressureVoltage =  pressureSensor.getAverageVoltage();
 		
+		doImagery.set(Alliance.Blue.equals(DriverStation.getInstance().getAlliance()));
+		
 		if (Robot.controls.getButtonPressed(ButtonMapping.COMPRESSOR_TOGGLE)) {
 			// System.out.println("Shift");
 			// toggleShift();
@@ -215,6 +222,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		//doImagery.set(false);
+		
 		if(logger.isOpen)
 			logger = new Logger();
 		logger.header("Autonomous Init");
@@ -226,7 +235,7 @@ public class Robot extends TimedRobot {
         lift.collapserer.set(Value.kReverse);
         Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
-
+		
 		Scheduler.getInstance().add(diagnostic);
 
 		logger.log("Robot Type", robotType.name());
