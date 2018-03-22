@@ -17,22 +17,22 @@ public class SwitchCenter extends CommandGroup {
 
 	public SwitchCenter() {
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
-		addSequential(new DriveDistance(0.5d, -20d, 10d));
+		addSequential(new DriveDistance(0.7d, -20d, 10d));
 		addParallel(new MoveLiftTime(1.2, 1));
 		
 		if (gameData.charAt(0) == 'R') {
 			addSequential(new TurnPID(45));
-			addSequential(new DriveDistance(0.5d, -62d, 10d));
+			addSequential(new DriveDistance(0.7d, -62d, 10d));
 			addSequential(new TurnPID(-45));
 			addParallel(new LowerIngestor(.5));
-			addSequential(new DriveDistance(0.5d, -30d, 10d));
+			addSequential(new DriveDistance(0.7d, -30d, 10d));
 			addSequential(new ExpelCube());
 		} else {
 			addSequential(new TurnPID(-45));
-			addSequential(new DriveDistance(0.5d, -90d, 10d));
+			addSequential(new DriveDistance(0.7d, -90d, 10d));
 			addSequential(new TurnPID(45));
 			addParallel(new LowerIngestor(.5));
-			addSequential(new DriveDistance(0.5d, -30d, 4d));
+			addSequential(new DriveDistance(0.7d, -30d, 4d));
 			addSequential(new ExpelCube());
 		}
 		
