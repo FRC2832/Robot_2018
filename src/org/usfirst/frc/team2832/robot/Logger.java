@@ -195,10 +195,12 @@ public class Logger {
     }
 
     public void flush() {
-        try {
-            csvWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(csvWriter != null) {
+            try {
+                csvWriter.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

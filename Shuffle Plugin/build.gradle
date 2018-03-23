@@ -14,6 +14,7 @@ dependencies {
     implementation(group: "edu.wpi.first.shuffleboard", name: "api", version: "1.2.0")
     implementation group: 'edu.wpi.first.shuffleboard.plugin', name: 'base', version: '1.0.0'
     compile group: 'com.jcraft', name: 'jsch', version: '0.1.44-1'
+    compile 'commons-net:commons-net:3.3'
 }
 
 task exportPlugin(type: Jar) {
