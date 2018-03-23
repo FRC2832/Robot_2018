@@ -21,16 +21,16 @@ public class LeftSide extends CommandGroup {
 
 		if (gameData.charAt(0) == 'L') { //If the switch is on our side
     		addParallel(new LowerIngestor(.5));
-			addSequential(new DriveDistance(.6f, -150d, 10)); //go forward to switch
+			addSequential(new DriveDistance(.7f, -150d, 10)); //go forward to switch
 			addParallel(new MoveLiftTime(1.2, 1));
     		addSequential(new TurnPID(90f)); //turn 90 degrees
-			addSequential(new DriveDistance(.6f, -25d, 10)); //go forward to switch
+			addSequential(new DriveDistance(.7f, -25d, 10)); //go forward to switch
 			addSequential(new ExpelCube());
     		
     	} else if (gameData.charAt(1) == 'L') { //If the scale is on our side
     		addSequential(new TimedCommand(.5));
     		addParallel(new MoveLiftTime(2.7, 1));
-    		addSequential(new DriveDistance(.6f, -288d, 10)); // go forward to scale    		
+    		addSequential(new DriveDistance(.7f, -288d, 10)); // go forward to scale    		
     		addSequential(new LowerIngestor(.1));
     		addSequential(new TimedCommand(.5));
     		addSequential(new TurnPID(50f)); //turn 90 degrees

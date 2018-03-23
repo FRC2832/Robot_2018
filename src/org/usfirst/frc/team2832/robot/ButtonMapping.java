@@ -9,8 +9,8 @@ import org.usfirst.frc.team2832.robot.Controls.Controllers;
 public class ButtonMapping {
 	public static final ButtonMapping RAISE_LIFT		= new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.A			);
 	public static final ButtonMapping LOWER_LIFT		= new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.B			);
-	public static final ButtonMapping RAISE_TILT 		= new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.X			);
-	public static final ButtonMapping LOWER_TILT 		= new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.Y			);
+	public static final ButtonMapping RAISE_TILT 		= new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.Y			);
+	public static final ButtonMapping LOWER_TILT 		= new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.X			);
 	public static final ButtonMapping PINTCHER_1 		= new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.BUMPER_RIGHT);
 	public static final ButtonMapping PINTCHER_0 		= new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.BUMPER_LEFT );
 	public static final ButtonMapping COMPRESSOR_TOGGLE = new ButtonMapping(Controllers.CONTROLLER_SECCONDARY, 	Buttons.STICK_RIGHT	);

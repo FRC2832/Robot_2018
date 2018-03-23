@@ -101,7 +101,7 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 	
 	public void setLiftPower(double power) {
-		if (collapserer.get().equals(Value.kReverse)) {
+		if (true) {
 			talonLift.set(power);
 		}
 	}
@@ -140,8 +140,8 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	@Override
     public void periodic() {
 		
-		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft));
-		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight));
+		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft));
+		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight));
 		
 		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if(getCurrentCommand() instanceof Climb)

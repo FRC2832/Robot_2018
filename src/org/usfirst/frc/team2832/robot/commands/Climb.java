@@ -19,7 +19,7 @@ public class Climb extends Command {
 	}
 	
 	protected void execute() {
-		Robot.lift.setWinchPower(1);
+		Robot.lift.setWinchPower(3);
 	}
 	
 	@Override
