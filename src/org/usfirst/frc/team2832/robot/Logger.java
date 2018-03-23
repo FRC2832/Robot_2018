@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 public class Logger {
 
     private final String USB_PATH = "U"; // Usb drive
-    private final String SYSTEM_PATH = System.getProperty("user.home") + File.separator;
+    private final String SYSTEM_PATH = System.getProperty("user.home");
     private final int MAX_LOGS = 200;
 
     private BufferedWriter logWriter, csvWriter;
@@ -25,7 +25,7 @@ public class Logger {
         singletons = new ArrayList<>();
 
         try {
-            createFiles((Robot.isReal() ? "/" : "") + USB_PATH + (Robot.isReal() ? "" : ":") + File.separator);
+            createFiles((Robot.isReal() ? "/" : "") + USB_PATH + (Robot.isReal() ? "" : ":"));
         } catch (Exception e0) {
             try {
                 createFiles(SYSTEM_PATH);
