@@ -228,7 +228,7 @@ public class Robot extends TimedRobot {
 
         lift.resetLiftEncoder(0); // Talk about whether these should be used or just use limit switches
 
-        lift.collapserer.set(Value.kReverse);
+        lift.unpack();
         Robot.driveTrain.setBrakeMode(true);
 		Scheduler.getInstance().removeAll();
 

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveDistance extends Command {
 
-	public static double CORRECTION = 20;
+	private final static double CORRECTION = 20;
 	
 	private double initialYaw, currentYaw, startLeft, startRight, distance, speeed, timeout, startTime;
 	private boolean usingPigeon;

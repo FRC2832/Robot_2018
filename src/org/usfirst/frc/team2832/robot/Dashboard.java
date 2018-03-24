@@ -1,7 +1,9 @@
 package org.usfirst.frc.team2832.robot;
 
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
+import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DrivePastLine;
 import org.usfirst.frc.team2832.robot.commands.auton.autongroups.LeftSide;
+import org.usfirst.frc.team2832.robot.commands.auton.autongroups.LeftSideScale;
 import org.usfirst.frc.team2832.robot.commands.auton.autongroups.RightSide;
 import org.usfirst.frc.team2832.robot.commands.auton.autongroups.SwitchCenter;
 
@@ -22,8 +24,10 @@ public class Dashboard {
 	
 	public Dashboard() {
 		chooser = new SendableChooser<>();
-		chooser.addDefault("Left Side", AUTON_MODE.LEFTSIDE);
-		chooser.addObject("Right Side", AUTON_MODE.RIGHTSIDE);
+		chooser.addDefault("Left Side Priority Switch", AUTON_MODE.LEFTSIDE_PRIORITYSWITCH);
+		chooser.addDefault("Left Side Priority Scale", AUTON_MODE.LEFTSIDE_PRIORITYSCALE);
+		chooser.addObject("Right Side Priority Switch", AUTON_MODE.RIGHTSIDE_PRIORITYSWITCH);
+		chooser.addObject("Right Side Priority Scale", AUTON_MODE.RIGHTSIDE_PRIORITYSCALE);
 		chooser.addObject("Center", AUTON_MODE.CENTER);
 		chooser.addObject("Just Drive Forward", AUTON_MODE.DRIVEFORWARD);
 		chooser.addObject("Do Nothing", AUTON_MODE.NOTHING);
@@ -44,21 +48,31 @@ public class Dashboard {
 	 * An enumeration for the different autonomous modes
 	 */
 	public enum AUTON_MODE {		
-		LEFTSIDE, RIGHTSIDE, CENTER, TEST, DRIVEFORWARD, NOTHING;
+		LEFTSIDE_PRIORITYSCALE, LEFTSIDE_PRIORITYSWITCH, RIGHTSIDE_PRIORITYSWITCH, RIGHTSIDE_PRIORITYSCALE, CENTER, TEST, DRIVEFORWARD, NOTHING;
 
 		public Command getCommand() {
 			switch (this) {
 
-			case LEFTSIDE: return new LeftSide();
-			case RIGHTSIDE: return new RightSide();
+			case LEFTSIDE_PRIORITYSCALE: return new LeftSide(AUTON_PRIORITY.SCALE);
+			case LEFTSIDE_PRIORITYSWITCH: return new LeftSide(AUTON_PRIORITY.SWITCH);
+			case RIGHTSIDE_PRIORITYSCALE: return new RightSide(AUTON_PRIORITY.SCALE);
+			case RIGHTSIDE_PRIORITYSWITCH: return new RightSide(AUTON_PRIORITY.SWITCH);
+			
 			case CENTER: return new SwitchCenter();
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
-			case TEST: return new TurnPID(90);
-			case DRIVEFORWARD: return new DriveDistance(.7, 100.0, 10.0);
+			case TEST: return new LeftSideScale();
+			case DRIVEFORWARD: return new DrivePastLine();
 			case NOTHING: return null;
 			default: return new DriveDistance(.7, 150.0, 10.0);
 			
 			}
 		}
+	}
+	
+	public enum SIDE {
+		RIGHTSIDE, LEFTSIDE;
+	}
+	public enum AUTON_PRIORITY {
+		SWITCH, SCALE;
 	}
 }

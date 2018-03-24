@@ -61,6 +61,8 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		talonBR.follow(talonFR);
 		drive = new DifferentialDrive(talonFL, talonFR);
 		pigeon = new PigeonIMU(0);
+		talonFL.configOpenloopRamp(0.2, 0);
+		talonFR.configOpenloopRamp(0.2, 0);
 		if(Robot.isReal()) {
 			talonPhoenixLeft.setSensorPhase(true);
 			talonPhoenixRight.setSensorPhase(true);

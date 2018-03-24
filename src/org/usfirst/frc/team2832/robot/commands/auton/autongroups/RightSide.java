@@ -1,49 +1,50 @@
 package org.usfirst.frc.team2832.robot.commands.auton.autongroups;
 
-import edu.wpi.first.wpilibj.command.TimedCommand;
-import org.usfirst.frc.team2832.robot.commands.LowerIngestor;
-import org.usfirst.frc.team2832.robot.commands.MoveLiftPID;
+import org.usfirst.frc.team2832.robot.Dashboard.AUTON_PRIORITY;
+import org.usfirst.frc.team2832.robot.Dashboard.SIDE;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
-import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnPID;
-import org.usfirst.frc.team2832.robot.commands.auton.lift.ExpelCube;
-import org.usfirst.frc.team2832.robot.commands.auton.lift.MoveLiftTime;
-import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnDegrees;
-import org.usfirst.frc.team2832.robot.subsystems.Lift;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
- * Command seqeuence for right side autonomous
+ * Command sequence for RIGHT side autonomous
+ * Takes a priority as a parameter
+ * If Switch is the priority, it will go for the switch first then for the scale, then just forward
+ * If Scale is the priority, it will go for the switch first then for the scale, then just forward
+ *
+ * This command group is only the logic to determine which block of code to run
+ * 
  */
 public class RightSide extends CommandGroup {
 
-    public RightSide() {
-    	
-    	String gameData = DriverStation.getInstance().getGameSpecificMessage();
-    	
-		//addSequential(new SensorFailsafe(0.5d, 120d, ()->Robot.driveTrain.getEncoderPosition(ENCODER.LEFT), ()->Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT), ()->Robot.driveTrain.getPigeonYaw()));
-    	if (gameData.charAt(0) == 'R') { //If the switch is on our side
-    		addParallel(new LowerIngestor(.5));
-			addSequential(new DriveDistance(.6f, -150d, 10)); //go forward to switch
-			addParallel(new MoveLiftTime(1.2, 1));
-    		addSequential(new TurnPID(-90f)); //turn 90 degrees
-			addSequential(new DriveDistance(.6f, -10d, 10)); //go forward to switch
-			addSequential(new ExpelCube());
-			
-    	} else if (gameData.charAt(1) == 'R') { //If the scale is on our side
-			addSequential(new TimedCommand(.5));
-    		addParallel(new MoveLiftTime(2.7, 1));
-    		addSequential(new DriveDistance(.6f, -288d, 10)); // go forward to scale
-    		addSequential(new LowerIngestor(.1));
-            addSequential(new TimedCommand(.5));
-    		addSequential(new TurnPID(-50f)); //turn 90 degrees
-    		addSequential(new ExpelCube());
-    		
-    	} else { //if neither the scale or switch is on our side
-    		addSequential(new DriveDistance(0.5d, -120d, 1d)); //go forward past the line
-    		
-    	}
-    	
-    }
+	public RightSide(AUTON_PRIORITY priority) {
+
+		String gameData = DriverStation.getInstance().getGameSpecificMessage();
+
+		// addSequential(new SensorFailsafe(0.5d, 120d,
+		// ()->Robot.driveTrain.getEncoderPosition(ENCODER.LEFT),
+		// ()->Robot.driveTrain.getEncoderPosition(ENCODER.RIGHT),
+		// ()->Robot.driveTrain.getPigeonYaw()));
+
+		if (priority == AUTON_PRIORITY.SWITCH) {
+			if (gameData.charAt(0) == 'R') {
+				addSequential(new ScoreSwitch(SIDE.RIGHTSIDE));
+			} else if (gameData.charAt(1) == 'R') { 
+				addSequential(new ScoreScale(SIDE.RIGHTSIDE));
+			} else { 
+				addSequential(new DriveDistance(0.5d, -120d, 1d));
+			}
+		}
+		
+		if (priority == AUTON_PRIORITY.SCALE) {
+			if (gameData.charAt(1) == 'R') { 
+				addSequential(new ScoreScale(SIDE.RIGHTSIDE));
+			} else if (gameData.charAt(0) == 'R') {
+				addSequential(new ScoreSwitch(SIDE.RIGHTSIDE));
+			} else { 
+				addSequential(new DriveDistance(0.5d, -120d, 1d)); 
+			}
+		}
+
+	}
 }
