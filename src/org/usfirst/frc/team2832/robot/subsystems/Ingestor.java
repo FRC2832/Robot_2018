@@ -109,8 +109,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		} else if (!(getCurrentCommand() instanceof LowerIngestor)){
 			tilt.set(Value.kOff);
 		}
-		talonL.set(ControlMode.PercentOutput, -Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft));
-		talonR.set(ControlMode.PercentOutput, -Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight));
+		talonL.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft):0);
+		talonR.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight):0);
 		
 		
 	}

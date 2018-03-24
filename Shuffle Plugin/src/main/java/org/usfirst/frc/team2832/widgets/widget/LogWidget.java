@@ -266,15 +266,15 @@ public class LogWidget extends SimpleAnnotatedWidget<LogData> {
                 if ("USB".equals(comboBox.getValue()))
                     sourceDir = "/U/";
                 else // Must be 'RIO'
-                    sourceDir = "/home/justin/";//"/home/lvuser/";
+                    sourceDir = "/home/lvuser/";//"/home/lvuser/";
                 FTPClient ftpClient;
                 try {
                     ftpClient = new FTPClient();
                     // connect and login to the server
                     //ftpClient.connect(IP, 21);
                     //ftpClient.login(USERNAME, PASSWORD);
-                    ftpClient.connect("192.168.1.173", 21);
-                    ftpClient.login("justin", "yeah, no");
+                    ftpClient.connect(IP, 21);
+                    ftpClient.login(USERNAME, PASSWORD);
                     // use local passive mode to pass firewall
                     ftpClient.enterLocalPassiveMode();
                     downloadDirectory(ftpClient, sourceDir + "LOGS", directory.getAbsolutePath() + "LOGS");
