@@ -101,7 +101,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kLeftRumble,  0.7d, Math.max(accelerometer[0], accelerometer[2]));
 			Robot.controls.setRumble(Controllers.CONTROLLER_SECCONDARY, RumbleType.kRightRumble, 0.7d, Math.max(accelerometer[0], accelerometer[2]));
 		}*/
-		
+		/*
 		if (getPigeonRoll() > 20) {
 			isTipping = true;
 			drive.tankDrive(1, 1);
@@ -114,6 +114,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			isTipping = false;
 			drive.tankDrive(0, 0);
 		}
+		//*/
 	}
 
 	/**
@@ -206,7 +207,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 *            to drive in between -1 and 1
 	 */
 	public void arcadeDrive(double speed, double direction) {
-		if(!isTipping && Robot.isReal()) {
+		if(/*!isTipping && */Robot.isReal()) {
 			drive.arcadeDrive(speed, direction);
 		}	
 	}
@@ -220,7 +221,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 *            between 0 and 1
 	 */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		if(!isTipping && Robot.isReal()) {
+		if(/*!isTipping &&*/ Robot.isReal()) {
 			drive.tankDrive(leftSpeed, rightSpeed);
 		}
 	}

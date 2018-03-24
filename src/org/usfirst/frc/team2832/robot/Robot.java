@@ -138,7 +138,7 @@ public class Robot extends TimedRobot {
         logger.addLoggedValue(() -> pdp.getCurrent(8)); //      |
         logger.addLoggedValue(() -> pdp.getCurrent(3)); // | Probably ingestors
         logger.addLoggedValue(() -> pdp.getCurrent(4)); // |
-        logger.addLoggedValue(() -> pdp.getCurrent(52)); //      Probably compressor
+        logger.addLoggedValue(() -> pdp.getCurrent(9)); //      Probably compressor
         logger.addLoggedValue(() -> lift.getLiftEncoderPosition());
         logger.addLoggedValue(() -> driveTrain.getPigeonYaw());
 		logger.addLoggedValue(() -> driveTrain.getPigeonPitch());

@@ -28,6 +28,7 @@ public class Logger {
             createFiles((Robot.isReal() ? "/" : "") + USB_PATH + (Robot.isReal() ? "" : ":"));
         } catch (Exception e0) {
             try {
+            	System.err.println("Normal log path failed, attempting to use SYSTEM_PATH (" + SYSTEM_PATH + ").");
                 createFiles(SYSTEM_PATH);
             } catch (Exception e1) {
                 System.err.println(new Exception("Failed to create logger", e1).toString());
@@ -54,9 +55,8 @@ public class Logger {
     private void createFiles(String path) throws IOException, NullPointerException {
         File dir = new File(path + File.separator + "LOGS" + File.separator);
         dir.mkdir();
-        dir = new File(path + File.separator + "CSV" + File.separator);
-        dir.mkdir();
-        File log = null, csv = null;
+        File dir2 = new File(path + File.separator + "CSV" + File.separator);
+        dir2.mkdir();
         for (int i = 0; i <= MAX_LOGS; i++) {
             log = new File(path + File.separator + "LOGS" + File.separator + "EventLog-" + i + ".txt");
             if (!log.exists()) {
@@ -66,8 +66,6 @@ public class Logger {
         }
         log.createNewFile();
         csv.createNewFile();
-        this.log = log;
-        this.csv = csv;
     }
 
     public void clearSingletons() {
@@ -170,6 +168,8 @@ public class Logger {
                 logOnce(e);
             }
         }
+        if(csvWriter == null)
+        	return;
         try {
             csvWriter.write(builder.toString());
             csvWriter.newLine();
