@@ -204,13 +204,16 @@ public class Logger {
         }
     }
 
-    public void dispose() {
-        System.out.println("Disposed logger");
+    @Override
+    protected void finalize() {
         try {
             logWriter.close();
             csvWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Disposed logger");
+        } catch (NullPointerException e) {
+            new RuntimeException("Logger was not open to be disposed", e).printStackTrace();
+        } catch (Exception e) {
+            new RuntimeException("Failed to dispose logger", e).printStackTrace();
         }
     }
 }
