@@ -62,7 +62,7 @@ public class Dashboard {
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
 			case TEST: return new LeftSideScale();
 			case DRIVEFORWARD: return new DrivePastLine();
-			case NOTHING: return null;
+			case NOTHING: return new DriveDistance(0, 0, 0);
 			default: return new DriveDistance(.7, 150.0, 10.0);
 			
 			}
