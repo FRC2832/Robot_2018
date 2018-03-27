@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class TurnPID extends Command implements PIDOutput, PIDSource {
 	
-	private final double P = 0.15;
-	private final double I = 0.0002;
+	private final double P = 0.1575;
+	private final double I = 0.000185;
 	private final double D = 0.5;
-	private final double F = 0.00;
+	private double F = 0.00;//A feed forward the same for both directions makes no sense.
 	
 	private final double TOLERANCE_DEGREES = 3f; //Accepted distance from target angle
 	private final int PATIENCE = 5; // Minimum "frames" where it is within angle range, I think
@@ -29,6 +29,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private int counter;
 
 	public TurnPID(double degrees) {
+		F = .0003*degrees;
 		requires(Robot.driveTrain);
 		this.degrees = degrees;
 		sourceType = PIDSourceType.kDisplacement;

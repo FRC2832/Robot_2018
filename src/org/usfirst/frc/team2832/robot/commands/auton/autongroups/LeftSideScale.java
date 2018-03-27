@@ -25,10 +25,10 @@ public class LeftSideScale extends CommandGroup {
 		} else {
 			
 			addSequential(new TimedCommand(.5));
-			addSequential(new DriveDistance(.7f, -250d, 10)); //TODO: Set this distance!!
+			addSequential(new DriveDistance(.9f, -250d, 10)); //TODO: Set this distance!!
 			addSequential(new TurnPID(90.0));
 			addParallel(new MoveLiftTime(2.7, 1));
-			addSequential(new DriveDistance(.7f, -250d, 10)); //TODO: Set this distance!!
+			addSequential(new DriveDistance(.9f, -250d, 10)); //TODO: Set this distance!!
 			addSequential(new TurnPID(-90.0));
 			addSequential(new LowerIngestor(.1));
 			addSequential(new ExpelCube());

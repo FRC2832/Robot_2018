@@ -19,8 +19,8 @@ public class ScoreScale extends CommandGroup {
     public ScoreScale(SIDE side) {
     	if (side == SIDE.LEFTSIDE) {
     		addSequential(new TimedCommand(.5));
-			addParallel(new MoveLiftTime(2.7, 1));
-			addSequential(new DriveDistance(.7f, -288d, 10)); 
+			addParallel(new MoveLiftTime(4, 1));
+			addSequential(new DriveDistance(.8f, -288d, 10)); 
 			addSequential(new LowerIngestor(.1));
 			addSequential(new TimedCommand(.5));
 			addSequential(new TurnPID(50f)); 
@@ -29,8 +29,8 @@ public class ScoreScale extends CommandGroup {
     	
     	if (side == SIDE.RIGHTSIDE) {
     		addSequential(new TimedCommand(.5));
-    		addParallel(new MoveLiftTime(2.7, 1));
-    		addSequential(new DriveDistance(.6f, -288d, 10)); 
+    		addParallel(new MoveLiftTime(4, 1));
+    		addSequential(new DriveDistance(.8f, -288d, 10)); 
     		addSequential(new LowerIngestor(.1));
             addSequential(new TimedCommand(.5));
     		addSequential(new TurnPID(-50f));
