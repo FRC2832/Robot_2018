@@ -181,9 +181,11 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "pressure", 250*(pressureVoltage/5)-25);
 		
 		if ((250*(pressureVoltage/5)-25) < 40) {
-			if (pressureWarningCycle > 10) {
+			if (pressureWarningCycle > 20) {
 				warningForPressure = !warningForPressure;
 				pressureWarningCycle = 0;
+			} else {
+				warningForPressure = true;
 			}
 			pressureWarningCycle++;
 		}

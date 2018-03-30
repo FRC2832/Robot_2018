@@ -29,10 +29,8 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private double targetAngle, degrees, startAngle;
 	private int counter;
 	
-	private double startTime;
-	private final double TIMEOUT = 3;
-
-	public TurnPID(double degrees) {
+	public TurnPID(double degrees, double timeOut) {
+		super(timeOut);
 		F = .0003*degrees;
 		requires(Robot.driveTrain);
 		this.degrees = degrees;
@@ -44,6 +42,10 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		controller.setAbsoluteTolerance(TOLERANCE_DEGREES);
 		controller.disable();
 	}
+	
+	public TurnPID(double degrees) {
+		this(degrees, 3);
+	}
 
 	protected void initialize() {
 		controller.reset();
@@ -52,8 +54,6 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 
 		System.out.println("Initial yaw angle " + Robot.driveTrain.getPigeonYaw());
 		Robot.logger.log("Turn PID", "Turning " + degrees + " degrees");
-		
-		startTime = Timer.getFPGATimestamp();
 	}
 
 	protected void execute() {
@@ -67,7 +67,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	}
 
 	protected boolean isFinished() {
-		if (Timer.getFPGATimestamp() - startTime > TIMEOUT)
+		if (isTimedOut()) 
 			return true;
 		if ((Math.abs(Robot.driveTrain.getPigeonYaw() - targetAngle)) <= TOLERANCE_DEGREES)
 			counter++;
