@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class TurnPID extends Command implements PIDOutput, PIDSource {
 	
-	private final double P = 0.1575;
+	private final double P = 0.06;
 	private final double I = 0.000185;
 	private final double D = 0.5;
 	private double F = 0.00;//A feed forward the same for both directions makes no sense.
@@ -27,6 +28,9 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private PIDController controller;
 	private double targetAngle, degrees, startAngle;
 	private int counter;
+	
+	private double startTime;
+	private final double TIMEOUT = 3;
 
 	public TurnPID(double degrees) {
 		F = .0003*degrees;
@@ -48,6 +52,8 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 
 		System.out.println("Initial yaw angle " + Robot.driveTrain.getPigeonYaw());
 		Robot.logger.log("Turn PID", "Turning " + degrees + " degrees");
+		
+		startTime = Timer.getFPGATimestamp();
 	}
 
 	protected void execute() {
@@ -61,6 +67,8 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	}
 
 	protected boolean isFinished() {
+		if (Timer.getFPGATimestamp() - startTime > TIMEOUT)
+			return true;
 		if ((Math.abs(Robot.driveTrain.getPigeonYaw() - targetAngle)) <= TOLERANCE_DEGREES)
 			counter++;
 		else

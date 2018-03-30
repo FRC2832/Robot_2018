@@ -61,6 +61,8 @@ public class Robot extends TimedRobot {
 	private Compressor compressor;
 	private Arduino teensy;
 	private double pressureVoltage;
+	private boolean warningForPressure = false;
+	private int pressureWarningCycle = 0;
 
 	/**
 	 * Gets which robot the code is running on
@@ -177,6 +179,17 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Collapser collapsed", lift == null ? false : lift.getPacked());
 		SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "voltage", pdp.getVoltage());
 		SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "pressure", 250*(pressureVoltage/5)-25);
+		
+		if ((250*(pressureVoltage/5)-25) < 40) {
+			if (pressureWarningCycle > 10) {
+				warningForPressure = !warningForPressure;
+				pressureWarningCycle = 0;
+			}
+			pressureWarningCycle++;
+		}
+		SmartDashboard.putBoolean(Dashboard.PREFIX_DRIVER + "Low Pressure Warning", warningForPressure);
+		
+		
 		//SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "voltage", 10);
 		//SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "pressure", 40);
 		//byte[] sensorVals = teensy.read();
