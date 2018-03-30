@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,12 +24,15 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private final double TOLERANCE_DEGREES = 3f; //Accepted distance from target angle
 	private final int PATIENCE = 5; // Minimum "frames" where it is within angle range, I think
 
+	private double time;
+	
 	private PIDSourceType sourceType;
 	private PIDController controller;
 	private double targetAngle, degrees, startAngle;
 	private int counter;
 
 	public TurnPID(double degrees) {
+		time = Timer.getFPGATimestamp();
 		F = .0003*degrees;
 		requires(Robot.driveTrain);
 		this.degrees = degrees;
@@ -54,6 +58,10 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Starting angle", startAngle);
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Target angle", targetAngle);
 		// Move to initialize() if this works
+		if(Timer.getFPGATimestamp() - time > 2.5) {
+			controller.reset();//clears the integral term
+			time = Timer.getFPGATimestamp();
+		}
 		if (!controller.isEnabled()) {
 			controller.setSetpoint(targetAngle);
 			controller.enable();

@@ -184,6 +184,8 @@ public class Robot extends TimedRobot {
 			if (pressureWarningCycle > 10) {
 				warningForPressure = !warningForPressure;
 				pressureWarningCycle = 0;
+			} else {
+				warningForPressure = true;
 			}
 			pressureWarningCycle++;
 		}
