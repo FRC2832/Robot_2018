@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class TurnPID extends Command implements PIDOutput, PIDSource {
 	
+	//Try removing F, and adjusting D. Perhaps increasing I a little could help counter it. 
+	
 	private final double P = 0.1575;
 	private final double I = 0.00019;
 	private final double D = 0.7;
