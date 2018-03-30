@@ -27,6 +27,7 @@ public class ScoreScale extends CommandGroup {
 			addSequential(new ExpelCube());
     	}
     	
+    	
     	if (side == SIDE.RIGHTSIDE) {
     		addSequential(new TimedCommand(.5));
     		addParallel(new MoveLiftTime(4, 1));

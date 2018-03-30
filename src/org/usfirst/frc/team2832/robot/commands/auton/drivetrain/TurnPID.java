@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TurnPID extends Command implements PIDOutput, PIDSource {
 	
 	private final double P = 0.1575;
-	private final double I = 0.000185;
-	private final double D = 0.5;
+	private final double I = 0.00019;
+	private final double D = 0.7;
 	private double F = 0.00;//A feed forward the same for both directions makes no sense.
 	
 	private final double TOLERANCE_DEGREES = 3f; //Accepted distance from target angle
@@ -58,10 +58,10 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Starting angle", startAngle);
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Target angle", targetAngle);
 		// Move to initialize() if this works
-		if(Timer.getFPGATimestamp() - time > 2.5) {
+		/*if(Timer.getFPGATimestamp() - time > 2.5) {
 			controller.reset();//clears the integral term
 			time = Timer.getFPGATimestamp();
-		}
+		}*/
 		if (!controller.isEnabled()) {
 			controller.setSetpoint(targetAngle);
 			controller.enable();
@@ -69,6 +69,8 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	}
 
 	protected boolean isFinished() {
+		if(Timer.getFPGATimestamp() - time > 4)
+			return true;
 		if ((Math.abs(Robot.driveTrain.getPigeonYaw() - targetAngle)) <= TOLERANCE_DEGREES)
 			counter++;
 		else
