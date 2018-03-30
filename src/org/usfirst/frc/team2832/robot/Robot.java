@@ -180,12 +180,13 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "voltage", pdp.getVoltage());
 		SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "pressure", 250*(pressureVoltage/5)-25);
 		
+		//Displays flashing boolean on shuffleboard when there is low pressure
 		if ((250*(pressureVoltage/5)-25) < 40) {
 			if (pressureWarningCycle > 20) {
 				warningForPressure = !warningForPressure;
 				pressureWarningCycle = 0;
 			} else {
-				warningForPressure = true;
+				warningForPressure = true; //Makes boolean display green when pressure is good
 			}
 			pressureWarningCycle++;
 		}
