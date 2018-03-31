@@ -6,14 +6,19 @@ import org.usfirst.frc.team2832.robot.Robot;
 
 public class MoveLiftTime extends Command {
 
-    private double startTime, duration, speeeed;
+    private double startTime, duration, speeeed, delay;
 
     public MoveLiftTime(double duration, double speeeed) {
+        this(duration, speeeed, 0);
+    }
+
+    public MoveLiftTime(double duration, double speeeed, double delay) {
         requires(Robot.lift);
         this.duration = duration;
         this.speeeed = speeeed;
+        this.delay = delay;
     }
-
+    
     @Override
     protected void initialize() {
         startTime = Timer.getFPGATimestamp();
@@ -21,7 +26,9 @@ public class MoveLiftTime extends Command {
 
     @Override
     protected void execute() {
-        Robot.lift.setLiftPower(speeeed);
+    	if (Timer.getFPGATimestamp() - startTime > delay) {
+    		Robot.lift.setLiftPower(speeeed);
+    	}
     }
 
     @Override
@@ -36,6 +43,6 @@ public class MoveLiftTime extends Command {
 
     @Override
     protected boolean isFinished() {
-        return Timer.getFPGATimestamp() > startTime + duration;
+        return Timer.getFPGATimestamp() > startTime + duration + delay;
     }
 }

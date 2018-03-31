@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveDistance extends Command {
 
-	private static double CORRECTION = 20;
+	private static double CORRECTION;
 	
 	private double initialYaw, currentYaw, startLeft, startRight, distance, speeed, timeout, startTime;
 	private boolean usingPigeon;
@@ -20,7 +20,7 @@ public class DriveDistance extends Command {
 	// Negative distances work
 	public DriveDistance(double speeed, double distance, double timeout) {
 		requires(Robot.driveTrain);
-		CORRECTION = 30 * speeed;
+		CORRECTION = 40 * speeed;
 		this.speeed = speeed;
 		this.distance = distance;
 		this.timeout = timeout;

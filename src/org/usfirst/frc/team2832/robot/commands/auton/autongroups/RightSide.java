@@ -32,7 +32,7 @@ public class RightSide extends CommandGroup {
 			} else if (gameData.charAt(1) == 'R') { 
 				addSequential(new ScoreScale(SIDE.RIGHTSIDE));
 			} else { 
-				addSequential(new DriveDistance(0.5d, -120d, 1d));
+				addSequential(new DriveDistance(0.5d, -120d, 10d));
 			}
 		}
 		
@@ -42,7 +42,7 @@ public class RightSide extends CommandGroup {
 			} else if (gameData.charAt(0) == 'R') {
 				addSequential(new ScoreSwitch(SIDE.RIGHTSIDE));
 			} else { 
-				addSequential(new DriveDistance(0.5d, -120d, 1d)); 
+				addSequential(new DriveDistance(0.5d, -120d, 10d)); 
 			}
 		}
 

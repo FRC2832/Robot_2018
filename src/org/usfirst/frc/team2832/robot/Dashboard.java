@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnPID;
+import org.usfirst.frc.team2832.robot.commands.auton.lift.ExpelCube;
 
 /**
  * This class handles interaction with the dashboard
@@ -60,10 +61,10 @@ public class Dashboard {
 			
 			case CENTER: return new SwitchCenter();
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
-			case TEST: return new LeftSideScale();
-			case DRIVEFORWARD: return new DrivePastLine();
+			case TEST: return new DriveDistance(0.7d, -120d, 10d);
+			case DRIVEFORWARD: return new  DriveDistance(0.7d, -120d, 10d);
 			case NOTHING: return new DriveDistance(0, 0, 0); //returning null as a command breaks things. 
-			default: return new DriveDistance(.7, -150.0, 10.0);
+			default: return new DriveDistance(.7, -120.0, 10.0);
 			
 			}
 		}
@@ -73,6 +74,6 @@ public class Dashboard {
 		RIGHTSIDE, LEFTSIDE;
 	}
 	public enum AUTON_PRIORITY {
-		SWITCH, SCALE;
+		SWITCH, SCALE, ONLYSWITCH;
 	}
 }
