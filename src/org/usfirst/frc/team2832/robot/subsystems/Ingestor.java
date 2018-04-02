@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.commands.LowerIngestor;
 
@@ -109,9 +110,10 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		} else if (!(getCurrentCommand() instanceof LowerIngestor)){
 			tilt.set(Value.kOff);
 		}
-		talonL.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft):0);
-		talonR.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight):0);
-		
+		if (!RobotState.isAutonomous()) {			
+			talonL.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft):-0.1);
+			talonR.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight):-0.1);
+		}
 		
 	}
 
