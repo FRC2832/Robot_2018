@@ -144,7 +144,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			pulsesPer100Mili = -talonPhoenixRight.getSensorCollection().getQuadratureVelocity();
 		else // Average with no encoder flags
 			pulsesPer100Mili = (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() - talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d;
-		return pulsesPer100Mili / 144d * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 4.67d);
+		return pulsesPer100Mili / 144d * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / GEAR_RATIO);
 	}
 
 	/**
