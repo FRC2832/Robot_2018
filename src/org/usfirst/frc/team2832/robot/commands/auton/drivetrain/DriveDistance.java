@@ -2,6 +2,7 @@ package org.usfirst.frc.team2832.robot.commands.auton.drivetrain;
 
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.DriveTrainFlags;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.Encoder;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -16,11 +17,14 @@ public class DriveDistance extends Command {
 	
 	private double initialYaw, currentYaw, startLeft, startRight, distance, speeed, timeout, startTime;
 	private boolean usingPigeon;
+	private boolean firstTime = true;
+	private double startL, startR;
+	private final double TOLERANCE = 4;
 
 	// Negative distances work
 	public DriveDistance(double speeed, double distance, double timeout) {
 		requires(Robot.driveTrain);
-		CORRECTION = 30 * speeed;
+		CORRECTION = 15d / speeed;
 		this.speeed = speeed;
 		this.distance = distance;
 		this.timeout = timeout;
@@ -42,6 +46,15 @@ public class DriveDistance extends Command {
 	 * Drive strait at desired speed
 	 */
 	protected void execute() {
+		if(firstTime) {
+			startL = Robot.driveTrain.getEncoderPosition(Encoder.LEFT);
+			startR = Robot.driveTrain.getEncoderPosition(Encoder.RIGHT);
+		}else {
+			if(Math.abs((Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startL) - (Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startR)) > TOLERANCE) {
+				Robot.logger.error("[Diagnoser]", "Encoder failure detected: Showing curve during DriveDistance.");
+				Robot.driveTrain.addFlags(DriveTrainFlags.ENCODER_L, DriveTrainFlags.ENCODER_R);//TODO utilize a known problem system
+			}
+		}
 		if(usingPigeon) {
 			currentYaw = Robot.driveTrain.getPigeonYaw();
 			//This is a bit backwards
@@ -75,11 +88,11 @@ public class DriveDistance extends Command {
 		if(Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_R))
 			return Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft;
 		else if(Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_L))
-			return startLeft + Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight;
+			return Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight;
 		else
 			return (Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft + Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight) / 2f;
 	}
-
+	
 	/**
 	 * Remember to shut off motors when done
 	 */

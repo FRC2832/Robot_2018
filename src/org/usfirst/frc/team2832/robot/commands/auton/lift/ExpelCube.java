@@ -17,8 +17,11 @@ public class ExpelCube extends Command {
 	private double startTime;
 	private Ingestor Ingestor = Robot.ingestor;
 	
+	private boolean runOnce;
+	
     public ExpelCube() {
     	requires(Robot.ingestor);
+    	runOnce = false;
     }
 
     // Called just before this Command runs the first time
@@ -30,7 +33,8 @@ public class ExpelCube extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Ingestor.setMotorSpeed(EXPEL_SPEED);
-    	Robot.ingestor.unpinch();
+    	if(!runOnce)
+    		Robot.ingestor.unpinch();
     }
 
     // Make this return true when this Command no longer needs to run execute()

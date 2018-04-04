@@ -48,6 +48,10 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 
 	private boolean isTipping = false;
 	
+	private double previousDifference = Double.MAX_VALUE;
+	private double previousValue = Double.MAX_VALUE;
+	private final double TOLERANCE = 7;
+	
 	public DriveTrain() {
 		super();
 		transmission = new DoubleSolenoid(TRANSMISSION_FIRST_GEAR_CHANNEL,TRANSMISSION_SECOND_GEAR_CHANNEL);
@@ -92,8 +96,25 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
         SmartDashboard.putString(Dashboard.PREFIX_PROG + "Current Gear", transmission.get().equals(Value.kForward) ? "first" : "second");
 
 		// Toggles which gear it is in and makes controller rumble
-
-
+        if(!hasFlag(DriveTrainFlags.ENCODER_L) || !hasFlag(DriveTrainFlags.ENCODER_R)) {
+        	double pos = Double.MAX_VALUE;
+	        if(!hasFlag(DriveTrainFlags.ENCODER_L))
+	        	pos = getEncoderPosition(Encoder.LEFT);
+	        else if(!hasFlag(DriveTrainFlags.ENCODER_R))
+	        	pos = getEncoderPosition(Encoder.RIGHT);
+	        if(previousValue != Double.MAX_VALUE) {
+	        	if(previousDifference != Double.MAX_VALUE){
+	        		if(Math.abs((pos - previousValue) - previousDifference) > TOLERANCE) {
+	        			if(!hasFlag(DriveTrainFlags.ENCODER_L))
+	        				addFlag(DriveTrainFlags.ENCODER_L);
+	        			else
+	        				addFlag(DriveTrainFlags.ENCODER_R);
+	        		}
+	        	}
+	        	previousDifference = pos - previousValue;
+	        }
+	        previousValue = pos;
+        }
 		// Vibrate controllers if greater than threshold in "Gs"
 		/*double[] accelerometer = new double[3];
 		pigeon.getAccelerometerAngles(accelerometer);
@@ -256,7 +277,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		if(Robot.isReal())
 			pigeon.setYaw(angle, 100);
 	}
-
+	
 	/**
 	 * Retrieves the yaw value from the pigeon IMU
 	 * 

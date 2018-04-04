@@ -2,6 +2,7 @@ package org.usfirst.frc.team2832.robot.commands.auton.drivetrain;
 
 import org.usfirst.frc.team2832.robot.Dashboard;
 import org.usfirst.frc.team2832.robot.Robot;
+import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.DriveTrainFlags;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class TurnPID extends Command implements PIDOutput, PIDSource {
 	
-	//Try removing F, and adjusting D. Perhaps increasing I a little could help counter it. 
+	//TODO Try removing F, and adjusting D. Perhaps increasing I a little could help counter it. 
 	
 	private final double P = 0.1575;
 	private final double I = 0.00019;
@@ -26,7 +27,8 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private final double TOLERANCE_DEGREES = 3f; //Accepted distance from target angle
 	private final int PATIENCE = 5; // Minimum "frames" where it is within angle range, I think
 
-	private double time;
+	private double startTime = -1;
+	private double TOLERANCE = 10;
 	
 	private PIDSourceType sourceType;
 	private PIDController controller;
@@ -34,7 +36,8 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private int counter;
 
 	public TurnPID(double degrees) {
-		time = Timer.getFPGATimestamp();
+		if(degrees < 40)
+			TOLERANCE = degrees / 4;
 		F = .0003*degrees;
 		requires(Robot.driveTrain);
 		this.degrees = degrees;
@@ -57,6 +60,14 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	}
 
 	protected void execute() {
+		if(startTime == -1)
+			startTime = Timer.getFPGATimestamp();
+		if(startTime + 1 < Timer.getFPGATimestamp()) {
+			if(Math.abs(Robot.driveTrain.getPigeonYaw() - startAngle) < TOLERANCE) {
+				Robot.driveTrain.addFlag(DriveTrainFlags.PIGEON);
+			}
+		}
+			
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Starting angle", startAngle);
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Target angle", targetAngle);
 		// Move to initialize() if this works
@@ -71,7 +82,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	}
 
 	protected boolean isFinished() {
-		if(Timer.getFPGATimestamp() - time > 4)
+		if(Timer.getFPGATimestamp() - startTime > 4)
 			return true;
 		if ((Math.abs(Robot.driveTrain.getPigeonYaw() - targetAngle)) <= TOLERANCE_DEGREES)
 			counter++;
