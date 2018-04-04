@@ -32,15 +32,17 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	final static int DRIVE_MOTER_FR = 24;
 	final static int DRIVE_MOTER_BL = 11;
 	final static int DRIVE_MOTER_BR = 23;
+	
+	final static double GEAR_RATIO = 1d; //Old was 3:1
 
 	final static double VIBRATE_THRESHOLD = 0.4d;
-
+	
 	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; // Circumference divided by
 																				// pulses/revolution
 	private static final double ENCODER_ERROR_PERCENTAGE_LEFT = 68d / 6.62d; // Actual/desired distance
 	private static final double ENCODER_ERROR_PERCENTAGE_RIGHT = 68d / 6.62d; // Actual/desired distance
 
-	private DoubleSolenoid transmission;
+//	private DoubleSolenoid transmission;
 	private DifferentialDrive drive;
 	private WPI_TalonSRX talonFL, talonFR, talonBL, talonBR;
 	private TalonSRX talonPhoenixLeft, talonPhoenixRight;
@@ -50,7 +52,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	
 	public DriveTrain() {
 		super();
-		transmission = new DoubleSolenoid(TRANSMISSION_FIRST_GEAR_CHANNEL,TRANSMISSION_SECOND_GEAR_CHANNEL);
+//		transmission = new DoubleSolenoid(TRANSMISSION_FIRST_GEAR_CHANNEL,TRANSMISSION_SECOND_GEAR_CHANNEL);
 		talonFL = new WPI_TalonSRX(DRIVE_MOTER_FL);
 		talonFR = new WPI_TalonSRX(DRIVE_MOTER_FR);
 		talonBL = new WPI_TalonSRX(DRIVE_MOTER_BL);
@@ -89,7 +91,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Right Position", getEncoderPosition(Encoder.RIGHT));
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Yaw Value", getPigeonYaw());
         SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Pitch Value", getPigeonPitch());
-        SmartDashboard.putString(Dashboard.PREFIX_PROG + "Current Gear", transmission.get().equals(Value.kForward) ? "first" : "second");
+//        SmartDashboard.putString(Dashboard.PREFIX_PROG + "Current Gear", transmission.get().equals(Value.kForward) ? "first" : "second");
 
 		// Toggles which gear it is in and makes controller rumble
 
@@ -142,7 +144,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			pulsesPer100Mili = -talonPhoenixRight.getSensorCollection().getQuadratureVelocity();
 		else // Average with no encoder flags
 			pulsesPer100Mili = (talonPhoenixLeft.getSensorCollection().getQuadratureVelocity() - talonPhoenixRight.getSensorCollection().getQuadratureVelocity()) / 2d;
-		return pulsesPer100Mili / 144d * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
+		return pulsesPer100Mili / 144d * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 4.67d);
 	}
 
 	/**
@@ -162,7 +164,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			pulses = -talonPhoenixRight.getSensorCollection().getQuadraturePosition() * ENCODER_ERROR_PERCENTAGE_RIGHT;
 		else
 			pulses = 0; // Don't use average, it won't work
-		return pulses * ENCODER_COUNT_TO_INCH * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / 3d);
+		return pulses * ENCODER_COUNT_TO_INCH * (Robot.RobotType.Programming.equals(Robot.getRobotType()) ? 1d : 1d / GEAR_RATIO);
 	}
 
 	/**
@@ -189,16 +191,16 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	 * @param gear
 	 *            to shift to
 	 */
-	public void shift(GEAR gear) {
-		transmission.set(gear.getValue());
-	}
+//	public void shift(GEAR gear) {
+//		transmission.set(gear.getValue());
+//	}
 
 	/**
 	 * Toggles selected gear
 	 */
-	public void toggleShift() {
-		transmission.set(transmission.get().equals(GEAR.HIGH.getValue()) ? GEAR.LOW.getValue(): GEAR.HIGH.getValue());
-	}
+//	public void toggleShift() {
+//		transmission.set(transmission.get().equals(GEAR.HIGH.getValue()) ? GEAR.LOW.getValue(): GEAR.HIGH.getValue());
+//	}
 
 	/**
 	 * Commands the drive motors using arcade drive

@@ -258,7 +258,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		Robot.driveTrain.shift(DriveTrain.GEAR.LOW);
+//		Robot.driveTrain.shift(DriveTrain.GEAR.LOW);
 		// If diagnostic is done, start either selected command group or just drive forward to line.
 		if(!postDiagnosis && diagnostic.doneDiagnosing()) {
 			postDiagnosis = true;

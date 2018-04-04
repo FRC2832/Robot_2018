@@ -75,7 +75,7 @@ public class DriveDistance extends Command {
 		if(Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_R))
 			return Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft;
 		else if(Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_L))
-			return startLeft + Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight;
+			return Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight;
 		else
 			return (Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft + Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight) / 2f;
 	}

@@ -106,7 +106,7 @@ public class ArcadeDrive extends Command {
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityDownshift", downshift.interpolate(dD));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityLeft", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.LEFT));
         SmartDashboard.putNumber(Dashboard.PREFIX_DRIVER + "velocityRight", Robot.driveTrain.getEncoderVelocity(DriveTrain.Encoder.RIGHT));*/
-        if((Math.abs(Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight)) < 0.2)) {
+ /*       if((Math.abs(Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight)) < 0.2)) {
             if (velocity >= upshift.interpolate(fadedDD)) {
                 SmartDashboard.putBoolean("High Gear", true);
                 Robot.driveTrain.shift(DriveTrain.GEAR.HIGH);
@@ -114,7 +114,7 @@ public class ArcadeDrive extends Command {
                 SmartDashboard.putBoolean("High Gear", false);
                 Robot.driveTrain.shift(DriveTrain.GEAR.LOW);
             }
-        }
+        }*/
         if(!DriverStation.getInstance().isAutonomous())
         	Robot.driveTrain.arcadeDrive(-Math.signum(Robot.controls.getJoystickY(Controllers.CONTROLLER_MAIN, Hand.kLeft)) * fadedDD,
         				Robot.controls.getJoystickX(Controllers.CONTROLLER_MAIN, Hand.kRight) * LIFT_LIMIT);
