@@ -61,10 +61,10 @@ public class Dashboard {
 			
 			case CENTER: return new SwitchCenter();
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
-			case TEST: return new DriveDistance(0.8d, -120d, 10d);
-			case DRIVEFORWARD: return new  DriveDistance(0.8d, -120d, 10d);
+			case TEST: return new DriveDistance(0.8d, -120d, 2d);
+			case DRIVEFORWARD: return new  DriveDistance(0.8d, -120d, 2d);
 			case NOTHING: return new DriveDistance(0, 0, 0); //returning null as a command breaks things. 
-			default: return new DriveDistance(.7, -120.0, 10.0);
+			default: return new DriveDistance(.7, -120.0, 2d);
 			
 			}
 		}

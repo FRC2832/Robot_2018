@@ -37,8 +37,9 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 
 	final static double VIBRATE_THRESHOLD = 0.4d;
 	
-	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; // Circumference divided by
-																				// pulses/revolution
+//	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; // Circumference divided by pulses/revolution
+	private static final double ENCODER_COUNT_TO_INCH = 1 / 763.544d;
+	
 	private static final double ENCODER_ERROR_PERCENTAGE_LEFT = 68d / 6.62d; // Actual/desired distance
 	private static final double ENCODER_ERROR_PERCENTAGE_RIGHT = 68d / 6.62d; // Actual/desired distance
 
