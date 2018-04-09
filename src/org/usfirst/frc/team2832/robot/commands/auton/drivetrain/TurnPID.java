@@ -10,11 +10,12 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team2832.robot.statemachine.SubsystemModule;
 
 /**
  * Turns desired degrees using PID
  */
-public class TurnPID extends Command implements PIDOutput, PIDSource {
+public class TurnPID extends SubsystemModule implements PIDOutput, PIDSource {
 	
 	private final double P = 0.06;
 	private final double I = 0.000185;
@@ -30,9 +31,8 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private int counter;
 	
 	public TurnPID(double degrees, double timeOut) {
-		super(timeOut);
 		F = .0003*degrees;
-		requires(Robot.driveTrain);
+		//requires(Robot.driveTrain);
 		this.degrees = degrees;
 		sourceType = PIDSourceType.kDisplacement;
 		controller = new PIDController(P, I, D, F, this, this, 0.02);
@@ -42,12 +42,17 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		controller.setAbsoluteTolerance(TOLERANCE_DEGREES);
 		controller.disable();
 	}
-	
+
+	@Override
+	public void start() {
+
+	}
+
 	public TurnPID(double degrees) {
 		this(degrees, 3);
 	}
 
-	protected void initialize() {
+	public void initialize() {
 		controller.reset();
 		startAngle = Robot.driveTrain.getPigeonYaw();		
 		targetAngle = Robot.driveTrain.getPigeonYaw() + degrees;
@@ -56,7 +61,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		Robot.logger.log("Turn PID", "Turning " + degrees + " degrees");
 	}
 
-	protected void execute() {
+	public void execute() {
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Starting angle", startAngle);
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Target angle", targetAngle);
 		// Move to initialize() if this works
@@ -66,9 +71,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		}
 	}
 
-	protected boolean isFinished() {
-		if (isTimedOut()) 
-			return true;
+	public boolean isFinished() {
 		if ((Math.abs(Robot.driveTrain.getPigeonYaw() - targetAngle)) <= TOLERANCE_DEGREES)
 			counter++;
 		else
@@ -76,13 +79,13 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		return (counter > PATIENCE);
 	}
 
-	protected void end() {
+	public void end() {
 		Robot.logger.log("Turn PID", "Ended");
 		Robot.driveTrain.tankDrive(0, 0);
 		controller.disable();
 	}
 
-	protected void interrupted() {
+	public void interrupted() {
 		Robot.logger.log("Turn PID", "Interrupted");
 		Robot.driveTrain.tankDrive(0, 0);
 		controller.disable();

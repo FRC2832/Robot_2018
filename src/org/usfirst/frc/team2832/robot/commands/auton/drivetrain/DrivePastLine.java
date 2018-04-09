@@ -16,7 +16,7 @@ public class DrivePastLine extends TimedCommand {
 	
     public DrivePastLine() {
         super(7);
-        requires(Robot.driveTrain);
+        //requires(Robot.driveTrain);
     }
 
     // Called just before this Command runs the first time

@@ -4,7 +4,6 @@ import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls;
 import org.usfirst.frc.team2832.robot.Robot;
 import org.usfirst.frc.team2832.robot.commands.Climb;
-import org.usfirst.frc.team2832.robot.commands.MoveLiftNoBackdrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -12,17 +11,18 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team2832.robot.statemachine.StandardState;
+import org.usfirst.frc.team2832.robot.statemachine.WarriorSubsystem;
 
 /**
  * The lift subsystem which handles an encoder, commanding the lift motor, and
  * folding with a pneumatic cylinder
  */
-public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
+public class Lift extends WarriorSubsystem<Lift.LiftFlags> {
 
 	final static private int COLLAPSE_FORWARD_CHANNEL = 7;
 	final static private int COLLAPSE_REVERSE_CHANNEL = 4;
@@ -66,10 +66,10 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 	}
 	
 	public static void setControls() {
-		Robot.controls.whilePressed(ButtonMapping.CLIMB_0, new Climb());
-		Robot.controls.whilePressed(ButtonMapping.CLIMB_1, new Climb());
-		Robot.controls.whilePressed(ButtonMapping.CLIMB_2, new Climb());
-		Robot.controls.whilePressed(ButtonMapping.CLIMB_3, new Climb());
+		//Robot.controls.whilePressed(ButtonMapping.CLIMB_0, new Climb());
+		//Robot.controls.whilePressed(ButtonMapping.CLIMB_1, new Climb());
+		//Robot.controls.whilePressed(ButtonMapping.CLIMB_2, new Climb());
+		//Robot.controls.whilePressed(ButtonMapping.CLIMB_3, new Climb());
 	}
 
 	//the pistons are retracted when the climber is extended and extended when the climber is retracted
@@ -128,26 +128,22 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		return Math.abs(limitSwitch.getAverageVoltage() - 5) < 2;
 	}
 
-	public void initDefaultCommand() {
-		setDefaultCommand(new MoveLiftNoBackdrive());
-	}
-	
 	public double [] getTriggers() {
 		double [] vals = {liftTriggerL, liftTriggerR};
 		return vals;
 	}
 
 	@Override
-    public void periodic() {
+    public void update() {
 		
 		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft));
 		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight));
 		
 		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
-			if(getCurrentCommand() instanceof Climb)
-				getCurrentCommand().cancel();
+			if(((StandardState)getState()).getModule() instanceof Climb)
+				getState().cancel();
 			else
-				Scheduler.getInstance().add(new Climb());
+				Robot.subsystemHandler.start(new Climb());
 		}
 
 		if(Robot.controls.getButtonPressed(ButtonMapping.PACK_BUTTON)) {

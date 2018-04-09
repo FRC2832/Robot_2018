@@ -17,13 +17,14 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;;
+import org.usfirst.frc.team2832.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team2832.robot.statemachine.WarriorSubsystem;;
 
 /**
  * The drive train subsystem which handles encoders, the transmission, and
  * driving
  */
-public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> {
+public class DriveTrain extends WarriorSubsystem<DriveTrain.DriveTrainFlags> {
 
 	final static int TRANSMISSION_FIRST_GEAR_CHANNEL = 5;
 	final static int TRANSMISSION_SECOND_GEAR_CHANNEL = 6;
@@ -70,21 +71,14 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
 		}
 	}
-	
-	/**
-	 * Runs the {@link ArcadeDrive} command when no other command is running on this
-	 * subsystem
-	 */
-	public void initDefaultCommand() {
-		setDefaultCommand(new ArcadeDrive());
-	}
+
 
 	/**
 	 * Puts values to dashboard and listens for pressing of the Y button for
 	 * rumbling
 	 */
 	@Override
-	public void periodic() {
+	public void update() {
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Left Position", getEncoderPosition(Encoder.LEFT));
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Encoder Right Position", getEncoderPosition(Encoder.RIGHT));
 		SmartDashboard.putNumber(Dashboard.PREFIX_PROG + "Pigeon Yaw Value", getPigeonYaw());

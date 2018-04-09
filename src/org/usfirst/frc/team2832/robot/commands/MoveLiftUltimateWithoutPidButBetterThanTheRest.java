@@ -16,7 +16,7 @@ public class MoveLiftUltimateWithoutPidButBetterThanTheRest extends Command {
 	private boolean moving;
 
 	public MoveLiftUltimateWithoutPidButBetterThanTheRest() {
-		requires(Robot.lift);
+		//requires(Robot.lift);
 	}
 
 	@Override

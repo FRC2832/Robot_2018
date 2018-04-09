@@ -1,30 +1,16 @@
 package org.usfirst.frc.team2832.robot.statemachine;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+public interface Module {
 
-public abstract class Module {
+    void initialize();
 
-    private List<WarriorSubsystem> requirements = new ArrayList<>();
+    void start();
 
-    final protected void requires(WarriorSubsystem...subsystems) {
-        requirements.addAll(Arrays.asList(subsystems));
-    }
+    void execute();
 
-    final List<WarriorSubsystem> getRequired() {
-        return requirements;
-    }
+    void end();
 
-    abstract void initialize();
+    void interrupted();
 
-    abstract void start();
-
-    abstract void execute();
-
-    abstract void end();
-
-    abstract void interrupted();
-
-    abstract boolean isFinished() ;
+    boolean isFinished() ;
 }

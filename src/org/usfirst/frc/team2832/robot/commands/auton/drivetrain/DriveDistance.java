@@ -1,6 +1,8 @@
 package org.usfirst.frc.team2832.robot.commands.auton.drivetrain;
 
 import org.usfirst.frc.team2832.robot.Robot;
+import org.usfirst.frc.team2832.robot.statemachine.Module;
+import org.usfirst.frc.team2832.robot.statemachine.SubsystemModule;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.Encoder;
 
@@ -10,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  * Drives forward desired distance at desired speed
  */
-public class DriveDistance extends Command {
+public class DriveDistance extends SubsystemModule {
 
 	private static double CORRECTION;
 	
@@ -19,7 +21,7 @@ public class DriveDistance extends Command {
 
 	// Negative distances work
 	public DriveDistance(double speeed, double distance, double timeout) {
-		requires(Robot.driveTrain);
+		//requires(Robot.driveTrain);
 		CORRECTION = 40 * speeed;
 		this.speeed = speeed;
 		this.distance = distance;
@@ -29,7 +31,7 @@ public class DriveDistance extends Command {
 	/**
 	 * Set the starting position by averaging encoder values
 	 */
-	protected void initialize() {
+	public void initialize() {
 		startLeft = Robot.driveTrain.getEncoderPosition(Encoder.LEFT);
 		startRight = Robot.driveTrain.getEncoderPosition(Encoder.RIGHT);
 		initialYaw = Robot.driveTrain.getPigeonYaw();
@@ -38,10 +40,15 @@ public class DriveDistance extends Command {
 		Robot.logger.log("Drive Distance", "Is " + (usingPigeon ? "" : "not") + " using pigeon for " + distance + "inch move");
 	}
 
+	@Override
+	public void start() {
+
+	}
+
 	/**
 	 * Drive strait at desired speed
 	 */
-	protected void execute() {
+	public void execute() {
 		if(usingPigeon) {
 			currentYaw = Robot.driveTrain.getPigeonYaw();
 			//This is a bit backwards
@@ -58,7 +65,7 @@ public class DriveDistance extends Command {
 	/**
 	 * Terminate command if desired distance has been traveled
 	 */
-	protected boolean isFinished() {
+	public boolean isFinished() {
 		if(Timer.getFPGATimestamp() > startTime + timeout)
 			return true;
 		if(!Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_L) || !Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_R)) {
@@ -83,12 +90,12 @@ public class DriveDistance extends Command {
 	/**
 	 * Remember to shut off motors when done
 	 */
-	protected void end() {
+	public void end() {
 		Robot.logger.log("Drive Distance", "Ended");
 		Robot.driveTrain.tankDrive(0, 0);
 	}
 
-	protected void interrupted() {
+	public void interrupted() {
 		Robot.logger.log("Drive Distance", "Interrupted");
 		Robot.driveTrain.tankDrive(0, 0);
 	}

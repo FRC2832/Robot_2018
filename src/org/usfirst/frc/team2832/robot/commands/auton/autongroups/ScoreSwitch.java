@@ -17,8 +17,8 @@ public class ScoreSwitch extends CommandGroup {
 
     public ScoreSwitch(SIDE side) {
     	
-        if (side == SIDE.RIGHTSIDE) {
-        	addParallel(new LowerIngestor(.5));
+        /*if (side == SIDE.RIGHTSIDE) {
+        	//addParallel(new LowerIngestor(.5));
 			addSequential(new DriveDistance(.75f, -150d, 10)); 
 			addParallel(new MoveLiftTime(1.2, 1));
     		addSequential(new TurnPID(-90f)); 
@@ -27,13 +27,13 @@ public class ScoreSwitch extends CommandGroup {
         }
         
         if (side == SIDE.LEFTSIDE) {
-        	addParallel(new LowerIngestor(.5));
+        	//addParallel(new LowerIngestor(.5));
 			addSequential(new DriveDistance(.75f, -150d, 10)); 
 			addParallel(new MoveLiftTime(1.2, 1));
     		addSequential(new TurnPID(90f)); 
 			addSequential(new DriveDistance(.75f, -25d, 10)); 
 			addSequential(new ExpelCube());
-        }
+        }*/
     }
     
 }

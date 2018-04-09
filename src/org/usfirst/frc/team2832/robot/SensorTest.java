@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2832.robot;
 
+import org.usfirst.frc.team2832.robot.statemachine.WarriorSubsystem;
 import org.usfirst.frc.team2832.robot.subsystems.DiagnosticSubsystem;
 
 import java.util.function.Supplier;
@@ -10,7 +11,7 @@ import java.util.function.Supplier;
 public class SensorTest {
 
     private Supplier<Boolean> sensor;
-    private DiagnosticSubsystem subsystem;
+    private WarriorSubsystem subsystem;
     private Enum flag;
 
     /**
@@ -18,7 +19,7 @@ public class SensorTest {
      * @param subsystem to flag
      * @param flag to add
      */
-    public SensorTest(Supplier<Boolean> sensor, DiagnosticSubsystem subsystem, Enum flag) {
+    public SensorTest(Supplier<Boolean> sensor, WarriorSubsystem subsystem, Enum flag) {
         this.sensor = sensor;
         this.subsystem = subsystem;
         this.flag = flag;
@@ -28,7 +29,7 @@ public class SensorTest {
         return sensor.get();
     }
 
-    public DiagnosticSubsystem getSubsystem() {
+    public WarriorSubsystem getSubsystem() {
         return subsystem;
     }
 

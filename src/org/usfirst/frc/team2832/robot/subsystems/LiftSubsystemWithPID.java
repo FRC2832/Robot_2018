@@ -31,14 +31,14 @@ public class LiftSubsystemWithPID extends Lift implements PIDSource, PIDOutput {
 	}
 
 	@Override
-	public void periodic() {
-		if (Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0)
+	public void update() {
+		/*if (Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0)
 				|| Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if (getCurrentCommand() instanceof Climb)
 				getCurrentCommand().cancel();
 			else
 				Scheduler.getInstance().add(new Climb());
-		}
+		}*/
 
 		if (Robot.controls.getButtonPressed(ButtonMapping.PACK_BUTTON)) {
 			if (collapserer.get() == DoubleSolenoid.Value.kForward)
@@ -53,7 +53,7 @@ public class LiftSubsystemWithPID extends Lift implements PIDSource, PIDOutput {
 			;// resetLiftEncoder(0); Todo: Potentially set calculated postion when at top of
 				// lift for better precision
 
-		SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command", getCurrentCommandName());
+		//SmartDashboard.putString(Dashboard.PREFIX_PROG + "current command", getCurrentCommandName());
 
 		/*
 		 * if(Robot.controls.getButtonPressed(ButtonMapping.LEVEL_UP)) { for(int i = 0;
@@ -98,11 +98,6 @@ public class LiftSubsystemWithPID extends Lift implements PIDSource, PIDOutput {
 
 	public void disableController() {
 		controller.disable();
-	}
-
-	@Override
-	public void initDefaultCommand() {
-
 	}
 
 	@Override

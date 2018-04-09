@@ -15,7 +15,7 @@ public class MoveLiftNoBackdrive extends Command {
 	private double target;
     
     public MoveLiftNoBackdrive() {
-        requires(Robot.lift);
+        //requires(Robot.lift);
     }
 
     @Override

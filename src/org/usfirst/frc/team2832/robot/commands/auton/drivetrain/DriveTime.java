@@ -15,7 +15,7 @@ public class DriveTime extends Command {
 	private double startTime, duration, speeed;
 	
     public DriveTime(double speeed, double duration) {
-    	requires(Robot.driveTrain);
+    	//requires(Robot.driveTrain);
     	this.duration = duration;
     	this.speeed = speeed;
     }

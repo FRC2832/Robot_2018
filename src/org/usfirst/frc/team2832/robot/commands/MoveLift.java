@@ -27,7 +27,7 @@ public class MoveLift extends Command {
 	private boolean stop = false;
 	//Add something about encoders and converting to inches
 	public MoveLift() {
-		requires(Robot.lift);
+		//requires(Robot.lift);
 	}
 	//Working on math for the range here
 	//Assuming + for up, - for down

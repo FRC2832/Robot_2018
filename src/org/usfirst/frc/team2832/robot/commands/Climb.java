@@ -1,43 +1,51 @@
 package org.usfirst.frc.team2832.robot.commands;
 
-import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Robot;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team2832.robot.statemachine.SubsystemModule;
+import org.usfirst.frc.team2832.robot.statemachine.Subsystems;
+import org.usfirst.frc.team2832.robot.subsystems.Lift;
 
-public class Climb extends Command {
+public class Climb extends SubsystemModule {
+
+	Lift lift;
 
 	public Climb() {
-		requires(Robot.lift);
+		lift = (Lift)Robot.subsystemHandler.get(Subsystems.Lift);
+		requires(Subsystems.Lift);
 	}
-	
-	protected void initialize() {
+
+	@Override
+	public void start() {
+
+	}
+
+	public void initialize() {
 		//Robot.lift.pack();
 		Robot.logger.log("Climb", "Starting");
-		Robot.lift.setWinchBrakeMode(true);
+		lift.setWinchBrakeMode(true);
 	}
-	
-	protected void execute() {
-		Robot.lift.setWinchPower(3);
+
+	public void execute() {
+		lift.setWinchPower(3);
 	}
 	
 	@Override
-	protected boolean isFinished() {
+	public boolean isFinished() {
 		return false;
 	}
-	
-	protected void end() {
+
+	public void end() {
 		Robot.logger.log("Climb", "Ended");
-		Robot.lift.setWinchPower(0);
-		Robot.lift.setWinchBrakeMode(false);
+		lift.setWinchPower(0);
+		lift.setWinchBrakeMode(false);
 		//Robot.lift.unpack();
 	}
-	
-	protected void interrupted() {
+
+	public void interrupted() {
 		Robot.logger.log("Climb", "Interrupted");
-		Robot.lift.setWinchPower(0);
-		Robot.lift.setWinchBrakeMode(false);
+		lift.setWinchPower(0);
+		lift.setWinchBrakeMode(false);
 		//Robot.lift.unpack();
 	}
 }

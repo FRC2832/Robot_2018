@@ -26,13 +26,13 @@ public class LeftSideScale extends CommandGroup {
 		} else {
 			
 			addSequential(new TimedCommand(.5));
-			addSequential(new DriveDistance(.7f, -240d, 10)); 
+			/*addSequential(new DriveDistance(.7f, -240d, 10));
 			addSequential(new TurnPID(90.0));
 			addParallel(new MoveLiftTime(2.7, 1));
 			addSequential(new DriveDistance(.7f, -235d, 10));
 			addSequential(new TurnPID(-90.0));
-			addSequential(new LowerIngestor(.1));
-			addSequential(new ExpelCube());
+			//addSequential(new LowerIngestor(.1));
+			addSequential(new ExpelCube());*/
 			
 		}
 

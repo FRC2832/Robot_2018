@@ -1,46 +1,51 @@
 package org.usfirst.frc.team2832.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2832.robot.Robot;
+import org.usfirst.frc.team2832.robot.statemachine.SubsystemModule;
+import org.usfirst.frc.team2832.robot.statemachine.Subsystems;
 
-public class LowerIngestor extends Command {
+public class LowerIngestor extends SubsystemModule {
 
     private double startTime;
     private double duration;
 
     public LowerIngestor() {
-        requires(Robot.ingestor);
-        duration = 2d;
+        this(2d);
     }
 
     public LowerIngestor(double time) {
-    	requires(Robot.ingestor);
+        requires(Subsystems.Ingestor);
     	duration = time;
     }
-    
+
     @Override
-    protected void initialize() {
+    public void start() {
+
+    }
+
+    @Override
+    public void initialize() {
         startTime = Timer.getFPGATimestamp();
     }
 
     @Override
-    protected void execute() {
-        Robot.ingestor.lowerTilt();
+    public void execute() {
+        Robot.subsystemHandler.get(Subsystems.Ingestor);
     }
 
     @Override
-    protected void end() {
-
-    }
-
-    @Override
-    protected void interrupted() {
+    public void end() {
 
     }
 
     @Override
-    protected boolean isFinished() {
+    public void interrupted() {
+
+    }
+
+    @Override
+    public boolean isFinished() {
         return Timer.getFPGATimestamp() > startTime + duration;
     }
 }

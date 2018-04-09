@@ -17,7 +17,7 @@ public class TurnDegrees extends Command {
 	// TODO: 2/9/2018 Switch this to take in one parameter which reflects direction, as well
 	//set turnRight to true to turn right, set to false to turn left
 	public TurnDegrees(double degrees, boolean turnRight) {
-		requires(Robot.driveTrain);
+		//requires(Robot.driveTrain);
 		this.degrees = degrees;
 		this.turnRight = turnRight;
 		driveTrain = Robot.driveTrain;

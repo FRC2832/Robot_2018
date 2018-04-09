@@ -32,7 +32,7 @@ public class MoveLiftPID extends Command implements PIDOutput, PIDSource {
 	}
 	
     public MoveLiftPID(double targetHeight) {
-    	requires(Robot.lift);
+    	//requires(Robot.lift);
     	this.targetHeight = targetHeight;
     	sourceType = PIDSourceType.kDisplacement;
 		controller = new PIDController(P, I, D, F, this, this);

@@ -38,7 +38,7 @@ public class ArcadeDrive extends Command {
 	private boolean doingFadeCurve = false;
 	
     public ArcadeDrive() {
-        requires(Robot.driveTrain);
+        //requires(Robot.driveTrain);
 
         joystickToDD = new LinearInterpolation(new double[]{0, 0.1, 0.4, 1}, new double[]{0, 0.2, 0.7, 1});
         joystickToDDPrecision = new LinearInterpolation(new double[]{0, 0.6, 1}, new double[]{0.2, 0.5, 1});

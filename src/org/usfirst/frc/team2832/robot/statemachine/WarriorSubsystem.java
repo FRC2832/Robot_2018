@@ -13,9 +13,42 @@ import java.util.List;
 public abstract class WarriorSubsystem<E extends Enum> {
 
     private List<E> flags;
+    private State currentState;
+    private String name;
 
     public WarriorSubsystem() {
         flags = new ArrayList<>();
+        this.name = getClass().getSimpleName();
+    }
+
+    public WarriorSubsystem(String name) {
+        flags = new ArrayList<>();
+        this.name = name;
+    }
+
+    /**
+     * Called peridically
+     */
+    public abstract void update();
+
+    void initialize() {
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public State getState() {
+        return currentState;
+    }
+
+    public void setState(State state) {
+        currentState = state;
+    }
+
+    public State getDefaultState() {
+        return null;
     }
 
     /**

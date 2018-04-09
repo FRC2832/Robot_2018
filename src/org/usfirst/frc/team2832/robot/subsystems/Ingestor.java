@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2832.robot.commands.LowerIngestor;
+import org.usfirst.frc.team2832.robot.statemachine.StandardState;
+import org.usfirst.frc.team2832.robot.statemachine.WarriorSubsystem;
 
-public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
+public class Ingestor extends WarriorSubsystem<Ingestor.IngestorFlags> {
 	
 	final static int INGESTOR_L = 13; // fix these
 	final static int INGESTOR_R = 14;
@@ -40,16 +42,6 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		// lowerTilt();
 		if(Robot.isReal())
 			talonR.setInverted(true);
-	}
-	
-	@Override
-	protected void initDefaultCommand() {
-		
-	}
-	
-	public void launch() {
-		// FIGURE THIS OUT
-		// via left trigger ???
 	}
 	
 	public void setMotorSpeed(double sped) {
@@ -90,8 +82,9 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	public void unpinch() {
 		pintcher.set(Value.kReverse);
 	}
-	
-	public void periodic () {
+
+	@Override
+	public void update () {
 		boolean sensorInIR = readDigital();
 		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "DigitalIntake Val", sensorInIR);
 		
@@ -106,7 +99,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			tilt.set(Value.kForward);
 		} else if (Robot.controls.getButton(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {
 			tilt.set(Value.kReverse);
-		} else if (!(getCurrentCommand() instanceof LowerIngestor)){
+		} else if (getState() instanceof StandardState && !(((StandardState)getState()).getModule() instanceof LowerIngestor)){
 			tilt.set(Value.kOff);
 		}
 		talonL.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft):0);
