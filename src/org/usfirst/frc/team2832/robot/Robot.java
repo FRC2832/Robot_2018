@@ -117,6 +117,7 @@ public class Robot extends TimedRobot {
 		new Thread(() -> {
 	    	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	    	camera.setResolution(640, 480);
+	    	camera.setFPS(30);
 	    	while(true) {
 	    		if(!camera.isConnected()) {
 	    			camera.free();

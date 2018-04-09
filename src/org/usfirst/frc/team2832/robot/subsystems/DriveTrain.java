@@ -50,7 +50,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	
 	private double previousDifference = Double.MAX_VALUE;
 	private double previousValue = Double.MAX_VALUE;
-	private final double TOLERANCE = 7;
+	private final double TOLERANCE = 7.5;
 	
 	public DriveTrain() {
 		super();
@@ -105,10 +105,13 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	        if(previousValue != Double.MAX_VALUE) {
 	        	if(previousDifference != Double.MAX_VALUE){
 	        		if(Math.abs((pos - previousValue) - previousDifference) > TOLERANCE) {
-	        			if(!hasFlag(DriveTrainFlags.ENCODER_L))
+	        			if(!hasFlag(DriveTrainFlags.ENCODER_L)) {
 	        				addFlag(DriveTrainFlags.ENCODER_L);
-	        			else
+	        				Robot.logger.error("[Diagnostics]", "Left encoder acceleration too high, assuming broken");
+	        			}else {
+	        				Robot.logger.error("[Diagnostics]", "Right encoder acceleration too high, assuming broken");
 	        				addFlag(DriveTrainFlags.ENCODER_R);
+	        			}
 	        		}
 	        	}
 	        	previousDifference = pos - previousValue;
