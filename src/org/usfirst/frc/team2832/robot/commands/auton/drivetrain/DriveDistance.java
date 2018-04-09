@@ -16,8 +16,9 @@ public class DriveDistance extends Command {
 	
 	private double initialYaw, currentYaw, startLeft, startRight, distance, speeed, timeout, startTime;
 	private boolean usingPigeon;
+	private boolean hasRun;
 
-	// Negative distances work
+	// Negative distances work and drive forward
 	public DriveDistance(double speeed, double distance, double timeout) {
 		requires(Robot.driveTrain);
 		CORRECTION = 40 * speeed;
@@ -30,11 +31,12 @@ public class DriveDistance extends Command {
 	 * Set the starting position by averaging encoder values
 	 */
 	protected void initialize() {
+		hasRun = false;
 		startLeft = Robot.driveTrain.getEncoderPosition(Encoder.LEFT);
 		startRight = Robot.driveTrain.getEncoderPosition(Encoder.RIGHT);
 		initialYaw = Robot.driveTrain.getPigeonYaw();
 		startTime = Timer.getFPGATimestamp();
-		usingPigeon = !Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.PIGEON);
+		usingPigeon = !Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.PIGEON);		
 		Robot.logger.log("Drive Distance", "Is " + (usingPigeon ? "" : "not") + " using pigeon for " + distance + "inch move");
 	}
 
@@ -42,6 +44,15 @@ public class DriveDistance extends Command {
 	 * Drive strait at desired speed
 	 */
 	protected void execute() {
+		if(hasRun) {
+			startLeft = Robot.driveTrain.getEncoderPosition(Encoder.LEFT);
+			startRight = Robot.driveTrain.getEncoderPosition(Encoder.RIGHT);
+			initialYaw = Robot.driveTrain.getPigeonYaw();
+			startTime = Timer.getFPGATimestamp();
+			usingPigeon = !Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.PIGEON);
+			Robot.logger.log("Drive Distance", "Is " + (usingPigeon ? "" : "not") + " using pigeon for " + distance + "inch move");
+			hasRun = false;
+		}
 		if(usingPigeon) {
 			currentYaw = Robot.driveTrain.getPigeonYaw();
 			//This is a bit backwards
@@ -63,9 +74,9 @@ public class DriveDistance extends Command {
 			return true;
 		if(!Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_L) || !Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_R)) {
 			if (distance >= 0)
-				return averageDist() > distance;
+				return averageDist() >= distance;
 			else
-				return averageDist() < distance;
+				return averageDist() <= distance;
 		} else {
 			return false;
 		}
@@ -86,10 +97,12 @@ public class DriveDistance extends Command {
 	protected void end() {
 		Robot.logger.log("Drive Distance", "Ended");
 		Robot.driveTrain.tankDrive(0, 0);
+		hasRun = true;
 	}
 
 	protected void interrupted() {
 		Robot.logger.log("Drive Distance", "Interrupted");
 		Robot.driveTrain.tankDrive(0, 0);
+		hasRun = true;
 	}
 }
