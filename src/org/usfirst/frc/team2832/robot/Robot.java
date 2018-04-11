@@ -47,7 +47,6 @@ public class Robot extends TimedRobot {
     private StateMachine autonMachine;
 
     private AnalogInput robotTypeInput;
-    private DiagnoseSensors diagnostic;
     private boolean postDiagnosis;
     private Compressor compressor;
     private Arduino teensy;
@@ -104,18 +103,6 @@ public class Robot extends TimedRobot {
         dashboard = new Dashboard(); //Make sure that this is after all subsystems and controls
 
         compressor = new Compressor();
-
-        // Create the command to be called before autonomous
-        diagnostic = new DiagnoseSensors(
-                new SensorTest(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT) == 0, driveTrain, DriveTrain.DriveTrainFlags.ENCODER_L),
-                new SensorTest(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.RIGHT) == 0, driveTrain, DriveTrain.DriveTrainFlags.ENCODER_R),
-                new SensorTest(() -> driveTrain.getPigeonYaw() == 0, driveTrain, DriveTrain.DriveTrainFlags.PIGEON),
-                new SensorTest(() -> lift.getLiftEncoderPosition() == 0, lift, Lift.LiftFlags.ENCODER));
-        autonMachine = new StateMachine.Builder()
-                .addState(new StandardState(diagnostic)
-                        .setTimeout(.3))
-                .addStates(new CenterAuton())
-                .build();
 
         // Create camera
         new Thread(() -> {
@@ -253,6 +240,17 @@ public class Robot extends TimedRobot {
         logger.log("Robot Type", robotType.name());
         driveTrain.setBrakeMode(true);
 
+        // Create the command to be called before autonomous
+        Module diagnostic = new DiagnoseSensors(
+                new SensorTest(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT) == 0, driveTrain, DriveTrain.DriveTrainFlags.ENCODER_L),
+                new SensorTest(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.RIGHT) == 0, driveTrain, DriveTrain.DriveTrainFlags.ENCODER_R),
+                new SensorTest(() -> driveTrain.getPigeonYaw() == 0, driveTrain, DriveTrain.DriveTrainFlags.PIGEON),
+                new SensorTest(() -> lift.getLiftEncoderPosition() == 0, lift, Lift.LiftFlags.ENCODER));
+        autonMachine = new StateMachine.Builder()
+                .addState(new StandardState(diagnostic)
+                        .setTimeout(.3))
+                .addStates(new CenterAuton())
+                .build();
         subsystemHandler.clearStates();
         subsystemHandler.start(autonMachine);
         //Scheduler.getInstance().removeAll();

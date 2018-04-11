@@ -10,7 +10,7 @@ public class CenterAuton extends StateProviderBuilder {
 
     public CenterAuton() {
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
-        gameData = "LLL ";
+
         addSequential(new DriveDistance(0.7d, -20d, 10d)).setTimeout(5);
         addParallel(new MoveLiftTime(1.2, 1, 1.5));
 
