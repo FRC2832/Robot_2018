@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 
 /**
- *
+ * The group of commands that only scores on the scale
+ * If the left side of the scale is ours, score on scale as usual
+ * If the right side of the scale is ours, go across the field and score on it
  */
 public class LeftSideScale extends CommandGroup {
 

@@ -87,9 +87,17 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 	public void lowerTilt() {
 		tilt.set(Value.kForward);
 	}
+	
+	public void raiseTilt() {
+		tilt.set(Value.kReverse);
+	}
 
 	public void unpinch() {
 		pintcher.set(Value.kReverse);
+	}
+	
+	public void pinch() {
+		pintcher.set(Value.kForward);
 	}
 	
 	public void periodic () {
@@ -100,7 +108,7 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			unpinch();
 		}
 		else {
-			pintcher.set(Value.kForward);
+			pinch();
 		}
 		
 		if (Robot.controls.getButton(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {

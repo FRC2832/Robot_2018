@@ -21,7 +21,7 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private final double D = 0.5;
 	private double F = 0.00;//A feed forward the same for both directions makes no sense.
 	
-	private final double TOLERANCE_DEGREES = 3f; //Accepted distance from target angle
+	private double TOLERANCE_DEGREES; //Accepted distance from target angle
 	private final int PATIENCE = 5; // Minimum "frames" where it is within angle range, I think
 
 	private PIDSourceType sourceType;
@@ -29,8 +29,9 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	private double targetAngle, degrees, startAngle;
 	private int counter;
 	
-	public TurnPID(double degrees, double timeOut) {
+	public TurnPID(double degrees, double timeOut, double ToleranceDegrees) {
 		super(timeOut);
+		TOLERANCE_DEGREES = ToleranceDegrees;
 		F = .0003*degrees;
 		requires(Robot.driveTrain);
 		this.degrees = degrees;
@@ -43,8 +44,12 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 		controller.disable();
 	}
 	
+	public TurnPID(double degrees, double timeOut) {
+		this(degrees, timeOut, 3);
+	}
+	
 	public TurnPID(double degrees) {
-		this(degrees, 3);
+		this(degrees, 3, 3);
 	}
 
 	protected void initialize() {
