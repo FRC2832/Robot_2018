@@ -3,7 +3,7 @@ package org.usfirst.frc.team2832.robot;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DrivePastLine;
 import org.usfirst.frc.team2832.robot.commands.auton.autongroups.LeftSide;
-import org.usfirst.frc.team2832.robot.commands.auton.autongroups.LeftSideDualCube;
+//import org.usfirst.frc.team2832.robot.commands.auton.autongroups.LeftSideDualCube;
 import org.usfirst.frc.team2832.robot.commands.auton.autongroups.LeftSideScale;
 import org.usfirst.frc.team2832.robot.commands.auton.autongroups.RightSide;
 import org.usfirst.frc.team2832.robot.commands.auton.autongroups.SwitchCenter;
@@ -63,7 +63,7 @@ public class Dashboard {
 			case LEFTSIDE_SCALEONLY: return new LeftSideScale();
 			case CENTER: return new SwitchCenter();
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
-			case TEST: return new LeftSideDualCube();
+			//case TEST: return new LeftSideDualCube();
 			case DRIVEFORWARD: return new  DriveDistance(0.7d, -120d, 10d);
 			case NOTHING: return new DriveDistance(0, 0, 0); //returning null as a command breaks things. 
 			default: return new DriveDistance(.7, -120.0, 10d);

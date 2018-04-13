@@ -143,12 +143,13 @@ public class Lift extends DiagnosticSubsystem<Lift.LiftFlags> {
 		liftTriggerR = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft));
 		liftTriggerL = Math.abs(Robot.controls.getTrigger(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight));
 		
-		if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
+		/*if(Robot.controls.getButtonPressed(ButtonMapping.CLIMB_0) || Robot.controls.getButtonPressed(ButtonMapping.CLIMB_1)) {
 			if(getCurrentCommand() instanceof Climb)
 				getCurrentCommand().cancel();
 			else
 				Scheduler.getInstance().add(new Climb());
-		}
+		}*/
+		
 
 		if(Robot.controls.getButtonPressed(ButtonMapping.PACK_BUTTON)) {
 			if(collapserer.get() == Value.kForward)
