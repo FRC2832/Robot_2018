@@ -23,7 +23,7 @@ public class DriveDistance extends Command {
 		requires(Robot.driveTrain);
 		CORRECTION = 40 * speeed;
 		this.speeed = speeed;
-		this.distance = distance;
+		this.distance = -1 * distance;
 		this.timeout = timeout;
 	}
 
@@ -45,6 +45,7 @@ public class DriveDistance extends Command {
 	 */
 	protected void execute() {
 		if(hasRun) {
+			Robot.logger.log("Has run thing running (DriveDistance starting again");
 			startLeft = Robot.driveTrain.getEncoderPosition(Encoder.LEFT);
 			startRight = Robot.driveTrain.getEncoderPosition(Encoder.RIGHT);
 			initialYaw = Robot.driveTrain.getPigeonYaw();
@@ -70,13 +71,21 @@ public class DriveDistance extends Command {
 	 * Terminate command if desired distance has been traveled
 	 */
 	protected boolean isFinished() {
-		if(Timer.getFPGATimestamp() > startTime + timeout)
-			return true;
+		if(Timer.getFPGATimestamp() > startTime + timeout) {
+			Robot.logger.log("Ending by time");
+			return true;			
+		}
 		if(!Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_L) || !Robot.driveTrain.hasFlag(DriveTrain.DriveTrainFlags.ENCODER_R)) {
-			if (distance >= 0)
-				return averageDist() >= distance;
-			else
-				return averageDist() <= distance;
+			if (distance >= 0) {
+				if (maxDist() >= distance) {
+					Robot.logger.log("Ending by Distance");
+					return true;	
+				} else {
+					return false;
+				}
+			} else {
+				return maxDist() <= distance;
+			}
 		} else {
 			return false;
 		}
@@ -89,6 +98,14 @@ public class DriveDistance extends Command {
 			return Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight;
 		else
 			return (Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft + Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight) / 2f;
+	}
+	
+	private double maxDist() {
+		if (Math.abs(Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft) > Math.abs(Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight)) {
+			return Robot.driveTrain.getEncoderPosition(Encoder.LEFT) - startLeft;			
+		} else {
+			return Robot.driveTrain.getEncoderPosition(Encoder.RIGHT) - startRight;	
+		}
 	}
 
 	/**

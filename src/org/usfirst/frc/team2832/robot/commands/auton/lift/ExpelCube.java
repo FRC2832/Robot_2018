@@ -12,15 +12,21 @@ import edu.wpi.first.wpilibj.command.Command;
 public class ExpelCube extends Command {
 
     private final double EXPEL_DURATION = 3;
-    private final double EXPEL_SPEED = 1;
+    private double EXPEL_SPEED = 1;
 
 	private double startTime;
 	private Ingestor Ingestor = Robot.ingestor;
 	
     public ExpelCube() {
+    	super(1);
     	requires(Robot.ingestor);
     }
-
+    
+    public ExpelCube(double speed) {
+    	EXPEL_SPEED = speed;
+    	requires(Robot.ingestor);
+    }
+    
     // Called just before this Command runs the first time
     protected void initialize() {
     	startTime = Timer.getFPGATimestamp();

@@ -103,6 +103,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			pintcher.set(Value.kForward);
 		}
 		
+		SmartDashboard.putBoolean(Dashboard.PREFIX_PROG + "Pinched", pintcher.get() == Value.kForward);
+		
 		if (Robot.controls.getButton(ButtonMapping.LOWER_TILT.getController(), ButtonMapping.LOWER_TILT.getButton())) {
 			tilt.set(Value.kForward);
 		} else if (Robot.controls.getButton(ButtonMapping.RAISE_TILT.getController(), ButtonMapping.RAISE_TILT.getButton())) {

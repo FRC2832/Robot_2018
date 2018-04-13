@@ -116,14 +116,16 @@ public class Robot extends TimedRobot {
 		// Create camera
 		new Thread(() -> {
 	    	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-	    	camera.setResolution(640, 480);
+	    	camera.setResolution(320, 240);
+	    	camera.setFPS(30);
 	    	while(true) {
 	    		if(!camera.isConnected()) {
-	    			camera.free();
-					break;
+	    			//camera.free();
+					//break;
+	    			camera = CameraServer.getInstance().startAutomaticCapture();
 				}
 	    		try {
-					Thread.sleep(50);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					logger.error("Camera Thread Interrupted", e.toString());
 				}
@@ -185,10 +187,10 @@ public class Robot extends TimedRobot {
 			if (pressureWarningCycle > 20) {
 				warningForPressure = !warningForPressure;
 				pressureWarningCycle = 0;
-			} else {
-				warningForPressure = true; //Makes boolean display green when pressure is good
-			}
+			} 
 			pressureWarningCycle++;
+		} else {
+			warningForPressure = true; //Makes boolean display green when pressure is good
 		}
 		SmartDashboard.putBoolean(Dashboard.PREFIX_DRIVER + "Low Pressure Warning", warningForPressure);
 		
