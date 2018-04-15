@@ -204,6 +204,21 @@ public class Logger {
         }
     }
 
+    public List<String> getTagged(String tag) {
+        try(BufferedReader reader = new BufferedReader(new FileReader(log))) {
+            List<String> tagged = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if(line.startsWith(tag))
+                    tagged.add(line.substring(tag.length() + 2));
+            }
+            return tagged;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     @Override
     protected void finalize() {
         try {

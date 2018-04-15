@@ -1,27 +1,37 @@
 package org.usfirst.frc.team2832.robot.statemachine;
 
-import com.ctre.phoenix.Logger;
 import org.usfirst.frc.team2832.robot.Robot;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
+import java.util.*;
 
 public class StateMachine extends State<StateMachine> {
 
     private List<State> states;
     private int index;
+    private List<List<State>> processes;
 
-    private StateMachine(List<State> states) {
+    private StateMachine(List<State> states, List<List<State>> processes) {
         this.states = states;
+        this.processes = processes;
     }
 
     @Override
     void start() {
         super.start();
         index = 0;
+        startState();
+    }
+
+    private void startState() {
+        if (processes.get(index) != null)
+            for (State state : processes.get(index)) {
+                Robot.logger.log(getName(), "Starting external state " + states.get(index).getName());
+                Set<Subsystems> requirements = state.getRequirements();
+                for (Subsystems subsystem : requirements)
+                    if (getRequirements().contains(subsystem))
+                        Robot.logger.critical(getName(), "External states should probably not replace state machines: " + state.getName());
+                Robot.subsystemHandler.start(state);
+            }
         Robot.logger.log(getName(), "Starting state " + index + ": " + states.get(index).getName());
         states.get(index).start();
     }
@@ -29,7 +39,7 @@ public class StateMachine extends State<StateMachine> {
     @Override
     public Set<Subsystems> getRequirements() {
         Set<Subsystems> set = new HashSet<>(super.getRequirements());
-        for(State state: states) {
+        for (State state : states) {
             set.addAll(state.getRequirements());
         }
         return set;
@@ -37,14 +47,14 @@ public class StateMachine extends State<StateMachine> {
 
     @Override
     public Module getRunningModuleOfType(Class clazz) {
-        return null;
+        return states.get(index).getRunningModuleOfType(clazz);
     }
 
     @Override
     void initialize() {
         StringBuilder builder = new StringBuilder("Composed of ");
-        for(int i = 0; i < states.size(); i++) {
-            if(i < states.size() - 1) {
+        for (int i = 0; i < states.size(); i++) {
+            if (i < states.size() - 1) {
                 builder.append(states.get(i).getName() + ", ");
             } else {
                 builder.append("and " + states.get(i).getName());
@@ -55,14 +65,13 @@ public class StateMachine extends State<StateMachine> {
 
     @Override
     void execute() {
-        if(index < states.size())
-            if(states.get(index).run()) {
+        if (index < states.size())
+            if (states.get(index).run()) {
                 Robot.logger.log(getName(), "Ending state " + index + ": " + states.get(index).getName());
                 states.get(index).end(false);
                 index++;
-                if(index < states.size()) {
-                    Robot.logger.log(getName(), "Starting state " + index + ": " + states.get(index).getName());
-                    states.get(index).start();
+                if (index < states.size()) {
+                    startState();
                 }
             }
     }
@@ -79,13 +88,19 @@ public class StateMachine extends State<StateMachine> {
     public static class Builder {
 
         private List<State> states = new ArrayList<>();
+        private List<List<State>> processes = new ArrayList<>();
 
         public Builder addState(Module module) {
             return addState(new StandardState(module));
         }
 
-        public Builder addStates(StateProvider states) {
-            this.states.addAll(states.getStates());
+        public Builder addStates(StateMachineProvider values) {
+            while (processes.size() < values.getValues().size())
+                processes.add(null);
+            for (StateMachineValue value : values.getValues()) {
+                states.add(value.getState());
+                processes.add(states.size() - 1, value.getProcesses());
+            }
             return this;
         }
 
@@ -95,7 +110,7 @@ public class StateMachine extends State<StateMachine> {
         }
 
         public StateMachine build() {
-            return new StateMachine(states);
+            return new StateMachine(states, processes);
         }
     }
 }

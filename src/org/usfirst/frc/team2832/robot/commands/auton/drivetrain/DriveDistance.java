@@ -91,12 +91,10 @@ public class DriveDistance extends SubsystemModule {
 	 * Remember to shut off motors when done
 	 */
 	public void end() {
-		Robot.logger.log("Drive Distance", "Ended");
 		Robot.driveTrain.tankDrive(0, 0);
 	}
 
 	public void interrupted() {
-		Robot.logger.log("Drive Distance", "Interrupted");
 		Robot.driveTrain.tankDrive(0, 0);
 	}
 }

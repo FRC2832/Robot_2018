@@ -6,7 +6,7 @@ import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.TurnPID;
 import org.usfirst.frc.team2832.robot.commands.auton.lift.ExpelCube;
 import org.usfirst.frc.team2832.robot.commands.auton.lift.MoveLiftTime;
 
-public class CenterAuton extends StateProviderBuilder {
+public class CenterAuton extends StateMachineProviderBuilder {
 
     public CenterAuton() {
         String gameData = DriverStation.getInstance().getGameSpecificMessage();

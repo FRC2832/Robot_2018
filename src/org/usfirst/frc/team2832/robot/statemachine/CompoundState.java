@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2832.robot.statemachine;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
+
 import java.util.*;
 
 public class CompoundState extends State<CompoundState> {
@@ -11,7 +13,16 @@ public class CompoundState extends State<CompoundState> {
     }
 
     public CompoundState(List<Module> modules) {
+        if(modules.size() == 0)
+            throw new IllegalArgumentException("Module list must not be empty");
         this.modules.addAll(modules);
+        List<Subsystems> requirements = new ArrayList<>();
+        for(Module module: modules)
+            for(Subsystems subsystem: ((SubsystemModule) module).getRequired()) {
+                if (requirements.contains(subsystem))
+                    throw new RuntimeException("Modules must not be on separate Subsystems");
+                requirements.add(subsystem);
+            }
     }
 
     @Override
@@ -29,6 +40,22 @@ public class CompoundState extends State<CompoundState> {
             if(module instanceof SubsystemModule && ((SubsystemModule)module).getRequired().size() > 0)
                 set.addAll(((SubsystemModule)module).getRequired());
         return set;
+    }
+
+    @Override
+    void end(boolean interrupted) {
+        for(Module module: modules) {
+            if(interrupted)
+                module.interrupted();
+            else
+                module.end();
+        }
+    }
+
+    @Override
+    void start() {
+        for(Module module: modules)
+            module.start();
     }
 
     @Override
