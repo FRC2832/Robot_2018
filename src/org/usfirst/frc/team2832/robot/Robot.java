@@ -241,18 +241,19 @@ public class Robot extends TimedRobot {
         driveTrain.setBrakeMode(true);
 
         // Create the command to be called before autonomous
-        Module diagnostic = new DiagnoseSensors(
+        State diagnostic = new StandardState(new DiagnoseSensors(
                 new SensorTest(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.LEFT) == 0, driveTrain, DriveTrain.DriveTrainFlags.ENCODER_L),
                 new SensorTest(() -> driveTrain.getEncoderPosition(DriveTrain.Encoder.RIGHT) == 0, driveTrain, DriveTrain.DriveTrainFlags.ENCODER_R),
                 new SensorTest(() -> driveTrain.getPigeonYaw() == 0, driveTrain, DriveTrain.DriveTrainFlags.PIGEON),
-                new SensorTest(() -> lift.getLiftEncoderPosition() == 0, lift, Lift.LiftFlags.ENCODER));
+                new SensorTest(() -> lift.getLiftEncoderPosition() == 0, lift, Lift.LiftFlags.ENCODER)));
         autonMachine = new StateMachine.Builder()
-                .addState(new StandardState(diagnostic)
-                        .setTimeout(.3))
+                .addState(diagnostic.setTimeout(.3))
                 .addStates(new CenterAuton())
                 .build();
         subsystemHandler.clearStates();
         subsystemHandler.start(autonMachine);
+        logger.log("StateMachine", "\n" + diagnostic.getHierarchy());
+
         //Scheduler.getInstance().removeAll();
 
         //Scheduler.getInstance().add(diagnostic);

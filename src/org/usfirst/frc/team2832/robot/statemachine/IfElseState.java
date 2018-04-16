@@ -9,6 +9,7 @@ public class IfElseState extends StateSelector {
     private State defaultState;
 
     private IfElseState(Map<Supplier<Boolean>, State> entries, State defaultState) {
+        super(entries.values());
         this.entries = entries;
         this.defaultState = defaultState;
     }
@@ -40,5 +41,15 @@ public class IfElseState extends StateSelector {
         public IfElseState build(State defaultState) {
             return new IfElseState(entries, defaultState);
         }
+    }
+
+    @Override
+    public List<State> getChildren() {
+        return new ArrayList<>(entries.values());
+    }
+
+    @Override
+    public boolean hasChildren() {
+        return entries.size() > 0;
     }
 }

@@ -1,9 +1,6 @@
 package org.usfirst.frc.team2832.robot.statemachine;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class SwitchState extends StateSelector {
@@ -12,6 +9,7 @@ public class SwitchState extends StateSelector {
     private Supplier supplier;
 
     private SwitchState(Map<Object, State> entries, Supplier supplier) {
+        super(entries.values());
         this.entries = entries;
         this.supplier = supplier;
     }
@@ -43,5 +41,15 @@ public class SwitchState extends StateSelector {
         public SwitchState build(Supplier supplier) {
             return new SwitchState(entries, supplier);
         }
+    }
+
+    @Override
+    public List<State> getChildren() {
+        return new ArrayList<>(entries.values());
+    }
+
+    @Override
+    public boolean hasChildren() {
+        return entries.size() > 0;
     }
 }

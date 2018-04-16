@@ -3,8 +3,10 @@ package org.usfirst.frc.team2832.robot.statemachine;
 import org.usfirst.frc.team2832.robot.Robot;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class StateMachine extends State<StateMachine> {
+public class StateMachine extends State<StateMachine> implements StateContainer {
 
     private List<State> states;
     private int index;
@@ -13,6 +15,8 @@ public class StateMachine extends State<StateMachine> {
     private StateMachine(List<State> states, List<List<State>> processes) {
         this.states = states;
         this.processes = processes;
+        for(State state: states)
+            state.setParent(this);
     }
 
     @Override
@@ -112,5 +116,29 @@ public class StateMachine extends State<StateMachine> {
         public StateMachine build() {
             return new StateMachine(states, processes);
         }
+    }
+
+    @Override
+    public List<State> getChildren() {
+        return states;
+    }
+
+    @Override
+    public boolean hasChildren() {
+        return states.size() > 0;
+    }
+
+    @Override
+    public StringBuilder buildHierarchy(StringBuilder builder, int depth) {
+        for(int i = 0; i < states.size(); i++) {
+            builder.append(IntStream.range(0, depth).mapToObj(w -> " ").collect(Collectors.joining("")));
+            builder.append("State ").append(i).append(":\n");
+            states.get(i).buildHierarchy(builder, depth + 3);
+            if(processes.get(i) != null)
+                for(State process: processes.get(i)) {
+                    process.buildHierarchy(builder, depth + 3);
+                }
+        }
+        return builder;
     }
 }

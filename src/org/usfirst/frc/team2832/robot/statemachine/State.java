@@ -3,14 +3,20 @@ package org.usfirst.frc.team2832.robot.statemachine;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public abstract class State<T extends State> {
+public abstract class State<T extends State> implements StateComponent {
 
     private boolean interruptable, running, canceled, inDisableable, initialized;
     private double startTime, timeout;
     private Set<Subsystems> requirements = new HashSet<>();
-    private String name = "";
+    private String name;
+    private StateContainer parent;
 
     public State(String name) {
         this.name = name;
@@ -98,5 +104,34 @@ public abstract class State<T extends State> {
 
     public void cancel() {
         canceled = true;
+    }
+
+    @Override
+    public StateComponent getParent() {
+        return parent;
+    }
+
+    @Override
+    public boolean hasParent() {
+        return parent != null;
+    }
+
+    @Override
+    public void setParent(StateContainer component) {
+        parent = component;
+    }
+
+    @Override
+    public String getHierarchy() {
+        if(hasParent())
+            return getParent().getHierarchy();
+        return buildHierarchy(new StringBuilder(), 0).toString();
+    }
+
+    @Override
+    public StringBuilder buildHierarchy(StringBuilder builder, int depth) {
+        builder.append(IntStream.range(0, depth).mapToObj(i -> " ").collect(Collectors.joining("")));
+        builder.append(getName()).append("\n");
+        return builder;
     }
 }
