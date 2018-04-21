@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2832.robot.commands.auton.drivetrain;
 
 import org.usfirst.frc.team2832.robot.Robot;
+import org.usfirst.frc.team2832.robot.Robot.RobotType;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2832.robot.subsystems.DriveTrain.Encoder;
 
@@ -23,8 +24,16 @@ public class DriveDistance extends Command {
 		requires(Robot.driveTrain);
 		CORRECTION = 40 * speeed;
 		this.speeed = speeed;
-		this.distance = -1 * distance;
 		this.timeout = timeout;
+		if (Robot.getRobotType() == RobotType.Competition) {
+			this.distance = -1 * distance;
+		} else if (Robot.getRobotType() == RobotType.Practice) {
+			this.distance = distance;
+		} else if (Robot.getRobotType() == RobotType.Programming) {
+			this.distance = distance; //TODO: check val
+		} else {
+			this.distance = -1 * distance;
+		}
 	}
 
 	/**
@@ -79,6 +88,7 @@ public class DriveDistance extends Command {
 			if (distance >= 0) {
 				if (maxDist() >= distance) {
 					Robot.logger.log("Ending by Distance");
+					System.out.println("Ending DriveDistance at " + maxDist() + " inches");
 					return true;	
 				} else {
 					return false;

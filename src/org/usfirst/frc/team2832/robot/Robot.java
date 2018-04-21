@@ -53,8 +53,11 @@ public class Robot extends TimedRobot {
 	private final int PRESSURE_SENSOR_PIN = 0;
 	PowerDistributionPanel pdp;
 	AnalogInput pressureSensor;
-	private static RobotType robotType;
+	
+	
+	private static RobotType robotType = RobotType.Competition;
 
+	
 	private AnalogInput robotTypeInput;
 	private DiagnoseSensors diagnostic;
 	private boolean postDiagnosis;
@@ -81,15 +84,16 @@ public class Robot extends TimedRobot {
 		logger.header("Robot Init");
 
         robotTypeInput = new AnalogInput(ROBOT_TYPE_PIN);
-        robotType = RobotType.Competition; //Default to competition
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(System.getProperty("user.home") + File.separator + "RobotType.txt")))){
-            String type = reader.readLine();
-            if(!"".equals(type))
-                robotType = RobotType.valueOf(type);
-        } catch(Exception e) {
-            logger.error("ReadTypeFile", "RobotType.txt is missing from " + System.getProperty("user.home") + File.separator);
-            robotType = RobotType.Competition;
-        }
+        
+//        robotType = RobotType.Competition; //Default to competition
+//        try (BufferedReader reader = new BufferedReader(new FileReader(new File(System.getProperty("user.home") + File.separator + "RobotType.txt")))){
+//            String type = reader.readLine();
+//            if(!"".equals(type))
+//                robotType = RobotType.valueOf(type);
+//        } catch(Exception e) {
+//            logger.error("ReadTypeFile", "RobotType.txt is missing from " + System.getProperty("user.home") + File.separator);
+//            robotType = RobotType.Competition;
+//        }
 
 		controls = new Controls();
 

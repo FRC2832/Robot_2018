@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import org.usfirst.frc.team2832.robot.ButtonMapping;
 import org.usfirst.frc.team2832.robot.Controls.Controllers;
 import org.usfirst.frc.team2832.robot.Robot;
+import org.usfirst.frc.team2832.robot.Robot.RobotType;
 import org.usfirst.frc.team2832.robot.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -33,12 +34,13 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	final static int DRIVE_MOTER_BL = 11;
 	final static int DRIVE_MOTER_BR = 23;
 	
-	final static double GEAR_RATIO = 1d; //Old was 3:1
-
+	private static double GEAR_RATIO; //1d for Competition Bot
+	//final static double GEAR_RATIO = 3.0 for Practice Bot
+	
 	final static double VIBRATE_THRESHOLD = 0.4d;
 	
-//	private static final double ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; // Circumference divided by pulses/revolution
-	private static final double ENCODER_COUNT_TO_INCH = 1 / 763.544d;
+	private static double ENCODER_COUNT_TO_INCH; // = 6d * Math.PI / 1440d; // Circumference divided by pulses/revolution Practice Bot Value
+//	private static final double ENCODER_COUNT_TO_INCH = 1 / 763.544d; //Competition Bot Value
 	
 	private static final double ENCODER_ERROR_PERCENTAGE_LEFT = 68d / 6.62d; // Actual/desired distance
 	private static final double ENCODER_ERROR_PERCENTAGE_RIGHT = 68d / 6.62d; // Actual/desired distance
@@ -71,6 +73,20 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 			talonPhoenixRight.setSensorPhase(true);
 			talonPhoenixLeft.getSensorCollection().setQuadraturePosition(0, 100);
 			talonPhoenixRight.getSensorCollection().setQuadraturePosition(0, 100);
+		}
+		
+		if (Robot.getRobotType() == RobotType.Competition) {
+			GEAR_RATIO = 1.0;
+			ENCODER_COUNT_TO_INCH = 1 / 763.544d; 
+		} else if (Robot.getRobotType() == RobotType.Practice){
+			GEAR_RATIO = 3.0;
+			ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d;
+		} else if (Robot.getRobotType() == RobotType.Programming){
+			GEAR_RATIO = 1.0;
+			ENCODER_COUNT_TO_INCH = 6d * Math.PI / 1440d; //TODO: fix val
+		} else {
+			GEAR_RATIO = 1.0;
+			ENCODER_COUNT_TO_INCH = 1 / 763.544d;
 		}
 	}
 	
