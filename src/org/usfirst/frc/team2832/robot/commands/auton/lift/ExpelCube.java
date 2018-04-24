@@ -11,19 +11,22 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ExpelCube extends Command {
 
-    private final double EXPEL_DURATION = 3;
+    private double EXPEL_DURATION = 3;
     private double EXPEL_SPEED = 1;
 
 	private double startTime;
 	private Ingestor Ingestor = Robot.ingestor;
 	
-    public ExpelCube() {
-    	super(1);
+	public ExpelCube(double speed, double time) {
+    	EXPEL_DURATION = time;
+    	EXPEL_SPEED = speed;
     	requires(Robot.ingestor);
     }
-    
-    public ExpelCube(double speed) {
-    	EXPEL_SPEED = speed;
+	public ExpelCube(double speed) {
+    	this(speed, 3);
+    }
+    public ExpelCube() {
+    	this(1, 3);
     	requires(Robot.ingestor);
     }
     

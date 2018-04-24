@@ -21,20 +21,24 @@ public class LeftSideDualCube extends CommandGroup {
 		
 		if (gameData.charAt(1) == 'L') { 
 			
-			addSequential(new ScoreScale(SIDE.LEFTSIDE));
+			addParallel(new MoveLiftTime(2.8, 1, 1.5));
+			addSequential(new DriveDistance(.8f, -250d, 8d)); 
+			addParallel(new LowerIngestor(.1));
+			addSequential(new TurnPID(50f, 1.5)); 
+			addSequential(new ExpelCube(.6, 0.8));
 			
-			addSequential(new DriveDistance(-.6, 25, 3));
-			addSequential(new TurnPID(50));
-			addParallel(new MoveLiftTime(3, -1, 0));
-			addSequential(new DriveDistance(.6, -50, 3)); //TODO: Set this distance
+			addSequential(new TurnPID(80, 1.5));
+			addParallel(new MoveLiftTime(2.8, -1));
+			addSequential(new DriveDistance(.7, -50, 3)); //TODO: Set this distance
 			addParallel(new LowerIngestor(.2));
-			addSequential(new TurnPID(70));
-			addParallel(new ExpelCube(-1));
-			addSequential(new DriveDistance(.5, -40, 3)); //TODO: Set this distance
-			addParallel(new MoveLiftTime(4, 1, 0));
-			addSequential(new TurnPID(180));
-			addSequential(new DriveDistance(.5, -50, 3)); //TODO: Set this distance
-			addSequential(new ExpelCube());    
+			addSequential(new TurnPID(40, 1.5));
+			addParallel(new ExpelCube(-1, 2.0));
+			addSequential(new DriveDistance(.6, -40, 2)); //TODO: Set this distance
+			addParallel(new MoveLiftTime(2.8, 1));
+			addSequential(new TurnPID(165, 2.0));
+			addSequential(new DriveDistance(.7, -40, 3)); //TODO: Set this distance
+			addSequential(new ExpelCube(0.6));
+			
 		}
     }
 }

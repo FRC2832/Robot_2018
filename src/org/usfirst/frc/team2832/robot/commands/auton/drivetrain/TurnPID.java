@@ -67,8 +67,10 @@ public class TurnPID extends Command implements PIDOutput, PIDSource {
 	}
 
 	protected boolean isFinished() {
-		if (isTimedOut()) 
+		if (isTimedOut()) {
+			Robot.logger.log("Turn PID", "Stopped by time at " + (Robot.driveTrain.getPigeonYaw() - startAngle));
 			return true;
+		}
 		if ((Math.abs(Robot.driveTrain.getPigeonYaw() - targetAngle)) <= TOLERANCE_DEGREES)
 			counter++;
 		else
