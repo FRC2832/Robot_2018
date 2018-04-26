@@ -47,6 +47,7 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 	private DifferentialDrive drive;
 	private WPI_TalonSRX talonFL, talonFR, talonBL, talonBR;
 	private TalonSRX talonPhoenixLeft, talonPhoenixRight;
+	private SpeedControllerGroup leftMotorGroup, rightMotorGroup
 	private PigeonIMU pigeon;
 
 	private boolean isTipping = false;
@@ -60,12 +61,18 @@ public class DriveTrain extends DiagnosticSubsystem<DriveTrain.DriveTrainFlags> 
 		talonBR = new WPI_TalonSRX(DRIVE_MOTER_BR);
 		talonPhoenixLeft = new TalonSRX(DRIVE_MOTER_FL);
 		talonPhoenixRight = new TalonSRX(DRIVE_MOTER_FR);
-		talonBL.follow(talonFL);
-		talonBR.follow(talonFR);
-		drive = new DifferentialDrive(talonFL, talonFR);
+		leftMotorGroup = new SpeedControllerGroup(talonFL, talonBL);
+		rightMotorGroup = new SpeedControllerGroup(talonFR, talonBR);
+		//talonBL.follow(talonFL);
+		//talonBR.follow(talonFR);
+		//drive = new DifferentialDrive(talonFL, talonFR);
+		drive = new DifferentialDrive(leftMotorGroup, rightMotorGroup);
 		pigeon = new PigeonIMU(0);
 		talonFL.configOpenloopRamp(0.2, 0);
 		talonFR.configOpenloopRamp(0.2, 0);
+		talonBL.configOpenloopRamp(0.2, 0);
+		talonBR.configOpenloopRamp(0.2, 0);
+
 		if(Robot.isReal()) {
 			talonPhoenixLeft.setSensorPhase(true);
 			talonPhoenixRight.setSensorPhase(true);
