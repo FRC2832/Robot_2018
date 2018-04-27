@@ -38,11 +38,20 @@ public class RightSide extends CommandGroup {
 		
 		if (priority == AUTON_PRIORITY.SCALE) {
 			if (gameData.charAt(1) == 'R') { 
-				addSequential(new ScoreScale(SIDE.RIGHTSIDE));
+				//addSequential(new ScoreScale(SIDE.RIGHTSIDE));
+				addSequential(new ScaleDualCube(SIDE.RIGHTSIDE));
 			} else if (gameData.charAt(0) == 'R') {
 				addSequential(new ScoreSwitch(SIDE.RIGHTSIDE));
 			} else { 
 				addSequential(new DriveDistance(0.7d, -120d, 2d)); 
+			}
+		}
+		
+		if (priority == AUTON_PRIORITY.SWITCHONLY) {
+			if (gameData.charAt(0) == 'R') {
+				addSequential(new ScoreSwitch(SIDE.RIGHTSIDE));
+			} else {
+				addSequential(new DriveDistance(0.7d, -120d, 10d)); 
 			}
 		}
 

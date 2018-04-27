@@ -21,16 +21,16 @@ public class SwitchCenter extends CommandGroup {
 		addParallel(new MoveLiftTime(1.2, 1, 1.5));
 		
 		if (gameData.charAt(0) == 'R') {
-			addSequential(new TurnPID(45));
+			addSequential(new TurnPID(45, 2.0));
 			addSequential(new DriveDistance(0.6d, -62d, 10d));
-			addSequential(new TurnPID(-45));
+			addSequential(new TurnPID(-45, 2.0));
 			addParallel(new LowerIngestor(.5));
 			addSequential(new DriveDistance(0.6d, -30d, 2d));
 			addSequential(new ExpelCube());
 		} else {
-			addSequential(new TurnPID(-45));
+			addSequential(new TurnPID(-45, 2.0));
 			addSequential(new DriveDistance(0.6d, -70d, 10d));
-			addSequential(new TurnPID(45));
+			addSequential(new TurnPID(45, 2.0));
 			addParallel(new LowerIngestor(.5));
 			addSequential(new DriveDistance(0.6d, -30d, 2d));
 			addSequential(new ExpelCube());

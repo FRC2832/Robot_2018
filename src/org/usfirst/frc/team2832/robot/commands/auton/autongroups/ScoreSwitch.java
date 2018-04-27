@@ -18,19 +18,19 @@ public class ScoreSwitch extends CommandGroup {
     public ScoreSwitch(SIDE side) {
     	
         if (side == SIDE.RIGHTSIDE) {
-        	addParallel(new LowerIngestor(.5));
-			addSequential(new DriveDistance(.75f, -155d, 5d)); 
+			addSequential(new DriveDistance(.75f, -140d, 5d)); 
 			addParallel(new MoveLiftTime(1.2, 1));
     		addSequential(new TurnPID(-90f)); 
+    		addParallel(new LowerIngestor(0.5));
     		addSequential(new DriveDistance(.6f, -4d, 2d)); 
 			addSequential(new ExpelCube());
         }
         
         if (side == SIDE.LEFTSIDE) {
-        	addParallel(new LowerIngestor(.5));
-			addSequential(new DriveDistance(.75f, -155d, 5d)); 
+			addSequential(new DriveDistance(.75f, -140d, 5d)); 
 			addParallel(new MoveLiftTime(1.2, 1));
     		addSequential(new TurnPID(90f)); 
+    		addParallel(new LowerIngestor(0.5));
 			addSequential(new DriveDistance(.6f, -4d, 2d)); 
 			addSequential(new ExpelCube());
         }

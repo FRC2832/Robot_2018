@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2832.robot.commands.auton.autongroups;
 
+import org.usfirst.frc.team2832.robot.Dashboard;
+import org.usfirst.frc.team2832.robot.Dashboard.AUTON_MODE;
 import org.usfirst.frc.team2832.robot.Dashboard.AUTON_PRIORITY;
 import org.usfirst.frc.team2832.robot.Dashboard.SIDE;
 import org.usfirst.frc.team2832.robot.commands.auton.drivetrain.DriveDistance;
@@ -36,10 +38,20 @@ public class LeftSide extends CommandGroup {
 
 		if (priority == AUTON_PRIORITY.SCALE) {
 			if (gameData.charAt(1) == 'L') { 
-				addSequential(new ScoreScale(SIDE.LEFTSIDE));
+				//addSequential(new ScoreScale(SIDE.LEFTSIDE));
+				addSequential(new ScaleDualCube(SIDE.LEFTSIDE));
 			} else if (gameData.charAt(0) == 'L') { 
 				addSequential(new ScoreSwitch(SIDE.LEFTSIDE));
 			}  else {
+				addSequential(new DriveDistance(0.7d, -120d, 10d)); 
+				//addSequential(new LeftSideScale());
+			}
+		}
+		
+		if (priority == AUTON_PRIORITY.SWITCHONLY) {
+			if (gameData.charAt(0) == 'L') {
+				addSequential(new ScoreSwitch(SIDE.LEFTSIDE));
+			} else {
 				addSequential(new DriveDistance(0.7d, -120d, 10d)); 
 			}
 		}

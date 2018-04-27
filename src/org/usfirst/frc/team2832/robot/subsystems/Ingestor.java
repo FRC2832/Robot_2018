@@ -88,6 +88,10 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 		tilt.set(Value.kForward);
 	}
 
+	public void raiseTilt() {
+		tilt.set(Value.kReverse);
+	}
+	
 	public void unpinch() {
 		pintcher.set(Value.kReverse);
 	}
@@ -113,8 +117,8 @@ public class Ingestor extends DiagnosticSubsystem<Ingestor.IngestorFlags> {
 			tilt.set(Value.kOff);
 		}
 		if (!RobotState.isAutonomous()) {			
-			talonL.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft):-0.1);
-			talonR.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight):-0.1);
+			talonL.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kLeft) * 0.75: -0.1);
+			talonR.set(ControlMode.PercentOutput, (Math.abs(Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight)) > .1)?-Robot.controls.getJoystickY(Controls.Controllers.CONTROLLER_SECCONDARY, Hand.kRight) * 0.75:-0.1);
 		}
 		
 	}

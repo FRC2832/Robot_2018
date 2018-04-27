@@ -66,6 +66,8 @@ public class Robot extends TimedRobot {
 	private double pressureVoltage;
 	private boolean warningForPressure = false;
 	private int pressureWarningCycle = 0;
+	
+	private double startTimer;
 
 	/**
 	 * Gets which robot the code is running on
@@ -120,7 +122,7 @@ public class Robot extends TimedRobot {
 		// Create camera
 		new Thread(() -> {
 	    	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-	    	camera.setResolution(320, 240);
+	    	camera.setResolution(160, 120); //lowered at worlds, old was 320 by 240
 	    	camera.setFPS(30);
 	    	while(true) {
 	    		if(!camera.isConnected()) {
@@ -257,6 +259,7 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().add(diagnostic);
 
 		logger.log("Robot Type", robotType.name());
+		startTimer = Timer.getFPGATimestamp();
 	}
 
 	/**
@@ -275,6 +278,10 @@ public class Robot extends TimedRobot {
 				logger.log("Auton", "Starting " + dashboard.getSelectedCommand().getName() + " normally");
 				Scheduler.getInstance().add(dashboard.getSelectedCommand());
 			}
+		}
+		
+		if (Timer.getFPGATimestamp() - startTimer < 1.0) {
+			ingestor.raiseTilt();
 		}
 	}
 
