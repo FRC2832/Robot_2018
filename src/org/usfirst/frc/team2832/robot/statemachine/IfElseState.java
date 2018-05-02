@@ -2,6 +2,8 @@ package org.usfirst.frc.team2832.robot.statemachine;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class IfElseState extends StateSelector {
 
@@ -45,11 +47,35 @@ public class IfElseState extends StateSelector {
 
     @Override
     public List<State> getChildren() {
-        return new ArrayList<>(entries.values());
+        List<State> children = new ArrayList<>(entries.values());
+        children.add(defaultState);
+        return children;
     }
 
     @Override
     public boolean hasChildren() {
         return entries.size() > 0;
+    }
+
+    @Override
+    public StringBuilder buildHierarchy(StringBuilder builder, int depth) {
+        builder.append(IntStream.range(0, depth).mapToObj(w -> " ").collect(Collectors.joining("")));
+        builder.append(getName()).append(":\n");
+        List<State> states = new ArrayList<>(entries.values());
+        for(int i = 0; i < states.size(); i++) {
+            builder.append(IntStream.range(0, depth).mapToObj(w -> " ").collect(Collectors.joining("")));
+            if(i == 0) {
+                builder.append("if(i == ").append(i).append(") {\n");
+            } else {
+                builder.append("} else if(i == ").append(i).append(") {\n");
+            }
+            states.get(i).buildHierarchy(builder, depth + 3);
+        }
+        builder.append(IntStream.range(0, depth).mapToObj(w -> " ").collect(Collectors.joining("")));
+        builder.append("} else {\n");
+        defaultState.buildHierarchy(builder, depth + 3);
+        builder.append(IntStream.range(0, depth).mapToObj(w -> " ").collect(Collectors.joining("")));
+        builder.append("}\n");
+        return builder;
     }
 }

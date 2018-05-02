@@ -139,7 +139,7 @@ public class SubsystemHandler implements StateContainer {
         List<State> used = new ArrayList<>();
         for(Subsystems subsystem: states.keySet())
             if(states.get(subsystem) != null) {
-                builder.append("-------------").append(subsystem.name()).append(": ").append(states.get(subsystem).getName()).append("-------------").append("\n");
+                builder.append("-------------").append(subsystem.name()).append("-------------").append("\n");
                 if(!used.contains(states.get(subsystem))) {
                     states.get(subsystem).buildHierarchy(builder, depth + 3);
                     used.add(states.get(subsystem));

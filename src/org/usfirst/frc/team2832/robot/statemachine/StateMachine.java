@@ -19,6 +19,16 @@ public class StateMachine extends State<StateMachine> implements StateContainer 
             state.setParent(this);
     }
 
+    /**
+     *
+     * @Todo The next thing to add is a wrapper for existing commands so as to not have to convert them all in
+     * the statemachine builder class
+     * also create a profile system for robots with json reading
+     *
+     */
+
+    
+
     @Override
     void start() {
         super.start();
@@ -27,7 +37,7 @@ public class StateMachine extends State<StateMachine> implements StateContainer 
     }
 
     private void startState() {
-        if (processes.get(index) != null)
+        if (processes.size() > 0 && processes.get(index) != null)
             for (State state : processes.get(index)) {
                 Robot.logger.log(getName(), "Starting external state " + states.get(index).getName());
                 Set<Subsystems> requirements = state.getRequirements();
@@ -114,6 +124,8 @@ public class StateMachine extends State<StateMachine> implements StateContainer 
         }
 
         public StateMachine build() {
+            while (processes.size() < states.size())
+                processes.add(null);
             return new StateMachine(states, processes);
         }
     }
@@ -130,11 +142,13 @@ public class StateMachine extends State<StateMachine> implements StateContainer 
 
     @Override
     public StringBuilder buildHierarchy(StringBuilder builder, int depth) {
+        builder.append(IntStream.range(0, depth).mapToObj(w -> " ").collect(Collectors.joining("")));
+        builder.append(getName()).append(":\n");
         for(int i = 0; i < states.size(); i++) {
             builder.append(IntStream.range(0, depth).mapToObj(w -> " ").collect(Collectors.joining("")));
             builder.append("State ").append(i).append(":\n");
             states.get(i).buildHierarchy(builder, depth + 3);
-            if(processes.get(i) != null)
+            if(processes.size() > 0 && processes.get(i) != null)
                 for(State process: processes.get(i)) {
                     process.buildHierarchy(builder, depth + 3);
                 }

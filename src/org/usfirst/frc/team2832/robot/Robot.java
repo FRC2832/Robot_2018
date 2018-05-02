@@ -248,7 +248,17 @@ public class Robot extends TimedRobot {
                 new SensorTest(() -> lift.getLiftEncoderPosition() == 0, lift, Lift.LiftFlags.ENCODER)));
         autonMachine = new StateMachine.Builder()
                 .addState(diagnostic.setTimeout(.3))
-                .addStates(new CenterAuton())
+                .addState(new SwitchState.SwitchStateBuilder()
+                        .add(Dashboard.AUTON_MODE.DRIVEFORWARD, new StateMachine.Builder().addStates(new CenterAuton()).build().setName("df"))
+                        .add(Dashboard.AUTON_MODE.TEST, new StateMachine.Builder().addStates(new CenterAuton()).build().setName("t"))
+                        .add(Dashboard.AUTON_MODE.NOTHING, new StateMachine.Builder().addStates(new CenterAuton()).build().setName("n"))
+                        .add(Dashboard.AUTON_MODE.CENTER, new StateMachine.Builder().addStates(new CenterAuton()).build().setName("c"))
+                        .add(Dashboard.AUTON_MODE.LEFTSIDE_PRIORITYSCALE, new StateMachine.Builder().addStates(new CenterAuton()).build().setName("lsc"))
+                        .add(Dashboard.AUTON_MODE.LEFTSIDE_PRIORITYSWITCH, new StateMachine.Builder().addStates(new CenterAuton()).build().setName("lsw"))
+                        .add(Dashboard.AUTON_MODE.RIGHTSIDE_PRIORITYSCALE, new StateMachine.Builder().addStates(new CenterAuton()).build().setName("rsc"))
+                        .add(Dashboard.AUTON_MODE.RIGHTSIDE_PRIORITYSWITCH, new StateMachine.Builder().addStates(new CenterAuton()).build().setName("rsw"))
+                        .build(new StateMachine.Builder().addStates(new CenterAuton()).build().setName("default"), () -> dashboard.getSelectedCommand()))
+                //.addStates(new CenterAuton())
                 .build();
         subsystemHandler.clearStates();
         subsystemHandler.start(autonMachine);

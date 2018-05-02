@@ -42,8 +42,8 @@ public class Dashboard {
 	 * 
 	 * @return An instance of the currently selected command
 	 */
-	public Module getSelectedCommand() {
-		return chooser.getSelected().getCommand();
+	public AUTON_MODE getSelectedCommand() {
+		return chooser.getSelected();
 	}
 
 	/**
@@ -59,14 +59,14 @@ public class Dashboard {
 			//case LEFTSIDE_PRIORITYSWITCH: return new LeftSide(AUTON_PRIORITY.SWITCH);
 			//case RIGHTSIDE_PRIORITYSCALE: return new RightSide(AUTON_PRIORITY.SCALE);
 			//case RIGHTSIDE_PRIORITYSWITCH: return new RightSide(AUTON_PRIORITY.SWITCH);
-			
+
 			//case CENTER: return new SwitchCenter();
 			//case TEST: return new DriveDistance(0.6d, 288d, 15);
 			case TEST: return new DriveDistance(0.8d, -120d, 10d);
 			case DRIVEFORWARD: return new  DriveDistance(0.8d, -120d, 10d);
 			case NOTHING: return new DriveDistance(0, 0, 0); //returning null as a command breaks things.
 			default: return new DriveDistance(.7, -120.0, 10.0);
-			
+
 			}
 		}
 	}
