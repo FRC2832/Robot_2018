@@ -38,8 +38,8 @@ public class LeftSide extends CommandGroup {
 
 		if (priority == AUTON_PRIORITY.SCALE) {
 			if (gameData.charAt(1) == 'L') { 
-				//addSequential(new ScoreScale(SIDE.LEFTSIDE));
-				addSequential(new ScaleDualCube(SIDE.LEFTSIDE));
+				addSequential(new ScoreScale(SIDE.LEFTSIDE));
+				//addSequential(new ScaleDualCube(SIDE.LEFTSIDE));
 			} else if (gameData.charAt(0) == 'L') { 
 				addSequential(new ScoreSwitch(SIDE.LEFTSIDE));
 			}  else {

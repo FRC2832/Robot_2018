@@ -8,16 +8,26 @@ public class LowerIngestor extends Command {
 
     private double startTime;
     private double duration;
-
-    public LowerIngestor() {
-        requires(Robot.ingestor);
-        duration = 2d;
-    }
-
+    private boolean lower;
+    
+//    public LowerIngestor(double time, boolean lower) {
+//    	requires(Robot.ingestor);
+//    	duration = time;
+//    	this.lower = lower;
+//    }
+    
     public LowerIngestor(double time) {
-    	requires(Robot.ingestor);
+    	//super(time, true);
     	duration = time;
+    	requires(Robot.ingestor);
     }
+    
+    public LowerIngestor() {
+    	super(.2);
+        requires(Robot.ingestor);
+    }
+
+   
     
     @Override
     protected void initialize() {

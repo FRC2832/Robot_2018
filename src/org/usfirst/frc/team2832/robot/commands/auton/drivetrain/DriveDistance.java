@@ -15,7 +15,7 @@ public class DriveDistance extends Command {
 
 	private static double CORRECTION;
 	
-	private double initialYaw, currentYaw, startLeft, startRight, distance, speeed, timeout, startTime;
+	private double initialYaw, currentYaw, startLeft, startRight, distance, speeed, timeout, startTime, rampDown;
 	private boolean usingPigeon;
 	private boolean hasRun;
 
@@ -25,6 +25,7 @@ public class DriveDistance extends Command {
 		CORRECTION = 40 * speeed;
 		this.speeed = speeed;
 		this.timeout = timeout;
+		rampDown = 1;
 		if (Robot.getRobotType() == RobotType.Competition) {
 			this.distance = -1 * distance;
 		} else if (Robot.getRobotType() == RobotType.Practice) {
@@ -63,16 +64,26 @@ public class DriveDistance extends Command {
 			Robot.logger.log("Drive Distance", "Is " + (usingPigeon ? "" : "not") + " using pigeon for " + distance + "inch move");
 			hasRun = false;
 		}
+		
+		double distanceLeft = distance - maxDist();
+		if (distanceLeft < 20) {
+			rampDown = distanceLeft / 20;
+			if (rampDown < 0.35) {
+				rampDown = 0.35;
+			}
+		}
+		
+		
 		if(usingPigeon) {
 			currentYaw = Robot.driveTrain.getPigeonYaw();
 			//This is a bit backwards
 			double differenceYaw = initialYaw - currentYaw;
 			if (differenceYaw != 0) {
 				//Hence why this is backwards
-				Robot.driveTrain.tankDrive(speeed + (differenceYaw / CORRECTION), speeed - (differenceYaw / CORRECTION));
+				Robot.driveTrain.tankDrive((speeed + (differenceYaw / CORRECTION)) * rampDown, (speeed - (differenceYaw / CORRECTION)) * rampDown);
 			}
 		} else {
-			Robot.driveTrain.tankDrive(speeed, speeed);
+			Robot.driveTrain.tankDrive(speeed * rampDown, speeed * rampDown);
 		}
 	}
 
